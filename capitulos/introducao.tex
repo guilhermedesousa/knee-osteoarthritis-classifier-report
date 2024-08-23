@@ -1,0 +1,44 @@
+% ----------------------------------------------------------
+% Introdução 
+% Capítulo sem numeração, mas presente no Sumário
+% ----------------------------------------------------------
+
+\chapter*[Introdução]{Introdução}
+\addcontentsline{toc}{chapter}{Introdução}
+
+A osteoartrite (OA) é uma forma muito comum de doença articular, definida como uma condição degenerativa que se inicia nas articulações e afeta principalmente a cartilagem, o revestimento articular e os ligamentos \cite{Sardim2020}, resultando em sintomas de dor, rigidez e mobilidade articular limitada \cite{PACCA2018}, que podem comprometer significativamente a qualidade de vida, especialmente em idosos e indivíduos obesos \cite{Luis2022}. A OA é altamente prevalente, sendo uma das principais causas da incapacidade no mundo, com grande incidência em articulações como joelhos e quadris, afetando uma em cada sete pessoas globalmente \cite{KELLGREN1957}. De acordo com um estudo recente, a prevalência global de osteoartrite de joelho (KOA) é de 16\% \cite{Tariq2023}. A medicina comumente avalia a severidade da KOA através dos graus de Kellgren/Lawrence (KL), que categoriza a doença em cinco níveis de progressão: 0 (saudável), 1 (duvidoso), 2 (mínimo), 3 (moderado) e 4 (severo), dependendo da experiência e cuidado médico na interpretação das radiografias \cite{KELLGREN1957}.
+
+Terapias farmacêuticas têm sido aplicadas a pacientes diagnosticados com OA com o objetivo de reduzir os sintomas de dor, uma vez que não existem medicamentos capazes de retardar o desenvolvimento da OA. A progressão da doença  pode ser prevenida com um diagnóstico precoce, ou seja, nos estágios iniciais em que a OA ainda é reversível \cite{Kanamoto2020}. No entanto, a precisão no diagnóstico da severidade da doença depende fortemente da compreensão e experiência do radiologista, o que pode levar a inconsistências entre o grau previsto e o grau real da OA, devido às mínimas diferenças entre os estágios adjacentes da doença \cite{Mohammed2023}. Além disso, estudos indicam que procedimentos como artroscopia são invasivos e podem causar complicações \cite{Saraev2020}, enquanto técnicas como tomografia computadorizada (CT) e ressonância magnética (MRI) também são usadas, mas o diagnóstico pode ser impreciso por falta falta de experiência do profissional \cite{Alshamrani2023}. Esses desafios têm impulsionado estudos sobre sistemas automáticos de detecção e classificação.
+
+Nos últimos anos, muitas áreas têm visto a introdução de sistemas de inteligência artificial para executar tarefas que eram realizadas de forma manual, incluindo na área da medicina para o diagnóstico de patologias, por exemplo. Avanços recentes em técnicas de aprendizado de máquina no campo da saúde levou a uma aceleração no diagnóstico de diversas doenças, incluindo a OA \cite{Mohammed2023}. O uso de modelos de aprendizado profundo baseados em redes neurais convolucionais (CNNs) tem ganhado espaço no que tange tarefas relacionadas a visão computacional \cite{Tariq2023}. Porém, isso só foi possível após a introdução de novas técnicas para treinar redes profundas em paralelo com avanços a nível de hardware \cite{Litjens2017}. Aprendizado por transferência também é amplamente utilizada para reduzir uso de recursos computacionais para tarefas que já são executadas por modelos existentes, como ResNet, VGG e DenseNet \cite{Tariq2023}. Enquanto o uso de CNNs tem se mostrado útil em soluções de detecção em imagens médicas, a operação de convolução limita o relacionamento entre pixels distantes numa imagem. Para tanto, a habilidade de codificar dependências de longo alcance tem sido possível graças aos modelos baseados em atenção, como os Visual Transformers (ViTs). Tais modelos ViT têm sido empregados para várias tarefas, incluindo classificação, detecção de objetos, entre outras \cite{Shamshad2023}.
+
+\section*{Motivação}\label{sec:motivacao}
+\addcontentsline{toc}{section}{Motivação}
+
+Esta pesquisa justifica-se pela crescente adoção de técnicas de aprendizado profundo, em especial redes neurais convolucionais e visual transformers, para tarefas de detecção e classificação de doenças. Além disso, o treinamento dos modelos usando radiografias se justifica pelo seu custo em relação a técnicas de tomografia. O problema de pesquisa é: Como as arquiteturas de Visual Transformers se comparam às redes neurais convolucionais na precisão da classificação da osteoartrite de joelho com base em radiografias?
+
+\section*{Objetivos}\label{sec:objetivos}
+\addcontentsline{toc}{section}{Objetivos}
+
+Comparar métricas de precisão, eficácia e eficiência computacional de modelos de redes neurais convolucionais (CNNs) e Visual Transformers (ViT) na detecção e classificação da osteoartrite de joelho a partir de radiografias, com o objetivo de identificar a abordagem mais adequada para uso em diagnósticos clínicos.
+
+Para alcançar tal objetivo, será necessário:
+\begin{itemize}
+    \item Conhecer as arquiteturas de CNNs e ViTs através modelos pré-treinados;
+    \item Treinar os modelos selecionados para a tarefa de classificação da KOA;
+    \item Analisar a acurácia no diagnóstico da severidade, de acordo com o sistema de Kellgren-Lawrence
+    \item Comparar a eficiência computacional dos modelos em termos de tempo de treinamento, velocidade de inferência, e recursos computacionais necessários
+\end{itemize}
+
+\section*{Metodologia}\label{sec:metodologia}
+\addcontentsline{toc}{section}{Metodologia}
+
+Esta pesquisa consistui de uma abordagem experimental com diversas etapas para a comparação entre redes neurais convolucionais (CNNs) e Visual Transformers (ViTs).
+
+A primeira etapa consiste numa revisão bibliográfica da literatura existente sobre o uso de Cnns e ViTs em tarefas de classificação de imagens médicas, em especial para a classificação de osteoartrite de joelho.
+
+A segunda etapa consiste na coleta e preparação de um dataset público de radiografias de joelho rotuladas com o nível de severidade da OA segundo o sistema KL. O pré-processamento das imagens inclui redução de ruído das imagens de raio-X, melhoria de contraste, ampliação do dataset, redimensionamentos e segmentação, se necessário.
+
+A terceira etapa consiste no desenvolvimento dos modelos de CNNs e ViTs. Seleção e implementação de um ou mais arquiteturas de CNNs, como ResNet, VGG e DenseNet, ajustando hiperparâmetros para o aperfeiçoamento do modelo. Para os ViTs, o processo se repete, selecionando ou adaptando os modelos existentes. Por fim, os modelos serão utilizados como fine tunning para serem treinados com as radiografias coletadas.
+
+A quarta e última etapa consiste na avaliação de desempenho dos modelos. A avaliação inclui a comparação de métricas como acurácia, precisão, recall, F1-score para cada classe de severidade da OA. Além disso, torna-se parte desta etapa a avaliação da eficiência computacional através da medição do tempo de treinamento, tempo de inferência e uso de recursos computacionais, comparando a eficiência das arquiteturas.
