@@ -1,12 +1,88 @@
-\chapter{Sistema Proposto}\label{cap:proposta}
+\chapter{Metodologia}\label{cap:proposta}
 
-Esse trabalho propõe um sistema de... 
+Esta seção descreve a metodologia proposta para atingir os objetivos da pesquisa.
 
+\section{Coleta de dados}
 
-\section{Primeira Parte do Sistema Proposto}
+A escolha e coleta dos dados é a primeira tarefa a ser realizada quando o objetivo é treinar um modelo de aprendizado profundo, incluindo redes neurais artificiais e vision transformers. Um conjunto de dados adequado é essencial para que o modelo tenha uma boa performance e seja útil para se tornar uma ferramenta de suporte no diagnóstico de OA de joelho. O conjunto de dados foi obtido a partir da plataforma Kaggle [TODO: fonte], uma fonte amplamente reconhecida por fornecer dados de alta qualidade e de domínio público para estudos acadêmicos e projetos de aprendizado de máquina. O conjunto de dados escolhido é baseado na Osteoarthritis Initiative (OAI) [TODO: fonte], um estudo observacional multicêntrico de dez anos de homens e mulheres, patrocionado pelo National Institutes of Health (NIH), com o objetivo de permitir uma melhor compreensão da prevenção e tratamento da osteoartrite de joelho. Este conjunto contém radiografias de joelhos, juntamente com suas respectivas classificações de severidade da OA, conforme o sistema de Kellgren/Lawrence. Este dataset foi selecionado por sua relevância na plataforma, fornecendo uma base sólida para o treinamento dos modelos de RNCs e ViTs propostos nesta pesquisa. A \autoref{tabela-dataset} detalha algumas propriedades do dataset.
 
-\lipsum[67]
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \textbf{Classe KL} & \textbf{Número de Imagens} & \textbf{Exemplo de Imagem} \\
+        \hline
+        0 (saudável) & 3857 & \includegraphics[width=2cm]{figs/KL0-sample.png} \\
+        \hline
+        1 (duvidoso) & 1770 & \includegraphics[width=2cm]{figs/KL1-sample.png} \\
+        \hline
+        2 (mínimo) & 2578 & \includegraphics[width=2cm]{figs/KL2-sample.png} \\
+        \hline
+        3 (moderado) & 1286 & \includegraphics[width=2cm]{figs/KL3-sample.png} \\
+        \hline
+        4 (severo) & 295 & \includegraphics[width=2cm]{figs/KL4-sample.png} \\
+        \hline
+    \end{tabular}
+    \caption{Tabela do conjunto de dados escolhido.}
+    \label{tabela-dataset}
+\end{table}
 
-\section{Considerações Finais}
+O conjunto de dados contém quatro pastas nomeadas ``auto\_test'', ``test'', ``train'' e ``val'', cada uma contendo as subpastas com imagens 224x224 representando cada um dos graus de KL. O dataset foi dividido entre dados de treino, teste e validação, com uma proporção de 7:2:1. O conjunto de treino é usado para treinar os modelos e consiste na maior proporção de imagens. O conjunto de validação é usado para ajustar os hiperparâmetros do modelo e monitorar o seu desempenho, enquanto o conjunto de teste é usado após o treinamento completo do modelo, para medir o desempenho final e verificar sua capacidade de generalização em dados completamente novos.
 
-\lipsum[68]
+\section{Pré-processamento das imagens}
+
+O pré-processamento de imagens de raio-X é crucial para melhorar a qualidade e facilitar a análise automatizada pelos modelos. Para isso, algumas técnicas devem ser utilizadas, incluindo:
+
+\subsection{Normalização}
+
+A normalização de dados visa ajustar os valores para um intervalo padrão, melhorando a consistência dos dados e a eficiências dos modelos treinados. Para as radiografias, os pixels devem ter seus valores transformados para o intervalo entre 0 e 1.
+
+\subsection{Equalização}
+
+A equalização busca melhorar o contraste e a visibilidade dos detalhes em uma imagem. O objetivo da equalização é redistribuir os níveis de cinza para que todos os valores de intensidade apareçam com uma frequência mais uniforme. Isso é realizado calculando o histograma acumulado da radiografia original e utilizando-o para redistribuir os valores de pixel.
+
+\subsection{Filtragem e suavização}
+
+As técnicas de filtragem e suavização visam reduzir o ruído e melhorar a qualidade visual das imagens. Para isso, será utilizado o filtro gaussiano, onde cada pixel tem o seu valor substituído pelo valor ponderado da média dos pixels vizinhos, onde os pesos são determinados pela função gaussiana.
+
+\subsection{Aumento de dados}
+
+A ideia desta técnica é expandir artificialmente o tamanho e a variabilidade de um conjunto de dados, principalmente quando o volume de dados disponível é limitado. Isso torna os modelos mais robustos e genéricos, prevenindo \textit{overfitting} e melhorar o desempenho em dados novos. As técnicas de aumento de dados que serão utilizadas nas radiografias são: rotação, escalonamento e reflexão (espelhamento) horizontal.
+
+\section{Arquitetura do modelo de Rede Neural Convolucional}
+
+As redes neurais convolucionais possuem um papel muito relevante no contexto de inteligência artificial, especialmente em tarefas de visão computacional devido à sua capacidade de extrair características relevantes de imagens de forma automática, sem qualquer intervenção manual. Sua arquitetura é especialmente eficaz para reconhecer e classificar objetos em imagens complexas, inclusive em radiografias, com o intuito de auxiliar no processo de diagnóstico médico. As RNCs conseguem identificar variações sutis que podem estar associadas a condições patológicas, como é o caso da osteoartrite de joelho, onde as variações entre os graus de KL reside no espaçamento articular da junção do joelho.
+
+Fazer o treinamento de uma RNC sem nenhum conhecimento prévio do modelo é custoso em termos de quantidade de dados necessário, consumo de recursos computacionais e tempo. Para resolver este problema, o uso de \textit{transfer learning} é essencial, pois permite aproveitar modelos já treinados em grandes conjuntos de dados genéricos, como o ImageNet, e adaptá-los para o conjunto de dados específico para o problema. Ao utilizar o \textit{transfer learning}, as primeiras camadas do modelo, que capturam características gerais da imagem, são congeladas, enquanto as camadas finais são ajustadas para a tarefa específica, tal processo é chamado de \textit{fine-tuning}. Isso economiza tempo e recursos computacionais e aumenta a eficácia do treinamento, resultando em modelos que podem fornecer diagnósticos precisos mesmo com volumes menores de dados disponíveis. Nos últimos anos, algumas arquiteturas performaram muito bem em algumas tarefas, como por exemplo a ResNet, VGG, GoogLeNet e DenseNet. Para esta pesquisa, serão trabalhadas os seguintes modelos de RNC:
+
+\subsection{ResNet (Residual Network)}
+
+A ResNet é uma arquitetura amplamente utilizada em tarefas de classificação de imagens devido à sua capacidade de treinar redes profundas sem problemas de desaparecimento de gradiente. A inovação da ResNet está em seus blocos residuais, que introduzem conexões de atalho para permitir que os gradientes fluam melhor durante o treinamento. Isso torna a ResNet altamente eficiente para tarefas de classificação de imagens médicas. Para este trabalho, serão treinados os modelos ResNet34, ResNet50 e ResNet101, que oferecem um bom equilíbrio entre profundidade e performance.
+
+\subsection{VGG (Visual Geometry Group Network)}
+
+O VGG é um modelo mais simples comparado ao ResNet, mas ainda é muito eficaz. Ele se destaca por usar camadas convolucionais de pequenos filtros (3x3) empilhadas seguidas por camadas de pooling. Embora o VGG tenha mais parâmetros que modelos mais modernos, sua estrutura é eficaz para capturar detalhes visuais em imagens médicas. O VGG16 e VGG19 serão utilizados nesta pesquisa.
+
+\subsection{DenseNet (Densely Connected Convolutional Networks)}
+
+O DenseNet utiliza conexões densamente conectadas, onde cada camada recebe entradas de todas as camadas anteriores. Isso promove um fluxo eficiente de gradientes e incentiva o reuso de características aprendidas, o que pode ser muito útil nas radiografias de osteoartrite de joelho, onde detalhes finos precisam ser capturados, especialmente na diferenciação entre graus de KL adjacentes. Os modelos do DenseNet121 e DenseNet169 serão as opções para este trabalho.
+
+\subsection{Inception (GoogLeNet)}
+
+A rede Inception, também chamada de GoogLeNet, é conhecida por seu uso de módulos Inception, que permitem que a rede aprenda de forma mais eficiente ao explorar convoluções de diferentes tamanhos em paralelo. A habilidade da Inception de capturar informações em várias escalas pode ser especialmente útil ao lidar com imagens médicas de diferentes resoluções. O Inception-v3 é uma versão mais moderna e, portanto, será utilizada nesta pesquisa.
+
+\section{Arquitetura do modelo de Vision Transformer}
+
+O modelo de Vision Transformer tem se detacado como uma abordagem poderosa para tarefas de visão computacional devido à sua capacidade de capturar relações globais em imagens através do mecanismo de atenção. Essa abordagem permite que os modelos de ViTs superem as limitações das RNCs, estas que focam mais em características locais da imagem. Tal capacidade é particularmente relevante para o diagnóstico de patologias em imagens médicas, incluindo radiografias, onde o modelo é capaz de processar toda a imagem simultaneamente, associando partes distantes e próximas com igual relevância. Além disso, os ViTs também se beneficiam do \textit{transfer learning}, permitindo que os modelos sejam treinados de forma eficiente em conjuntos de dados limitados. Para esta pesquisa serão treinados alguns modelos de ViTs para a tarefa de classificação da OA de joelho, como segue:
+
+\subsection{ViT-B/16}
+
+O ViT-B/16 é uma das primeiras variantes da arquitetura Vision Transformer, onde "B" representa o modelo base (base model) e "16" refere-se ao tamanho do patch em que a imagem é dividida (16x16 pixels). O ViT-B/16 recebe uma imagem e a divide em patches, tratando cada patch como um "token" semelhante ao processamento de palavras em texto nos transformers tradicionais. O modelo usa um mecanismo de atenção para processar os tokens de maneira global, capturando interdependências entre diferentes regiões da radiografia. Essa abordagem permite que o ViT-B/16 compreenda melhor a estrutura geral da imagem, identificando padrões que podem se estender por grandes áreas da mesma. Este modelo pode ser eficaz para a tarefa de classificação da OA de joelho ao capturar relações no espaçamento articular da divisão do joelho.
+
+\subsection{DeiT (Data-efficient Image Transformer)}
+
+O DeiT é uma versão otimizada dos ViTs, projetada para melhorar a eficiência no uso de dados. Enquanto os ViTs originais, como o ViT-B/16, geralmente precisam de grandes quantidades de dados para atingir um bom desempenho, o DeiT foi projetado para ser treinado em conjunto de dados reduzidos. Isso acontece devido à técnicas do \textit{ditillation token}, que permite ao modelo aprender a partir de um "professor" (modelo mais simples), aumentando a eficiência do treinamento. Este modelo pode ser particularmente útil na tarefa de classificação da OA de joelho, podendo ser um importante fator ao comparar com outros modelos de ViTs e RNCs.
+
+\subsection{Swin Transformer (Shifted Window Transformer)}
+
+O Swin Transformer é uma arquitetura de ViT que introduz uma abordagem inovadora ao utilizar janelas deslizantes, ou \textit{sliding windows}, para aplicar a atenção. Em vez de processar toda a imagem como uma sequência de patches globalmente, o Swin Transformer aplica a atenção dentro de pequenas janelas locais, de forma hierárquica, permitindo que o modelo mantenha a eficiência computacional e ainda capture detalhes locais e globais. Conforme o modelo avança pelas camadas, as janelas se expandem e se deslocam, permitindo que o Swin Transformer agregue contexto global ao longo do processamento. Essa estrutura hierárquica é particularmente eficaz para imagens de alta resolução, como as radiografias, onde há muitos detalhes importantes em diferentes escalas. Além disso, o Swin Transformer pode ser facilmente escalado para diferentes tamanhos de imagens e é altamente eficiente em termos de uso de memória e poder computacional, sendo uma escolha apropriada para a tarefa de classificação da OA de joelho.
