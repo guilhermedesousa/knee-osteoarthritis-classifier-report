@@ -55,8 +55,8 @@
 % Pacotes de CITAÇÕES
 % ---------------------
 \usepackage[brazilian,hyperpageref]{backref}	% Paginas com as citações na bibl
-\usepackage[alf]{abntex2cite}				% Citações padrão ABNT (alfa)
-%\usepackage[num]{abntex2cite}				% Citações padrão ABNT (numericas)
+%\usepackage[alf]{abntex2cite}				% Citações padrão ABNT (alfa)
+\usepackage[num]{abntex2cite}				% Citações padrão ABNT (numericas)
 % ---------------------
 
 % Configurações de CITAÇÕES para abntex2
@@ -115,27 +115,30 @@
 % \include{pretextual/epigrafe}
 
 % Resumo e Abstract
-% \include{pretextual/resumos}
+\include{pretextual/resumos}
 
 % Lista de ilustrações
-% \pdfbookmark[0]{\listfigurename}{lof}
-% \listoffigures*
-% \cleardoublepage
+\pdfbookmark[0]{\listfigurename}{lof}
+\listoffigures*
+\cleardoublepage
 
 % Lista de tabelas
-% \pdfbookmark[0]{\listtablename}{lot}
-% \listoftables*
-% \cleardoublepage
+\pdfbookmark[0]{\listtablename}{lot}
+\listoftables*
+\cleardoublepage
 
 % Lista de abreviaturas e siglas
 \begin{siglas}
-  \item[OA] Osteoarthritis
-  \item[KOA] Knee Osteoarthritis
+  \item[OA] Osteoartrite
   \item[KL] Kellgren/Lawrence
-  \item[CT] Tomografia Computadorizada
-  \item[MRI] Magnetic Resonance Imaging
-  \item[CNN] Convolutional Neural Network
-  \item[ViT] Visual Transformer
+  \item[IA] Inteligência Artificial
+  \item[RNC] Rede Neural Convolucional
+  \item[ViT] Vision Transformer
+  \item[WHO] World Health Organization
+  \item[OAI] Osteoarthritis Initiative
+  \item[NIH] National Institutes of Health
+  \item[CAM] Class Activation Mapping
+  \item[GAP] Global Average Pooling
 \end{siglas}
 
 % Lista de símbolos
@@ -175,7 +178,7 @@
 
 % PARTE
 % \part{Parte Final}
-% \include{capitulos/resultados}
+\include{capitulos/resultados}
 % \include{capitulos/conclusao}
 
 % ----------------------------------------------------------

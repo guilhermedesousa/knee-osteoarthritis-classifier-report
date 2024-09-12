@@ -1,11 +1,21 @@
-\chapter{Resultados e Discussão}\label{cap:resultados}
+\chapter{Resultados esperados}\label{cap:resultados}
 
-\lipsum[73]
+Esta pesquisa utiliza transfer learning de modelos pré-treinados e faz um ajuste fino com o objetivo de classificar o nível de severidade da osteoartrite de joelho usando a escala de Kellgren/Lawrence. Para isso, os treinamentos serão feitos usando a linguagem de programação Python em um ambiente de notebooks disponíveis na plataforma do Google Colab. Caso o treinamento exija um maior poder computacional, o super computador da Universidade Federal do ABC poderá ser utilizado para esta pesquisa.
 
-\section{Base de Dados}
+Nesta seção será discutido os resultados esperados quanto à performance dos modelos treinados usando a metodologia proposta. Espera-se que existam variações significativas de performance entre os modelos, dado que cada arquitetura possui diferentes estratégias para a extração e processamento das características contidas nas radiografias de joelho.
 
-\lipsum[72]
+Os modelos ResNet (ResNet34, ResNet50 e ResNet101) são eficazes para extrair características complexas em imagens, incluindo imagens médicas como radiografias de joelho. Sabe-se que quanto mais profunda é a rede, maior é sua capacidade de capturar padrões complexos. Nesse sentido, o modelo ResNet101 (101 camadas) tende a ser o modelo com maior acurácia, mas pode sofrer com \textit{overfitting} se o conjunto de dados for pequeno, como acontece para a classe KL 4, com apenas 295 imagens no total. Além disso, é esperado que o consumo de recursos computacionais seja maior para redes mais profundas. O modelo ResNet50 pode oferecer um bom equilíbrio entre generalização do modelo e custo computacional.
 
-\section{Considerações Finais}
+Os modelos VGG (VGG16 e VGG19), apesar de profundos, possuem uma arquitetura mais simples em comparação com o ResNet e são menos eficientes em termos de uso de parâmetros e, portanto, identificação de características complexas das radiografias. Embora seja esperado que estes modelos apresentem performance inferior em relação aos modelos ResNet considerando suas profundidades, pelo fato deles serem modelos com arquitetura mais simples e direta, consistindo principalmente de camadas convolucionais empilhadas seguidas por camadas totalmente conectadas, isso pode levar a uma melhor generalização do modelo e menor probabilidade de \textit{overfitting}, trazendo uma performance melhor.
 
-\lipsum[74]
+Os modelos DenseNet (DenseNet121 e DenseNet169) possuem conexões diretas entre todas as camadas, o que facilita o fluxo de informação e melhora a eficiência do aprendizado de padrões em imagens. Esses modelos podem ser especialmente úteis em capturar detalhes sutis nas radiografias, como pequenas degradações no espaço articular. Logo, espera-se que estes modelos tenham uma performance muito competitiva e superem os modelos ResNet e VGG, principalmente o DenseNet169.
+
+O GoogLeNet, com sua arquitetura Inception, permite que o modelo capture diferentes tamanhos de características simultaneamente. Essa flexibilidade pode ser benéfica em radiografias ao extrair padrões importantes em diferentes imagens ou até conjuntos de dados. É esperado que este modelo tenha um bom desempenho, mas não supere as arquiteturas anteriores.
+
+Com relação aos modelos de transformer, o Vit-B/16 tem a capacidade de extrair informações globais da imagem usando um mecanismo de atenção sem a necessidade de convolução. Para o conjunto de dados desta pesquisa, espera-se que ele se destaque, capturando relações complexas e interdependências entre diferentes regiões da imagem, o que pode ser bom na classificação da osteoartrite de joelho. Entretanto, para a classe KL 4, pode ser que o modelo não tenha um desempenho tão bom, dado que os ViTs dependem de muitos dados para treinar efetivamente.
+
+O DeiT é uma abordagem mais eficiente em termos de dados de treinamento, pois ele foi projetado para ser robusto em conjuntos de dados menores. Espera-se que ele tenha um bom equilíbrio entre performance e eficiência computacional, além de apresentar resultados competitivos em relação aos modelos RNCs.
+
+O Swin Transformer é projetado para capturar características locais e globais através de uma abordagem hierárquica de atenção, o que o torna uma boa opção para tarefas que exigem análise de características em várias escalas, como em radiografias. Devido à sua capacidade de trabalhar em diferentes níveis de granularidade, é esperado que o Swin Transformer tenha um desempenho muito competitivo, podendo até mesmo ser superior aos outros modelos de ViT e RNC.
+
+Por fim, o ResNet50-ViT-B/16 junta as forças de RNCs e ViTs para criar uma arquitetura promissora na tarefa de classificação da OA de joelho. A combinação de extração de características locais detalhadas pelo modelo ResNet50 com a capacidade dos transformers de capturar dependências globais na imagem oferece um equilíbrio vantajoso entre precisão e generalização. Espera-se que este modelo apresente resultados superiores em comparação com modelos puramente convolucionais e modelos de transformers isolados.
