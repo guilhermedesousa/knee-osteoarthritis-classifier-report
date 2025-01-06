@@ -49,13 +49,15 @@
 \usepackage{tabularx} 					% Para poder ter tabelas com colunas de largura auto-ajustável
 \usepackage{afterpage} 					% Para executar um comando depois do fim da página corrente
 \usepackage{url} 						% Para formatar URLs (endereços da Web)
+\usepackage{multirow}				    % Para juntar duas linhas em uma só	
+
 % ---------------------
 
 % ---------------------
 % Pacotes de CITAÇÕES
 % ---------------------
 \usepackage[brazilian,hyperpageref]{backref}	% Paginas com as citações na bibl
-%\usepackage[alf]{abntex2cite}				% Citações padrão ABNT (alfa)
+% \usepackage[alf]{abntex2cite}				% Citações padrão ABNT (alfa)
 \usepackage[num]{abntex2cite}				% Citações padrão ABNT (numericas)
 % ---------------------
 
@@ -165,6 +167,8 @@
 
 % Inclui cada capitulo da Dissertação
 \include{capitulos/introducao}
+
+\include{capitulos/fundamentacao}
 
 % PARTE - Define a divisão do documento em partes (Não é obrigatório)
 % \part{Preparação da pesquisa}

@@ -4,28 +4,14 @@ Esta seção descreve a metodologia proposta para a tarefa de classificação da
 
 \section{Coleta de dados}
 
-A escolha e coleta dos dados é a primeira tarefa a ser realizada quando o objetivo é treinar um modelo de aprendizado profundo, incluindo redes neurais artificiais e vision transformers. Um conjunto de dados adequado é essencial para que o modelo tenha uma boa performance e seja útil para se tornar uma ferramenta de suporte no diagnóstico de OA de joelho. O conjunto de dados foi obtido a partir da plataforma Kaggle \cite{dataset-kaggle}, uma fonte amplamente reconhecida por fornecer dados de alta qualidade e de domínio público para estudos acadêmicos e projetos de aprendizado de máquina. O conjunto de dados escolhido é baseado na Osteoarthritis Initiative (OAI), um estudo observacional multicêntrico de dez anos de homens e mulheres, patrocionado pelo National Institutes of Health (NIH), com o objetivo de permitir uma melhor compreensão da prevenção e tratamento da osteoartrite de joelho \cite{oai}. Este conjunto contém radiografias de joelhos, juntamente com suas respectivas classificações de severidade da OA, conforme o sistema de Kellgren/Lawrence. Este dataset foi selecionado por sua relevância na plataforma, fornecendo uma base sólida para o treinamento dos modelos de RNCs e ViTs propostos nesta pesquisa. A \autoref{tabela-dataset} ilustra os detalhes do conjunto de dados.
+A escolha e coleta dos dados é a primeira tarefa a ser realizada quando o objetivo é treinar um modelo de aprendizado profundo, incluindo redes neurais artificiais e vision transformers. Um conjunto de dados adequado é essencial para que o modelo tenha uma boa performance e seja útil para se tornar uma ferramenta de suporte no diagnóstico de OA de joelho. O conjunto de dados foi obtido a partir da plataforma Kaggle \cite{dataset-kaggle}, uma fonte amplamente reconhecida por fornecer dados de alta qualidade e de domínio público para estudos acadêmicos e projetos de aprendizado de máquina. O conjunto de dados escolhido é baseado na Osteoarthritis Initiative (OAI), um estudo observacional multicêntrico de dez anos de homens e mulheres, patrocionado pelo National Institutes of Health (NIH), com o objetivo de permitir uma melhor compreensão da prevenção e tratamento da osteoartrite de joelho \cite{oai}. Este conjunto contém radiografias de joelhos, juntamente com suas respectivas classificações de severidade da OA, conforme o sistema de Kellgren/Lawrence. Este dataset foi selecionado por sua relevância na plataforma, fornecendo uma base sólida para o treinamento dos modelos de RNCs e ViTs propostos nesta pesquisa. A \autoref{dataset-distribuition} ilustra a distribuição do conjunto de dados entre treino, teste e validação.
 
-\begin{table}[htbp]
+\begin{figure}[h]
     \centering
-    \begin{tabular}{|c|c|c|}
-        \hline
-        \textbf{Classe KL} & \textbf{Número de Imagens} & \textbf{Exemplo de Imagem} \\
-        \hline
-        0 (saudável) & 3857 & \includegraphics[width=2cm]{figs/KL0-sample.png} \\
-        \hline
-        1 (duvidoso) & 1770 & \includegraphics[width=2cm]{figs/KL1-sample.png} \\
-        \hline
-        2 (mínimo) & 2578 & \includegraphics[width=2cm]{figs/KL2-sample.png} \\
-        \hline
-        3 (moderado) & 1286 & \includegraphics[width=2cm]{figs/KL3-sample.png} \\
-        \hline
-        4 (severo) & 295 & \includegraphics[width=2cm]{figs/KL4-sample.png} \\
-        \hline
-    \end{tabular}
-    \caption{Quantidade de imagens em cada classe Kellgren/Lawrence do conjunto de dados escolhido.}
-    \label{tabela-dataset}
-\end{table}
+    \includegraphics[width=\linewidth]{figs/num-imagens-por-escala-kl.png}
+    \caption{Número de imagens em cada classe do conjunto de dados}
+    \label{dataset-distribuition}
+\end{figure}
 
 O conjunto de dados contém quatro pastas nomeadas ``auto\_test'', ``test'', ``train'' e ``val'', cada uma contendo as subpastas com imagens 224x224 representando cada um dos graus de KL. O dataset foi dividido entre dados de treino, teste e validação, com uma proporção de 7:2:1. O conjunto de treino é usado para treinar os modelos e consiste na maior proporção de imagens. O conjunto de validação é usado para ajustar os hiperparâmetros do modelo e monitorar o seu desempenho, enquanto o conjunto de teste é usado após o treinamento completo do modelo, para medir o desempenho final e verificar sua capacidade de generalização em dados completamente novos.
 
@@ -37,17 +23,33 @@ O pré-processamento de imagens de raio-X é crucial para melhorar a qualidade e
 
 A normalização de dados visa ajustar os valores para um intervalo padrão, melhorando a consistência dos dados e a eficiências dos modelos treinados. Para as radiografias, os pixels devem ter seus valores transformados para o intervalo entre 0 e 1.
 
-\subsection{Equalização}
+\subsection{Equalização de Histograma}
 
-A equalização busca melhorar o contraste e a visibilidade dos detalhes em uma imagem. O objetivo da equalização é redistribuir os níveis de cinza para que todos os valores de intensidade apareçam com uma frequência mais uniforme. Isso é realizado calculando o histograma acumulado da radiografia original e utilizando-o para redistribuir os valores de pixel.
+A equalização de histograma é um método de processamento de imagem que busca melhorar o contraste e a visibilidade dos detalhes em uma imagem. Para isso, esta técnica redistribui os níveis de cinza da imagem, de forma que a distribuição dos valores de intensidade seja mais uniforme. Isso é feito calculando o histograma acumulado da imagem original e utilizando-o para redistribuir os valores de cada pixel. Em particular, a equalização de histograma é útil para radiografias, onde a variação de intensidade pode ser sutil e a distinção entre diferentes graus de KL pode ser difícil.
 
-\subsection{Filtragem e suavização}
+Dada uma imagem \( I(x, y) \) com intensidades de pixel \( i \in \{0, 1, \dots, L-1\} \) e número total de pixels \( N \), onde \( x \) e \( y \) são as coordenadas do pixel, e \( L \) é o número de níveis de intensidade (normalmente \( L = 256 \) para imagens de 8 bits), a probabilidade de ocorrência de cada intensidade \( i \) é calculada como:
 
-As técnicas de filtragem e suavização visam reduzir o ruído e melhorar a qualidade visual das imagens. Para isso, será utilizado o filtro gaussiano, onde cada pixel tem o seu valor substituído pelo valor ponderado da média dos pixels vizinhos, onde os pesos são determinados pela função gaussiana.
+\[
+p(i) = \frac{n(i)}{N}
+\]
+
+onde \( n(i) \) é o número de pixels com intensidade \( i \) na imagem. O histograma acumulado \( H \) é então calculado como:
+
+\[
+H(i) = \sum_{j=0}^{i} p(j)
+\]
+
+O novo valor de intensidade \( j \) para um pixel com intensidade \( i \) é calculado como:
+
+\[
+j = (L-1) \times H(i)
+\]
+
+onde \( L - 1 \) garante que o novo valor esteja no intervalo de intensidade da imagem. O resultado da equalização é normalmente arredondado para o valor inteiro mais próximo.
 
 \subsection{Aumento de dados}
 
-A ideia desta técnica é expandir artificialmente o tamanho e a variabilidade de um conjunto de dados, principalmente quando o volume de dados disponível é limitado. Isso torna os modelos mais robustos e genéricos, prevenindo \textit{overfitting} e melhorar o desempenho em dados novos. As técnicas de aumento de dados que serão utilizadas nas radiografias são: rotação, escalonamento e reflexão (espelhamento) horizontal.
+A ideia desta técnica é expandir artificialmente o tamanho e a variabilidade de um conjunto de dados, principalmente quando o volume de dados disponível é limitado. Isso torna os modelos mais robustos e genéricos, prevenindo \textit{overfitting} e melhorando o desempenho em dados novos. As técnicas de aumento de dados que serão utilizadas nas radiografias são: rotação e reflexão (espelhamento) horizontal.
 
 \section{Arquitetura do modelo de Rede Neural Convolucional}
 
@@ -71,13 +73,6 @@ O DenseNet \cite{Huang2017} utiliza conexões densamente conectadas, onde cada c
 
 A rede Inception \cite{Szegedy2016}, também chamada de GoogLeNet, é conhecida por seu uso de módulos Inception, que permitem que a rede aprenda de forma mais eficiente ao explorar convoluções de diferentes tamanhos em paralelo. A habilidade da Inception de capturar informações em várias escalas pode ser especialmente útil ao lidar com imagens médicas de diferentes resoluções. O Inception-v3 é uma versão mais moderna e, portanto, será utilizada nesta pesquisa.
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\linewidth]{figs/modelo-rnc.png}
-    \caption{Metodologia para as redes neurais convolucionais}
-    \label{modelo rnc}
-\end{figure}
-
 \section{Arquitetura do modelo de Vision Transformer}
 
 A arquitetura Vision Transformer tem se detacado como uma abordagem poderosa para tarefas de visão computacional devido à sua capacidade de capturar relações globais em imagens através do mecanismo de atenção \cite{Dosovitskiy2021}. Essa abordagem permite que os modelos de ViTs alcancem ótimos resultados e superem as limitações das RNCs, que focam mais em características locais da imagem. Tal capacidade é particularmente relevante para o diagnóstico de patologias em imagens médicas, incluindo radiografias, onde o modelo é capaz de processar toda a imagem simultaneamente, associando partes distantes e próximas com igual relevância. Além disso, os ViTs também se beneficiam do \textit{transfer learning}, permitindo que os modelos sejam treinados de forma eficiente em conjuntos de dados limitados. Para esta pesquisa será feito o \textit{fine-tuning} de alguns modelos de ViT para a tarefa de classificação da OA de joelho, como o ViT-B/16, DeiT (Data-efficient Image Transformer), Swin Transformer (Shifted Window Transformer) e ResNet50-ViT-B/16. A arquitetura para os modelos de ViT pode ser vista na Figura \ref{modelo vit}.
@@ -94,9 +89,9 @@ O DeiT \cite{Touvron2021} é uma versão otimizada dos ViTs, projetada para melh
 
 O Swin Transformer \cite{Liu2021} é uma arquitetura de ViT que introduz uma abordagem nova que utiliza \textit{hierarchical feature maps} e \textit{sliding windows} para aplicar a atenção e melhorar a eficiência e performance do modelo. Em vez de processar toda a imagem como uma sequência de \textit{patches} globalmente, o Swin Transformer aplica a atenção dentro de pequenas janelas locais, de forma hierárquica, permitindo que o modelo mantenha a eficiência computacional e ainda capture detalhes locais e globais. Conforme o modelo avança pelas camadas, as janelas se expandem e se deslocam, permitindo que o modelo agregue contexto global ao longo do processamento. Essa estrutura hierárquica é particularmente eficaz para imagens de alta resolução, como as radiografias, onde há muitos detalhes importantes em diferentes escalas. Além disso, o Swin Transformer pode ser facilmente escalado para diferentes tamanhos de imagens e é altamente eficiente em termos de uso de memória e poder computacional, sendo uma escolha apropriada para a tarefa de classificação da OA de joelho.
 
-\subsection{ResNet50-ViT-B/16}
+% \subsection{ResNet50-ViT-B/16}
 
-Uma abordagem híbrida, combinando RNC, como o ResNet, e ViT, pode ser aplicada de maneira eficaz na classificação da severidade da osteoartrite de joelho, aproveitando as vantagens de ambas as arquiteturas para obter uma melhor predição das classificações de KL \cite{Park2022, Wang2021}. Essa mescla pode ser observada no modelo ResNet50-ViT-B/16, onde o ResNet50 atua como um extrator de características iniciais, processando as radiografias e capturando padrões como texturas e bordas, e o modelo ViT-B/16 utiliza seus mecanismos de atenção para permitir uma análise mais contextualizada e eficiente. A combinação se faz promissora para melhorar a precisão na classificação da OA de joelho, equilibrando eficiência computacional e qualidade do modelo final.
+% Uma abordagem híbrida, combinando RNC, como o ResNet, e ViT, pode ser aplicada de maneira eficaz na classificação da severidade da osteoartrite de joelho, aproveitando as vantagens de ambas as arquiteturas para obter uma melhor predição das classificações de KL \cite{Park2022, Wang2021}. Essa mescla pode ser observada no modelo ResNet50-ViT-B/16, onde o ResNet50 atua como um extrator de características iniciais, processando as radiografias e capturando padrões como texturas e bordas, e o modelo ViT-B/16 utiliza seus mecanismos de atenção para permitir uma análise mais contextualizada e eficiente. A combinação se faz promissora para melhorar a precisão na classificação da OA de joelho, equilibrando eficiência computacional e qualidade do modelo final.
 
 \begin{figure}[h]
     \centering
