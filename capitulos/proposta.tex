@@ -163,6 +163,16 @@ Para tarefas de classificação binária, será utilizada também a métrica AUC
 
 onde $TPR$ é a taxa de verdadeiros positivos e $FPR$ é a taxa de falsos positivos.
 
+\section{Eficiência computacional}
+
+Além da performance dos modelos, a eficiência computacional é um fator importante a ser considerado devido ao custo associado ao treinamento e inferência dos modelos. Para avaliar essa métrica, serão considerados o tempo de treinamento e a quantidade de computação utilizada por cada modelo. O tempo de treinamento, medido em minutos, é calculado da seguinte forma:
+
+\begin{equation}
+    \text{Tempo de Treinamento} = \text{Tempo Final} - \text{Tempo Inicial}
+\end{equation}
+
+onde o tempo final é o momento em que o treinamento é concluído e o tempo inicial é o momento em que ele é iniciado. A quantidade de computação é medida em FLOPs (operações de ponto flutuante por segundo), que representa uma métrica largamente utilizada para medir a quantidade de cálculos necessários para treinar um modelo de aprendizado profundo e está diretamente relacionada à eficiência computacional. A quantidade de FLOPs pode ser calculada de uma forma aproximada a partir do número de operações nas etapas de \textit{forward} e \textit{backward} do modelo, o número de exemplos no conjunto de dados e o número de épocas de treinamento \cite{Lohn2022}. Para esta pesquisa, será utilizada a biblioteca \textit{FLOPs Counter PyTorch} \cite{ptflops} para calcular a quantidade de FLOPs de cada modelo.
+
 \section{Método de visualização}
 
 A visualização é uma técnica importante para avaliar quais foram as regiões da imagens que ajudaram o modelo a fazer determinada previsão. O método de visualização Grad-CAM (Gradient-weighted Class Activation Mapping) é uma técnica usada para interpretar e visualizar as decisões feitas por redes neurais convolucionais (RNCs). Em tarefas de classificação, como a avaliação da severidade da OA de joelho a partir de radiografias, entender quais regiões da imagem contribuíram para a decisão do modelo é crucial para a validação e a confiança nos resultados do modelo.

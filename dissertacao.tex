@@ -50,7 +50,6 @@
 \usepackage{afterpage} 					% Para executar um comando depois do fim da página corrente
 \usepackage{url} 						% Para formatar URLs (endereços da Web)
 \usepackage{multirow}				    % Para juntar duas linhas em uma só	
-
 % ---------------------
 
 % ---------------------
@@ -58,12 +57,14 @@
 % ---------------------
 \usepackage[brazilian,hyperpageref]{backref}	% Paginas com as citações na bibl
 % \usepackage[alf]{abntex2cite}				% Citações padrão ABNT (alfa)
-\usepackage[num]{abntex2cite}				% Citações padrão ABNT (numericas)
+% \usepackage[num]{abntex2cite}				% Citações padrão ABNT (numericas)
 % \usepackage[style=authoryear]{biblatex} % Citações padrão ABNT (numericas)
+\usepackage[authoryear,round]{natbib}
+\bibliographystyle{plainnat}
 % ---------------------
 
 % Configurações de CITAÇÕES para abntex2
-\include{extras/conf_citacoes}
+% \include{extras/conf_citacoes}
 
 % Inclusão de dados para CAPA e FOLHA DE ROSTO (título, autor, orientador, etc.)
 \include{extras/dados}
