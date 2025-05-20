@@ -90,143 +90,36 @@ No entanto, a classificação manual pode ser subjetiva e suscetível a erros, a
     \label{tabela-kl}
 \end{table}
 
-\section{Aprendizado de Máquina}\label{sec:aprendizado-maquina}
+\section{Rede Neural Convolucional (RNC)}\label{sec:rnc}
 
-O aprendizado de máquina (ou \textit{machine learning} em inglês) é um subcampo da inteligência artificial que estuda como os sistemas computacionais podem aprender a partir de dados, identificar padrões, executar tarefas automaticamente e tomar decisões sem serem explicitamente programados \citep{ibm2018}. A aprendizagem ocorre de forma estatística através de exemplos, cujo objetivo é tornar a máquina capaz de aprender relacionamentos e padrões significativos nos dados, a fim de fazer previsões ou tomar decisões com base nesses padrões \citep{Bishop2007}.
+Uma rede neural artificial é um modelo computacional inspirado no cérebro humano \citep{McCulloch1943}, onde neurônios artificiais recebem um conjunto de entradas ponderadas, realizam uma soma dessas entradas e aplicam uma função de ativação para produzir uma saída. Essa estrutura permite que as redes neurais aprendam padrões complexos a partir de dados, tornando-as adequadas para tarefas de processamento de linguagem natural, visão computacional, entre outras aplicações.
 
-\subsection{Tipos de Aprendizado de Máquina}
+Em 2006, \cite{Hinton2006} propuseram o uso de redes neurais artificiais com múltiplas camadas com o objetivo de melhorar a capacidade dos modelos, o que levou a um renascimento do interesse nessas redes e ao desenvolvimento de novas arquiteturas, como é o caso da rede neural convolucional (CNN, do inglês \textit{Convolutional Neural Network}).
 
-O aprendizado de máquina pode ser dividido em três categorias principais: aprendizado supervisionado, aprendizado não supervisionado e aprendizado por reforço \citep{Janiesch2021}.
+As CNNs são modelos de aprendizado profundo projetados para processar dados com estrutura de grade, como imagens. Inspiradas na organização do córtex visual, CNNs são amplamente utilizadas em tarefas de visão computacional, como classificação de imagens, detecção de objetos e segmentação semântica.
 
-\begin{itemize}
-    \item \textbf{Aprendizado Supervisionado}: neste tipo de aprendizado, o algoritmo é treinado em um conjunto de dados rotulados, onde as entradas e saídas são conhecidas. Para cada conjunto de variáveis preditoras $x_i$, $i = 1,...,n$ existe uma variável de saída $y_i$ \citep{James2000}. O objetivo é aprender uma função que mapeia as entradas para as saídas, de modo que o algoritmo possa fazer previsões precisas ou classificar novos dados. Para um modelo linear, dado um conjunto de entradas $X^T = \{X_1, X_2, ..., X_p\}$, a saída prevista $\hat{Y}$ é dada pela equação
-    
-    \begin{equation}
-        \hat{Y} = \hat{\beta}_0 + \sum_{j=1}^{p} X_j \hat{\beta}_j
-    \end{equation},
+A camada de convolução é o componente central das CNNs, responsável por extrair características locais dos dados de entrada. Essa camada utiliza filtros (ou \textit{kernels}), que são pequenas matrizes de pesos (por exemplo, 3x3 ou 5x5) aplicadas em toda a imagem de entrada para gerar um mapa de características (ou \textit{feature maps}), representando a presença dessas características em diferentes regiões da imagem.
 
-    onde $\hat{\beta}_0$ é o viés, $\hat{\beta}_j$ são os coeficientes das variáveis preditoras e $p$ é o número de variáveis preditoras.
+Esses filtros são ajustados durante o treinamento da rede, permitindo que a CNN aprenda a detectar padrões relevantes, como bordas, texturas e formas. Conforme a rede avança pelas camadas, os filtros se tornam mais complexos e capazes de capturar características de alto nível, como objetos inteiros. Após as convoluções, é comum utilizar a função de ativação ReLU (\textit{Rectified Linear Unit}), que substitui valores negativos por zero e introduz não linearidades no modelo, permitindo que ele aprenda representações complexas.
 
-    Agora, para um modelo de classificação, a variável da classe de saída $G$ é discreta e codificada como um vetor de variáveis binárias, onde cada variável representa uma classe possível. A saída prevista $\hat{Y}$ é dada pela função de ativação, que mapeia as entradas para as probabilidades de cada classe. Por exemplo, para uma classificação binária, $\hat{G}$ pode ser definida como:
-
-    \begin{equation}
-        \hat{G} = 
-        \begin{cases}
-            1 & \text{se } \hat{Y} > 0.5 \\
-            0 & \text{caso contrário}
-        \end{cases}
-    \end{equation}
-
-    A \autoref{fig:classification-example} ilustra um exemplo de classificação simples em duas dimensões usando um modelo linear chamado de regressão linear.
-
-    \begin{figure}[h]
-        \centering
-        \includegraphics[width=0.5\linewidth]{figs/classification-example.png}
-        \caption{Um exemplo de classificação em duas dimensões. As classes são codificadas como uma variável binária (AZUL = 0, LARANJA = 1) e, em seguida, ajustadas por regressão linear. A linha é a fronteira de decisão definida por $x^T \hat{\beta} = 0.5$. A região laranja sombreada denota a parte do espaço de entrada classificada como LARANJA, enquanto a região azul é classificada como AZUL \cite{Hastie2009}.}
-        \label{fig:classification-example}
-    \end{figure}
-
-    \item \textbf{Aprendizado Não Supervisionado}: em contraste, o aprendizado não supervisionado descreve um cenário onde o algoritmo é treinado em um conjunto de dados não rotulados, onde para cada observação $i = 1,...,n$, observa-se um vetor de variáveis preditoras $x_i$ sem a presença de uma variável de saída $y_i$. O objetivo é inferir diretamente as estruturas e padrões nos dados, sem a ajuda de um supervisor ou professor corrigindo os erros \citep{James2000}.
-    
-    Um exemplo comum de aprendizado não supervisionado é o agrupamento, onde o objetivo é dividir os dados em grupos ou clusters, de modo que as observações dentro de um mesmo grupo sejam mais semelhantes entre si do que com observações de outros grupos. A \autoref{fig:clustering-example} ilustra um exemplo de agrupamento com duas variáveis, $X_1$ e $X_2$.
-
-    \begin{figure}[h]
-        \centering
-        \includegraphics[width=0.5\linewidth]{figs/clustering-example.png}
-        \caption{Um conjunto de dados de agrupamento envolvendo três grupos. Cada grupo é mostrado usando um símbolo colorido diferente. Os três grupos estão bem separados. Neste cenário, uma abordagem de agrupamento deve identificar com sucesso os três grupos \citep{James2000}.}
-        \label{fig:clustering-example}
-    \end{figure}
-    
-    \item \textbf{Aprendizado por Reforço}: esta técnica de aprendizado é baseada em um sistema de recompensa, onde um agente interage com um ambiente dinâmico e deve aprender a executar ações através de tentativa e erro. O agente é recompensado ou punido com base em suas ações, e o objetivo é maximizar a recompensa ao longo do tempo \citep{Kaelbling1996}.
-    
-    A \autoref{fig:reinforcement-learning-example} mostra o modelo padrão de aprendizado por reforço. Em cada passo de interação o agente recebe como entrada $i$, alguma indicação do estado atual do ambiente $s$; o agente executa alguma ação $a$ para gerar uma saída. O ambiente responde com um sinal de reforço $r$.
-    
-    \begin{figure}[h]
-        \centering
-        \includegraphics[width=0.5\linewidth]{figs/reinforcement-learning-example.png}
-        \caption{O modelo de aprendizado por reforço padrão \citep{Kaelbling1996}.}
-        \label{fig:reinforcement-learning-example}
-    \end{figure}
-
-\end{itemize}
-
-\subsection{Funções de Perda}
-
-Mensurar a qualidade de um modelo de aprendizado de máquina é a chave para avaliar a sua eficácia e desempenho. Para isso, é comum utilizar funções de perda, que são métricas que quantificam a diferença entre as previsões do modelo e os valores reais dos dados. A escolha da função de perda depende do tipo de problema que está sendo resolvido, seja uma tarefa de regressão, classificação ou agrupamento.
-
-Em problemas de regressão, onde o objetivo é prever um valor contínuo, a função de perda comumente usada é o erro quadrátido médio, ou \textit{mean squared error} (MSE) em inglês, que é a média dos quadrados das diferenças entre as previsões e os valores reais. A maior parte dos algoritmos de regressão minimizam este erro para ajustar os parâmetros do modelo. A fórmula do MSE é dada por:
-
-\begin{equation}
-    MSE = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{f}(x_i))^2,
-\end{equation}
-
-onde $y_i$ é o valor real, $\hat{f}(x_i)$ é a previsão do modelo para a entrada $x_i$ e $n$ é o número de observações \citep{James2000}.
-
-Em problemas onde o objetivo é prever uma classe ou categoria, a função de perda mais comum é a entropia cruzada, ou \textit{cross-entropy} em inglês, que mede a divergência entre a distribuição de probabilidade prevista pelo modelo e a distribuição real dos dados. A fórmula da entropia cruzada é dada por:
-
-\begin{equation}
-    H(y, \hat{y}) = -\sum_{i} y_i \log(\hat{y}_i),
-\end{equation}
-
-onde $y_i$ é a distribuição real das classes e $\hat{y}_i$ é a distribuição prevista pelo modelo \citep{Hastie2019}.
-
-\subsection{Viés e Variância}
-
-Quando se treina um modelo de aprendizado de máquina, é importante considerar o viés e a variância, que são duas fontes de erro concorrentes encontradas ao fazer a predição de novos dados num modelo de aprendizado estatístico.
+Após as camadas de convolução, as CNNs geralmente incluem camadas de \textit{pooling} para reduzir a dimensionalidade dos \textit{feature maps}, enquanto preservam as características mais relevantes. O \textit{pooling} pode ser feito de várias maneiras, como \textit{max pooling} (onde o valor máximo de uma região é mantido) ou \textit{average pooling} (onde a média dos valores é calculada). Esse processo contribui para:
 
 \begin{itemize}
-    \item \textbf{Viés}: o viés (ou \textit{bias} em inglês) é o erro sistemático introduzido pelo modelo devido a suposições incorretas sobre os dados. Este valor de erro cresce quando o modelo é muito simples para capturar a complexidade dos dados. Um modelo com alto viés não é capaz de se ajustar bem aos dados de treinamento, o que resulta em um desempenho ruim na generalização para novas entradas.
-    
-    Por exemplo, considere um modelo de regressão linear que modela uma saída $Y$ com base em variáveis preditoras $X_1, X_2, ..., X_p$. Se a relação entre $Y$ e $X$ não é linear, o modelo terá um alto viés e não será capaz de capturar a complexidade do problema na realidade \citep{James2000}.
-    
-    A \autoref{fig:poor-linear-model-fit} ilustra claramente que o problema é não linear e o modelo de regressão linear (curva laranja) não é capaz de se ajustar bem aos dados, resultando em um alto viés.
-
-    \begin{figure}[h]
-        \centering
-        \includegraphics[width=0.5\linewidth]{figs/poor-linear-model-fit.png}
-        \caption{Um exemplo de ajuste ao dados. O modelo de regressão linear (curva laranja) não é capaz de se ajustar bem aos dados. \cite{James2000}.}
-        \label{fig:poor-linear-model-fit}
-    \end{figure}
-
-    \item \textbf{Variância}: a variância (ou \textit{variance} em inglês) se refere à sensibilidade do modelo à pequenas flutuações nos dados de treinamento. Idealmente, o modelo não deveria variar muito entre diferentes conjuntos de treino. Um modelo com alta variância, normalmente representado por modelos mais flexíveis, tende a se adaptar aos ruídos dos dados.
-    
-    A \autoref{fig:poor-flexible-model} mostra um exemplo onde a curva flexível (verde) está seguindo os dados de treino de perto e isso implica numa alta variância do modelo.
-
-    \begin{figure}[h]
-        \centering
-        \includegraphics[width=0.5\linewidth]{figs/poor-flexible-model.png}
-        \caption{Um exemplo de ajuste ao dados. O modelo da linha verde está se ajustando de forma muito próxima aos dados de treino. \cite{James2000}.}
-        \label{fig:poor-flexible-model}
-    \end{figure}
+    \item reduzir a quantidade de parâmetros e o custo computacional da rede.
+    \item tornar a rede mais robusta a pequenas variações nos dados de entrada.
 \end{itemize}
 
-\subsection{Overfitting e Underfitting}
+Após diversas camadas de convolução e \textit{pooling}, uma ou mais camadas totalmente conectadas (\textit{fully connected}) são adicionadas ao final da rede para combinar as características extraídas de camadas anteriores e realizar a tarefa de classificação. Cada neurônio dessas camadas está conectado a todos os valores da camada anterior, permitindo decisões baseadas em combinações globais das informações aprendidas. Em tarefas de classificação, a última camada totalmente conectada geralmente utiliza a função de ativação \textit{softmax}, que transforma as saídas em probabilidades.
 
-No processo de treinamento de modelos de aprendizado de máquina, é comum esbarrar em problemas de sobreajuste (\textit{overfitting}) e subajuste (\textit{underfitting}). Tais problemas ocorrem quando o modelo não é capaz de generalizar bem para novos dados, resultando em um desempenho ruim quando o modelo é avaliado em um conjunto de teste, por exemplo.
+Durante o treinamento, a CNN ajusta os pesos dos filtros por meio do algoritmo de retropropagação (\textit{backpropagation}), em que o erro de saída é retropropagado pela rede para atualizar os pesos e minimizar a função de perda. Esse processo é repetido por várias épocas, permitindo que a rede aprenda a reconhecer padrões complexos nos dados de entrada.
 
-\begin{itemize}
-    \item \textbf{Sobreajuste}: o \textit{overfitting} ocorre quando o modelo se ajusta demais aos dados de treinamento, incluindo erros e ruídos, o que resulta em um desempenho ruim na generalização para novos dados, ou seja, dados que não são parte do conjunto de treinamento. Dessa forma, o modelo se torna muito complexo e sensível aos dados de treinamento, o que pode levar a uma alta variância e baixo viés \citep{Hastie2009}.
-    
-    \item \textbf{Subajuste}: em contraste, o \textit{underfitting} é observado quando o modelo falha em capturar importantes distinções e padrões nos dados, de modo que ele performa muito ruim até nos dados de treinamento. Dessa forma, o modelo deverá ter uma alto viés e baixa variância \citep{Hastie2009}.
-\end{itemize}
-
-\section{Aprendizado Profundo}\label{sec:aprendizado-profundo}
-
-O aprendizado profundo (ou \textit{deep learning} em inglês) é um ramo do aprendizado de máquina e inteligência artificial que se baseia em redes neurais artificiais com múltiplas camadas de processamento, conhecidas como redes neurais profundas. Essas redes estão sendo aplicadas com sucesso em diversas áreas, como saúde, reconhecimento visual, cibersegurança, entre outras, devido à sua capacidade de aprender representações complexas e abstratas dos dados \citep{Sarker2021}.
-
-O conceito de aprendizado profundo, no entanto, não é novo. Em 2006, Geoffrey Hinton e seus colaboradores propuseram o uso de redes neurais profundas para melhorar a capacidade de aprendizado de máquinas, o que levou a um renascimento do interesse em redes neurais profundas e ao desenvolvimento de novas arquiteturas, como as redes neurais convolucionais (CNNs) e as redes neurais recorrentes (RNNs) \citep{Hinton2006}.
-
-\subsection{Redes Neurais Artificiais}
-
-As redes neurais artificiais são modelos computacionais inspirados no cérebro humano \citep{McCulloch1943}. Elas são capazes de aprender a partir de dados, modificando seus componentes internos para melhorar o desempenho em tarefas específicas.
-
-Uma rede neural é tipicamente composta por várias camadas de neurônios, onde cada neurônio representa uma unidade de processamento que recebe entradas, realiza uma soma ponderada dessas entradas, aplica uma função de ativação e produz uma saída (\autoref{fig:neuronio-artificial}). Esses neurônios formam conexões entre si através de pesos, que são ajustados durante o treinamento para minimizar a função de perda e melhorar o desempenho do modelo \citep{Grossi2007}.
+A \autoref{fig:cnn} ilustra uma rede neural convolucional composta por cinco camadas. O número de camadas, a disposição dessas camadas, o número e tamanho dos filtros, a forma de conexão entre as camadas, entre outros fatores, podem variar dependendo da arquitetura escolhida. Em seguida, serão aprensentadas algumas das arquiteturas populares de CNN que serão utilizadas neste trabalho.
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.5\linewidth]{figs/neuronio-artificial.jpg}
-    \caption{Um neurônio artificial. Fonte: \cite{Martiniano2016}.}
-    \label{fig:neuronio-artificial}
+    \includegraphics[width=0.5\linewidth]{figs/convolution-neural-network.png}
+    \caption{Uma rede neural convolucional simples, composta por apenas cinco camadas. Fonte: \cite{Saxena2022}.}
+    \label{fig:cnn}
 \end{figure}
 
 \subsubsection{Perceptron e Perceptron Multicamadas}
