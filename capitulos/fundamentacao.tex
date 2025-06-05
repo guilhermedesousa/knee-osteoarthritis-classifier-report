@@ -321,24 +321,45 @@ O uso de modelos de aprendizado profundo baseados em redes neurais convolucionai
 
 \subsection{Predição Conformal}
 
-A predição conformal é uma técnica que fornece intervalos de confiança para previsões feitas por qualquer modelo de aprendizado de máquina. Dada uma probabilidade de erro $\epsilon$, a predição conformal gera um conjunto de possíveis rótulos para um novo exemplo $y$, incluindo o rótulo $\hat{y}$ fornecido pelo modelo e, geralmente, o rótulo verdadeiro com probabilidade de pelo menos $1 - \epsilon$ \citep{angelopoulos2021gentle}.
+A predição conformal é uma técnica estatística que fornece intervalos de confiança às previsões de qualquer modelo de aprendizado de máquina. Dada uma probabilidade de erro $\epsilon$, o método gera, para cada nova entrada, um conjunto de possíveis rótulos que inclui a predição $\hat{y}$ do modelo, com garantia teórica de que o rótulo verdadeiro estará nesse conjunto com probabilidade de ao menos $1 - \epsilon$ \citep{angelopoulos2021gentle}.
 
-Suponha um modelo classificador $\hat{f}$ e um conjunto de imagens classificadas em uma das $K$ classes possíveis. Para cada imagem, o modelo atribui uma probabilidade $\hat{f}(x) \in [0,1]^K$ para cada classe, normalmente usando a função \textit{softmax}. Em seguida, um conjunto de imagens de calibração é utilizado para encontrar um limiar de confiança $\hat{q}$, que é o valor mínimo de probabilidade para considerar uma classe como possível. A etapa de calibração é feita da seguinte forma:
+Considere um modelo classificador $\hat{f}$ e um conjunto de imagens classificadas em uma das $K$ classes possíveis. Para cada imagem $x$, o modelo atribui uma distribuição de probabilidades $\hat{f}(x) \in [0,1]^K$ sobre as classes, geralmente obtida por meio da função \textit{softmax}. Com base nessas probabilidades, utiliza-se um conjunto de calibração para então encontrar o conjunto de predição. Em resumo, a predição conformal é realizada da seguinte forma:
 
 \begin{enumerate}
-    \item Para cada par ($X_i$,$Y_i$) de imagem do conjunto de calibração, calcula-se a pontuação de conformidade $s_i = 1 - \hat{f}(X_i)_{Y_i}$
-    \item Ordena-se as pontuações de conformidade em ordem crescente: $s_1 \leq s_2 \leq ... \leq s_n$
-    \item Define-se o limiar de confiança $\hat{q}$ como o quantil ${\lceil (n+1)(1-\epsilon) \rceil}/n$ sobre $s_1, ... s_n$, onde $\lceil \cdot \rceil$ é a função teto.
+    \item Para cada par de imagem ($x$, $y$) do conjunto de calibração, calcula-se a pontuação de conformidade $s(x,y)$:
+    \begin{equation}
+        s(x,y) = \sum_{j=1}^{k} \hat{f}(x)_{\pi_j(x)}\text{, onde } y = \pi_k(x)
+    \end{equation}
+    e $\pi(x)$ é uma permutação dos rótulos de classe $\lbrace 1 \text{,...,} K \rbrace$, ordenada de acordo com a probabilidade atribuída pelo modelo, ou seja, $\hat{f}(x)_{\pi_1(x)} \geq \hat{f}(x)_{\pi_2(x)} \geq ... \geq \hat{f}(x)_{\pi_k(x)}$. Em outras palavras, as probabilidades de cada classe são somadas até que se alcance a classe correta $y$.
+
+    \item Define-se o limiar de confiança $\hat{q}$ como sendo o quantil ${\lceil (n+1)(1-\epsilon) \rceil}/n$ sobre $s_1, ... s_n$, onde $\lceil \cdot \rceil$ é a função teto.
+    \item Para um novo par de imagem de teste ($x_{\text{test}}$, $y_{\text{test}}$), forma-se o conjunto de predição $\lbrace y:s(x_{\text{test}},y_{\text{test}}) \leq \hat{q} \rbrace$:
+    \begin{equation}
+        C(x_{\text{test}}) = \lbrace \pi_1(x) \text{,...,} \pi_k(x) \rbrace \text{, onde } k = \sup \Bigg\lbrace k' : \sum_{j=1}^{k'} \hat{f}(x_{\text{test}})_{\pi_j(x_{\text{test}})} < \hat{q} \Bigg\rbrace + 1
+    \end{equation}
 \end{enumerate}
 
-Dessa forma, dada uma nova imagem de teste $X_{\text{test}}$, a predição conformal gera um conjunto de rótulos possíveis $C(X_{\text{test}}) = \lbrace y:s(X_{\text{test}},y) \leq \hat{q} \rbrace$, que inclui todas as classes cujo valor \textit{softmax} é maior ou igual ao limiar de confiança $\hat{q}$.
+A predição conformal tem sido aplicada em diversas áreas, incluindo ciência forense, biometria e medicina, onde o objetivo é fornecer previsões mais confiáveis sobre a saída do modelo \citep{Fontana2023}. Por exemplo, \cite{Pereira2020} utilizaram a predição conformal para prever o intervalo de confiança da probabilidade de que pacientes com comprometimento cognitivo leve evoluam para demência.
 
-Como uma extensão da predição conformal, \cite{angelopoulos2021gentle} introduziram um método para para gerar intervalos de confiança, chamado de \textit{adaptive prediction sets} (APS). Esse método é baseado na ideia de que, em vez de gerar um conjunto de rótulos com o menor tamanho médio, o modelo pode gerar um conjunto adaptativo de rótulos, que se ajusta dinamicamente ao nível de incerteza do modelo.
+% TODO: escrever sobre avaliação de predição conformal
 
-Seguindo o APS, o conjunto de rótulos $\lbrace y: s(x,y) \leq \hat{q} \rbrace$ é definido da seguinte forma:
+\subsubsection{Verificação de corretude}
+
+A verificação de corretude é uma técnica para testar se a predição conformal atende às garantias teóricas de cobertura, definida pelo \autoref{theorem:conformal-prediction}. A ideia é verificar se o conjunto de predição $C(x)$ contém o rótulo verdadeiro $y$ com probabilidade de pelo menos $1 - \epsilon$.
+
+\begin{theorem}
+\label{theorem:conformal-prediction}
+    (Garantia de cobertura conformal; \cite{Vovk1999}) Suponha $(X_i,Y_i)_{i=1,...,n}$ e $(X_\text{test},Y_\text{test})$ são independentes e identicamente distribuídos ($i.i.d.$) e defina $\hat{q}$ como o quantil ${\lceil (n+1)(1-\epsilon) \rceil}/n$ e $C(X_\text{test}) = \lbrace y : s(X_\text{test},y) \leq \hat{q}$. Então, o segue que:
+
+    \begin{equation}
+        P(Y_\text{test} \in C(X_\text{test})) \geq 1 - \epsilon.
+    \end{equation}
+\end{theorem}
+
+Para calcular a cobertura $C$, é necessário executar o algoritmo de predição conformal em um conjunto de teste. A cobertura é então calculada como a proporção de casos em que o rótulo verdadeiro $Y_\text{test}$ está contido no conjunto de predição $C(X_\text{test})$:
 
 \begin{equation}
-    C(x) = \lbrace \pi_1(x), ..., \pi_k(x) \rbrace \text{, onde } k = \sup \Bigg\lbrace k' : \sum_{j=1}^{k'} \hat{f}(x)_{\pi_j(x)} < \hat{q} \Bigg\rbrace + 1
+    C = \frac{1}{N} \sum_{i=1}^{N} \mathbb{I}(Y_i \in C(X_i))
 \end{equation}
 
-A predição conformal tem sido aplicada em diversas áreas, incluindo ciência forense, biometria e medicina, onde o objetivo é fornecer previsões mais confiáveis sobre a saída do modelo \citep{Fontana2023}. Por exemplo, \cite{Pereira2020} utilizaram a predição conformal para prever o intervalo de confiança da probabilidade de que pacientes com comprometimento cognitivo leve evoluam para demência.
+onde $N$ é o número de casos no conjunto de teste e $\mathbb{I}$ é a função indicadora, que retorna 1 se a condição for verdadeira e 0 caso contrário. A cobertura deve ser comparada com o nível de confiança $\epsilon$ para verificar se a predição conformal atende às garantias teóricas.
