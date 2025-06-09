@@ -122,161 +122,332 @@ A \autoref{fig:cnn} ilustra uma rede neural convolucional composta por cinco cam
     \label{fig:cnn}
 \end{figure}
 
-\subsubsection{Perceptron e Perceptron Multicamadas}
+\subsection{VGG (Visual Geometry Group Network)}
 
-\subsubsubsection{Perceptron}
+Os modelos VGG foram introduzidos pelo \textit{Visual Geometry Group} da Universidade de Oxford por \cite{Simonyan2015}, que depois serviu como base para a competição do \textit{ImageNet} em 2014, quando conquistaram o primeiro e segundo lugar na época. A arquitetura VGG é conhecida por sua simplicidade e profundidade, utilizando filtros convolucionais pequenos (3×3) empilhados em camadas profundas, variando de 11 a 19 camadas. O objetivo dos autores era explorar o impacto da profundidade na performance do modelo, e eles descobriram que redes neurais mais profundas superavam redes mais rasas, desde que treinadas adequadamente.
 
-O tipo mais simples de rede neural é chamado de perceptron, que consiste num modelo linear baseado em um neurônio artificial capaz de fazer previsões binárias. Ele é muito similar à regressão linear, mas com a adição de uma função de ativação que transforma a saída em uma previsão binária \citep{James2000}. O perceptron pode ser definido pela seguinte fórmula:
+A arquitetura VGG processa imagens RGB de 224×224 pixels, utilizando uma série de camadas convolucionais seguidas por camadas de \textit{pooling}, onde cada camada contém um número crescente de filtros 3×3. O \textit{stride} é fixo em 1 pixel, e o \textit{padding} é utilizado para manter a dimensão da imagem. Após as camadas convolucionais, são aplicadas camadas de \textit{max-pooling} com um tamanho de 2×2 e \textit{stride} de 2, reduzindo a dimensão da imagem pela metade. Por fim, são adicionadas três camadas totalmente conectadas (ou \textit{fully connected} do inglês), seguidas por uma camada de saída com ativação \textit{softmax} para classificação. Além disso, as camadas escondidas são ativadas por funções ReLU, reponsáveis por introduzir a não-linearidade no modelo.
 
-\begin{equation}
-    \hat{Y} = 
-    \begin{cases}
-        1 & \text{se } \sum_{i=1}^{n} w_i x_i > \theta \\
-        0 & \text{caso contrário}
-    \end{cases}
-\end{equation}
+A tabela \ref{vgg-arch} apresenta a configuração das arquiteturas VGG-16 e VGG-19, com um total de 16 e 19 camadas, respectivamente. Ambas se destacaram na competição do \textit{ImageNet} e são amplamente utilizadas devido à sua performance em tarefas de classificação, incluindo o diagnóstico a partir de imagens médicas \citep{Saini2023, Sitaula2021}. Por esse motivo, estas arquiteturas serão utilizadas nesta pesquisa como comparação com os demais modelos.
 
-onde $w_i$ são os pesos das variáveis preditoras $x_i$, $\theta$ é o limiar de ativação e $\hat{Y}$ é a previsão do modelo. Este algoritmo, também conhecido como perceptron de camada única, serve como base para as redes neurais artificiais e é usado para resolver problemas de classificação binária.
-
-A \autoref{fig:perceptron} ilustra uma rede neural típica com uma camada de entrada, uma camada oculta e uma camada de saída. Este tipo de rede é capaz de modelar tanto problemas de classificação quanto de regressão, dependendo da função de ativação usada e o número de neurônios na camada de saída. Para um problema de classificação com K classes, existem K neuronios na camada de saída, cada um representando uma classe possível \citep{James2000}.
-
-\begin{figure}
+\begin{table}[h]
     \centering
-    \includegraphics[width=0.5\linewidth]{figs/perceptron-network.png}
-    \caption{Rede neural artificial com uma camada oculta. Fonte: \cite{James2000}.}
-    \label{fig:perceptron}
-\end{figure}
+    \footnotesize
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{VGG-16} & \textbf{VGG-19} \\
+        \hline
+        16 camadas & 19 camadas \\
+        \hline
+        \multicolumn{2}{|c|}{imagem RGB de entrada (224 x 224)} \\
+        \hline
+        conv3-64 & conv3-64 \\
+        conv3-64 & conv3-64 \\
+        \hline
+        \multicolumn{2}{|c|}{maxpool} \\
+        \hline
+        conv3-128 & conv3-128 \\
+        conv3-128 & conv3-128 \\
+        \hline
+        \multicolumn{2}{|c|}{maxpool} \\
+        \hline
+        conv3-256 & conv3-256 \\
+        conv3-256 & conv3-256 \\
+        conv3-256 & conv3-256 \\
+         & \textbf{conv3-256} \\
+        \hline
+        \multicolumn{2}{|c|}{maxpool} \\
+        \hline
+        conv3-512 & conv3-512 \\
+        conv3-512 & conv3-512 \\
+        conv3-512 & conv3-512 \\
+         & \textbf{conv3-512} \\
+        \hline
+        \multicolumn{2}{|c|}{maxpool} \\
+        \hline
+        conv3-512 & conv3-512 \\
+        conv3-512 & conv3-512 \\
+        conv3-512 & conv3-512 \\
+         & \textbf{conv3-512} \\
+        \hline
+        \multicolumn{2}{|c|}{maxpool} \\
+        \hline
+        \multicolumn{2}{|c|}{FC-4096} \\
+        \hline
+        \multicolumn{2}{|c|}{FC-4096} \\
+        \hline
+        \multicolumn{2}{|c|}{FC-1000} \\
+        \hline
+        \multicolumn{2}{|c|}{softmax} \\
+        \hline
+    \end{tabular}
+    \caption{Configuração dos modelos VGG-16 e VGG-19. Os parâmetros de cada camada convolucional são denotados por "conv<tamanho do campo receptivo>-<número de canais>". A função de ativação ReLU não é exibida por motivos de simplicidade.}
+    \label{vgg-arch}
+\end{table}
 
-\subsubsubsection{Treinamento do Perceptron}
+\subsection{ResNet (Residual Network)}
 
-O treinamento do perceptron é feito através do algoritmo de aprendizado supervisionado, onde o modelo é ajustado iterativamente para minimizar a função de perda. O algoritmo mais comum para treinar o perceptron é o algoritmo de Rosenblatt \citep{Rosenblatt1958}, que busca encontrar um hiperplano que separe duas classes através da minimização da distância de pontos mal classificados em relação ao hiperplano.
+\cite{He2016} venceram a competição ILSVRC 2015 com a arquitetura \textit{Residual Network} (\textit{ResNet}), que introduziu a ideia de blocos residuais e alcançou uma taxa de erro de 3,57\% no conjunto de validação do \textit{ImageNet} com um \textit{ensemble} de seus modelos. Os autores abordaram o problema da degradação de desempenho: conforme a profundidade da rede aumentava, a acurácia saturava e começava a diminuir. Para resolver, eles introduziram a ideia de conexões de atalho (\textit{skip connections}) entre as camadas, onde o sinal de entrada de uma camada é somado ao sinal de saída de uma camada subsequente (\autoref{residual-learning}).
 
-A primeira etapa consiste em inicializar os pesos, normalmente com valores aleatórios baixos ou zero. É comum utilizar $w_i$ para representar o $i$-ésimo valor no vetor de pesos e $x_{j,i}$ para representar o valor da $i$-ésima variável preditora no $j$-ésimo valor no vetor de entrada de treinamento. Em seguida, é calculada a saída prevista $y_j$ para cada valor de entrada $x_j$ da seguinte forma:
-
-\begin{equation}
-    \begin{split}
-        y_j(t) &= f[w(t) \cdot x_j] \\
-        &= f[w_0(t) \cdot x_{j,0} + w_1(t) \cdot x_{j,1} + ... + w_n(t) \cdot x_{j,n}]
-    \end{split}
-\end{equation}
-
-onde $f$ é a função de ativação e $w(t)$ é o vetor de pesos no tempo $t$. A saída prevista $y_j(t)$ é então comparada com o valor real $d_j$ para atualizar os pesos de acordo com a regra de aprendizado:
-
-\begin{equation}
-    w_i(t+1) = w_i(t) + \eta \cdot (d_j - y_j(t)) \cdot x_{j,i}
-\end{equation}
-
-onde $\eta$ é a taxa de aprendizado, que controla o tamanho do passo de atualização dos pesos. O algoritmo continua iterando sobre os dados de treinamento até que a função de perda $\frac{1}{s} \sum_{j=1}^{s} |d_j - y_j(t)|$ seja minimizada, onde $s$ é o número de observações no conjunto de treinamento, ou até que um critério de parada, como a convergência do erro, a acurácia do modelo ou o número máximo de iterações seja atingido.
-
-\subsubsubsection{Perceptron Multicamadas}
-
-Ao adicionar múltiplas camadas de neurônios entre a entrada e a saída, forma-se o que se denomina perceptron multicamadas (MLP – \textit{Multilayer Perceptron}), geralmente composto por uma camada de entrada, uma ou mais camadas ocultas — responsáveis pelo processo de aprendizado — e uma camada de saída \citep{Sarker2021}. A \autoref{fig:multilayer-perceptron} apresenta uma arquitetura típica de um MLP.
-
-Quando a rede neural é expandida com várias camadas ocultas, ela passa a ser chamada de rede neural profunda (\textit{Deep Neural Network}), capaz de aprender representações hierárquicas, mais complexas e abstratas dos dados \citep{AurlienGron2019}. Esse tipo de arquitetura permite a resolução de problemas altamente não lineares e desafiadores, frequentemente presentes em tarefas como visão computacional, processamento de linguagem natural e reconhecimento de voz.
+Formalmente, considerando que o objetivo de uma rede neural é aprender uma função \( H(x) \), onde \( x \) é a entrada, a ResNet propõe que a rede aprenda uma função residual \( F(x) = H(x) - x \), onde a entrada \( x \) é adicionada à saída \( H(x) \), reformulando a função de aprendizado como \( H(x) = F(x) + x \). Essa abordagem permite que a rede aprenda funções de identidade mais facilmente, facilitando o treinamento de redes mais profundas sem adicionar complexidade.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\linewidth]{figs/multilayer-perceptron.png}
-    \caption{Arquitetura de uma rede perceptron multicamadas com duas entradas, uma camada oculta de quatro neurônios e três neurônios de saída (os neurônios de viés são mostrados, mas normalmente estão implícitos). Fonte: \cite{AurlienGron2019}.}
-    \label{fig:multilayer-perceptron}
+    \includegraphics[width=0.5\linewidth]{figs/residual-connection.png}
+    \caption{Aprendizado residual}
+    \label{residual-learning}
 \end{figure}
 
-\subsubsection{Funções de Ativação}
+A arquitetura ResNet é composta por pilhas de blocos residuais que consistem em duas camadas convolucionais, com um \textit{Batch Normalization} e uma função de ativação ReLU entre elas. As camadas convolucionais utilizam filtros de tamanho 3×3, com um \textit{stride} de 1 e \textit{padding} de 1, para manter a dimensão da imagem. A saída do bloco residual é então somada à entrada original, permitindo que o modelo aprenda a função residual. A rede termina com uma camada de \textit{average pooling} global e uma camada totalmente conectada (ou \textit{fully connected} do inglês) com ativação \textit{softmax} para classificação.
 
-As funções de ativação desempenham um papel fundamental nas redes neurais artificiais, pois são responsáveis por introduzir não linearidade no modelo e melhorar a convergência da rede \citep{Dubey2022}. Sem elas, independentemente do número de camadas ocultas adicionadas, a rede se comportaria como um modelo linear, incapaz de aprender e representar padrões complexos e não lineares dos dados.
+A tabela \ref{resnet-arch} apresenta a configuração das arquiteturas ResNet-34, ResNet-50 e ResNet-101, que são variantes da ResNet com diferentes profundidades. Essas arquiteturas foram escolhidas devido à sua popularidade e eficácia em tarefas de classificação de imagens, especialmente em radiografias. \cite{Leung2020} utilizaram a arquitetura ResNet-34 para diagnosticar a OA de joelhos em pacientes submetidos à artroplastia total do joelho (TKA) e obtiveram resultados que superaram modelos de resultados binários.
 
-Matematicamente, uma função de ativação $f$ transforma a saída $z$ de um neurônio em uma nova saída $f(z)$, que será propagada para as camadas seguintes da rede. Algumas das funções de ativação mais comuns incluem:
+\begin{table}[h]
+    \centering
+    \footnotesize
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        \textbf{Camada} & \textbf{Tamanho da saída} & \textbf{34 camadas} & \textbf{50 camadas} & \textbf{101 camadas} \\
+        \hline
+        conv1 & 112×112 & \multicolumn{3}{c|}{7×7, 64, stride 2} \\
+        \hline
+        \multicolumn{2}{|c|}{ } & \multicolumn{3}{c|}{3×3 max pool, stride 2} \\
+        \hline
+        conv2\_x & 56×56 & 
+        $\left[\begin{array}{c}
+        3 \times 3, 64 \\
+        3 \times 3, 64
+        \end{array}\right] \times 3$ & 
+        $\left[\begin{array}{c}
+        1 \times 1, 64 \\
+        3 \times 3, 64 \\
+        1 \times 1, 256
+        \end{array}\right] \times 3$ & 
+        $\left[\begin{array}{c}
+        1 \times 1, 64 \\
+        3 \times 3, 64 \\
+        1 \times 1, 256
+        \end{array}\right] \times 3$ \\
+        \hline
+        conv3\_x & 28×28 &
+        $\left[\begin{array}{c}
+        3 \times 3, 128 \\
+        3 \times 3, 128
+        \end{array}\right] \times 4$ & 
+        $\left[\begin{array}{c}
+        1 \times 1, 128 \\
+        3 \times 3, 128 \\
+        1 \times 1, 512
+        \end{array}\right] \times 4$ & 
+        $\left[\begin{array}{c}
+        1 \times 1, 128 \\
+        3 \times 3, 128 \\
+        1 \times 1, 512
+        \end{array}\right] \times 4$ \\
+        \hline
+        conv4\_x & 14×14 & 
+        $\left[\begin{array}{c}
+        3 \times 3, 256 \\
+        3 \times 3, 256
+        \end{array}\right] \times 6$ & 
+        $\left[\begin{array}{c}
+        1 \times 1, 256 \\
+        3 \times 3, 256 \\
+        1 \times 1, 1024
+        \end{array}\right] \times 6$ & 
+        $\left[\begin{array}{c}
+        1 \times 1, 256 \\
+        3 \times 3, 256 \\
+        1 \times 1, 1024
+        \end{array}\right] \times 23$ \\
+        \hline
+        conv5\_x & 7×7 &
+        $\left[\begin{array}{c}
+        3 \times 3, 512 \\
+        3 \times 3, 512
+        \end{array}\right] \times 3$ &
+        $\left[\begin{array}{c}
+        1 \times 1, 512 \\
+        3 \times 3, 512 \\
+        1 \times 1, 2048
+        \end{array}\right] \times 3$ & 
+        $\left[\begin{array}{c}
+        1 \times 1, 512 \\
+        3 \times 3, 512 \\
+        1 \times 1, 2048
+        \end{array}\right] \times 3$ \\
+        \hline
+         & 1×1 & \multicolumn{3}{c|}{average pool, 1000-d fc, softmax} \\
+        \hline
+        \multicolumn{2}{|c|}{FLOPs} & 3.6×10\textsuperscript{9} & 3.8×10\textsuperscript{9} & 7.6×10\textsuperscript{9} \\
+        \hline
+    \end{tabular}
+    \caption{Configuração das arquiteturas ResNet-34, ResNet-50 e ResNet-101.}
+    \label{resnet-arch}
+\end{table}
 
-\begin{itemize}
-    \item \textbf{Sigmoide}: é uma função limitada e diferenciável, que tem exatamente um ponto de inflexão. Devido a sua característica de limitar valores em um intervalo definido, ela é chamada de função de compressão (ou \textit{squashing function} do inglês) \citep{lederer2021activation}. A função sigmoide logística, também conhecida como função logística, é definida como:
-    
-    \[
-    f(z) = \sigma(z) = \frac{1}{1 + e^{-z}}
-    \]
-    
-    Essa função mapeia os valores de entrada para o intervalo $(0, 1)$, o que a torna útil para modelar probabilidades. Por isso, a função sigmoide é frequentemente utilizada em problemas de classificação binária, onde a saída é interpretada como uma probabilidade \citep{nwankpa2018activation}.
+\subsection{DenseNet (Densely Connected Convolutional Networks)}
 
-    Apesar de ser historicamente importante na teoria e prática de redes neurais, a função sigmoide sofre com o problema do \textit{desvanecimento do gradiente} (\textit{vanishing gradient}), onde os gradientes se tornam muito pequenos durante o treinamento, dificultando a atualização dos pesos e levando a um aprendizado lento ou estagnado, especialmente em redes profundas \citep{Dubey2022}.
-
-    \item \textbf{Tangente Hiperbólica (tanh)}: é uma função de ativação semelhante à sigmoide, mas com a vantagem de ser centrada em zero, o que pode contribuir para a convergência do modelo, além de ter uma saída mais ampla, variando entre -1 e 1 \citep{nwankpa2018activation}. A função tangente hiperbólica é definida como:
-    
-    \[
-    f(z) = \tanh(z) = \frac{e^{z} - e^{-z}}{e^{z} + e^{-z}}
-    \]
-    
-    A função tanh também sofre com o problema do desvanecimento do gradiente, mas em menor grau do que a sigmoide \citep{Dubey2022}. Outra condição importante a ser considerada é que a função tanh pode produzir ``neurônios mortos'' quando a entrada é muito grande ou muito pequena, resultando em gradientes nulos e impedindo a atualização dos pesos \citep{nwankpa2018activation}.
-
-    \item \textbf{ReLU (Rectified Linear Unit)}: atualmente uma das funções mais utilizadas em aplicações de aprendizado profundo, a ReLU é uma função de ativação mais rápida e eficiente do que a sigmoide e a tangente hiperbólica \citep{Nair2010}. De forma simples, a ReLU é uma função linear que retorna o valor de entrada se ele for maior que zero, e zero caso contrário, definida como:
-    
-    \[
-    f(z) = \max(0, z) =
-    \begin{cases}
-        z, & \text{se } z > 0 \\
-        0, & \text{caso contrário}
-    \end{cases}
-    \]
-
-    Ela resolve parcialmente o problema do desvanecimento do gradiente, mas pode levar à inatividade de neurônios quando $z < 0$ \citep{Dubey2022}. Apesar disso, a ReLU é amplamente utilizada em redes neurais profundas devido à sua simplicidade e eficiência computacional.
-
-    \item \textbf{Leaky ReLU}: é uma variação da ReLU que introduz uma pequena inclinação para valores negativos, evitando que os neurônios fiquem permanentemente inativos durante o processo de treinamento \citep{Maas2013}. O parâmetro $\alpha$ controla a inclinação da função para valores negativos, evitando que os gradientes sejam zero \citep{nwankpa2018activation}. A Leaky ReLU é definida como:
-    
-    \[
-    f(z) = \alpha z + z =
-    \begin{cases}
-    z, & \text{se } z > 0 \\
-    \alpha z, & \text{caso contrário}
-    \end{cases}
-    \]
-
-    onde $\alpha$ é um pequeno valor positivo, tipicamente 0{,}01.
-
-    \item \textbf{Softmax}: é uma função de ativação usada para computar a distribuição de probabilidade de um vetor de valores reais, onde a soma das saídas é igual a 1 \citep{nwankpa2018activation}. A função softmax é definida como:
-    
-    \[
-    f(z_i) = \frac{e^{z_i}}{\sum_{j=1}^{K} e^{z_j}}, \quad \text{para } i = 1, 2, \dots, K
-    \]
-
-    onde $K$ é o número total de classes.
-
-    A função softmax é frequentemente utilizada na camada de saída de redes neurais para problemas de classificação multiclasse, onde cada neurônio na camada de saída representa uma classe e a saída da função softmax é interpretada como a probabilidade de cada classe \citep{nwankpa2018activation}.
-
-\end{itemize}
-
-\subsubsection{Algoritmo de Retropropagação}
-
-Quando se trata de aprendizado supervisionado em redes neurais, o algoritmo de retropropagação (ou \textit{backpropagation} em inglês) é um dos métodos mais utilizados para treinar modelos de redes neurais artificiais, especialmente em redes multicamadas \citep{Sarker2021}. Este algoritmo funciona ajustando os pesos dos neurônios de maneira a minimizar a função de perda através do cálculo do gradiente do erro da rede em relação aos pesos \citep{AurlienGron2019}.
-
-O algoritmo consiste em duas etapas principais: a fase de propagação para frente e a fase de retropropagação. Na fase de propagação para frente, os dados de entrada são transmitidos através da rede, camada por camada, até chegar à camada de saída. Durante essa fase, cada neurônio calcula sua saída com base nas entradas recebidas e nos pesos associados, aplicando a função de ativação correspondente (Sigmoide, ReLU, etc.). Por exemplo, para um neurônio $k$, sua saída $h_k$ é dada por $h_k = f(a_k)$, onde $a_k = \sum_{j} h_j W_{jk}$, $f$ é a função de ativação e $W_{jk}$ é o peso associado à conexão entre o neurônio $j$ e o neurônio $k$ (\autoref{forward-pass}). A saída final da rede é então comparada com o valor real usando uma função de perda (MSE, entropia cruzada, etc.), que quantifica o erro da previsão. Por exemplo, para um neurônio $l$ da camada de saída, o erro é calculado usando a saída prevista $y_l$ e o valor real $t_l$ \citep{Lillicrap2020}.
+A arquitetura DenseNet introduziu uma nova abordagem para lidar com redes profundas e aliviar o problema de \textit{vanishing gradients}, melhorando a propagação e reuso da informação, além de diminuir o número de parâmetros. A ideia principal foi conectar cada camada a todas as camadas anteriores, formando conexões densas entre elas. Isso significa que cada camada recebe como entrada não apenas a saída da camada anterior, mas também as saídas de todas as camadas anteriores (\autoref{dense-network}). Essa abordagem permite que o modelo aprenda representações mais ricas e complexas, facilitando a extração de características relevantes para a tarefa de classificação \citep{Huang2017}.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\linewidth]{figs/forward-pass.png}
-    \caption{Propagação para frente. Fonte: \cite{Lillicrap2020}.}
-    \label{forward-pass}
+    \includegraphics[width=0.5\linewidth]{figs/dense-network.png}
+    \caption{Um bloco de 5 camadas de uma DenseNet. Cada camada recebe como entrada a saída de todas as camadas anteriores.}
+    \label{dense-network}
 \end{figure}
 
-Na fase de retropropagação (), o erro calculado na camada de saída é propagado de volta através da rede, ajustando os pesos de cada neurônio com base na contribuição para o erro. Isso é feito usando a regra da cadeia, que permite calcular o gradiente do erro em relação aos pesos \citep{AurlienGron2019}. A forma mais simples de usar o gradiente é mudar cada peso $W_{ij}$ na direção do gradiente negativo, ou seja:
+O componente fundamental da DenseNet é o bloco denso (ou \textit{dense block} em inglês), que consiste em várias camadas convolucionais conectadas densamente. Cada camada dentro do bloco denso aplica três operações consecutivas: \textit{batch normalization} (BN), seguido de uma função de ativação ReLU e, por fim, uma convolução 3×3. Após a aplicação do bloco denso, uma transição (ou \textit{transition} em inglês) é realizada para reduzir a dimensão dos \textit{feature maps} usando uma camada de convolução 1×1, seguida por uma camada de \textit{average pooling} 2×2.
 
-\begin{equation}
-    \Delta W_{ij} = -\eta \frac{\partial E}{\partial W_{ij}} = -\eta h_i \delta_j
-\end{equation}
+Portanto, a arquitetura DenseNet é composta por quatro blocos densos, cada um seguido por camadas de transição. A saída final (classificador) é obtida através de uma camada de \textit{global average pooling} e uma camada totalmente conectada com ativação \textit{softmax} para classificação. A tabela \ref{densenet-arch} apresenta a configuração das arquiteturas DenseNet-121 e DenseNet-169, que são variantes da DenseNet com diferentes profundidades que serão utilizadas neste trabalho, pois fornecem um bom equilíbrio entre complexidade e desempenho comparado com outras arquiteturas mais profundas.
 
-onde $\eta$ é a taxa de aprendizado, $E$ é a função de perda, e $\delta_j = e_j f'(a_j) = (\sum_k \delta_k W_{jk}) f'(a_j)$ é o erro do neurônio $j$ na camada oculta \citep{Lillicrap2020}. A retropropagação continua até que todos os pesos da rede sejam atualizados, minimizando assim a função de perda. Esse processo é repetido para várias iterações ou épocas, até que o modelo converja para um conjunto de pesos que minimizam o erro.
+Nos últimos anos, as arquiteturas DenseNet têm sido amplamente utilizadas em diversas tarefas de classificação de imagens, incluindo diagnósticos médicos. Por exemplo, \citep{Rajpurkar2017} propuseram um modelo chamado CheXNet baseado na arquitetura DenseNet-121 para detectar pneumonia a partir de radiografias torácicas, superando o desempenho médio de radiologistas na métrica F1-score.
+
+\begin{table}[h]
+    \centering
+    \footnotesize
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        \textbf{Camadas} & \textbf{Tamanho da saída} & \textbf{DenseNet-121} & \textbf{DenseNet-169} \\
+        \hline
+        Convolução & 112×112 & \multicolumn{2}{c|}{7×7 conv, stride 2} \\
+        \hline
+        Pooling & 56×56 & \multicolumn{2}{c|}{3×3 max pool, stride 2} \\
+        \hline
+        Dense Block (1) & 56×56 & 
+        $\left[\begin{array}{c}
+        1 \times 3 \\
+        3 \times 3
+        \end{array}\right] \times 6$ & 
+        $\left[\begin{array}{c}
+        1 \times 3 \\
+        3 \times 3
+        \end{array}\right] \times 6$ \\
+        \hline
+        \multirow{2}{*}{Transition Layer (1)} & 56×56 & \multicolumn{2}{c|}{$1 \times 1$ conv} \\
+        \cline{2-4}
+        & 28×28 & \multicolumn{2}{c|}{$2 \times 2$ average pool, stride 2} \\
+        \hline
+        Dense Block (2) & 28×28 & 
+        $\left[\begin{array}{c}
+        1 \times 3 \\
+        3 \times 3
+        \end{array}\right] \times 12$ & 
+        $\left[\begin{array}{c}
+        1 \times 3 \\
+        3 \times 3
+        \end{array}\right] \times 12$ \\
+        \hline
+        \multirow{2}{*}{Transition Layer (2)} & 28×28 & \multicolumn{2}{c|}{$1 \times 1$ conv} \\
+        \cline{2-4}
+        & 14×14 & \multicolumn{2}{c|}{$2 \times 2$ average pool, stride 2} \\
+        \hline
+        Dense Block (3) & 14×14 & 
+        $\left[\begin{array}{c}
+        1 \times 3 \\
+        3 \times 3
+        \end{array}\right] \times 24$ & 
+        $\left[\begin{array}{c}
+        1 \times 3 \\
+        3 \times 3
+        \end{array}\right] \times 32$ \\
+        \hline
+        \multirow{2}{*}{Transition Layer (3)} & 14×14 & \multicolumn{2}{c|}{$1 \times 1$ conv} \\
+        \cline{2-4}
+        & 7×7 & \multicolumn{2}{c|}{$2 \times 2$ average pool, stride 2} \\
+        \hline
+        Dense Block (4) & 7×7 & 
+        $\left[\begin{array}{c}
+        1 \times 3 \\
+        3 \times 3
+        \end{array}\right] \times 16$ & 
+        $\left[\begin{array}{c}
+        1 \times 3 \\
+        3 \times 3
+        \end{array}\right] \times 32$ \\
+        \hline
+        \multirow{2}{*}{Classification Layer} & 1×1 & \multicolumn{2}{c|}{$7 \times 7$ global average pool} \\
+        \cline{2-4}
+        &  & \multicolumn{2}{c|}{1000D fully-connected, softmax} \\
+        \hline
+    \end{tabular}
+    \caption{Configuração das arquiteturas DenseNet-121 e DenseNet-169.}
+    \label{densenet-arch}
+\end{table}
+
+\subsection{Inception-v3}
+
+A arquitetura Inception, introduzida por \cite{Szegedy2015} no contexto do desafio ILSVRC 2014, representou um avanço significativo na evolução das redes neurais convolucionais. Seu principal diferencial está na proposta de uma estrutura modular - o módulo Inception - que combina convoluções de diferentes tamanhos (1×1, 3×3, 5×5) e operações de \textit{pooling} em paralelo, promovendo o processamento de informações em múltiplas escalas (\autoref{inception-module}).
+
+O modelo GoogLeNet, uma instância da arquitetura Inception com 22 camadas profundas, obteve o primeiro lugar no ILSVRC 2014 \citep{Russakovsky2015}, alcançando um notável desempenho em tarefas de classificação e detecção, mesmo utilizando significativamente menos parâmetros que modelos anteriores, como o VGG.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\linewidth]{figs/backward-pass.png}
-    \caption{Retropropagação. Fonte: \cite{Lillicrap2020}.}
-    \label{backward-pass}
+    \includegraphics[width=0.5\linewidth]{figs/inception-module.png}
+    \caption{Um módulo Inception.}
+    \label{inception-module}
 \end{figure}
 
-\subsubsection{Otimização de Redes Neurais}
+A arquitetura Inception-v3 \citep{Szegedy2016} representa uma evolução significativa em relação ao modelo original Inception (GoogLeNet), incorporando diversas inovações voltadas à melhoria da eficiência computacional e da acurácia. Entre as principais contribuições estão a fatoração de convoluções em operações menores e assimétricas (\autoref{inception-module-v3}), o uso mais sistemático da normalização em lote (\textit{batch normalization}) e a adoção da técnica de \textit{label smoothing} como forma de regularização. Tais aprimoramentos resultaram em um modelo mais profundo e preciso, mantendo um custo computacional viável para aplicações práticas.
 
-A otimização de redes neurais é um aspecto crucial no treinamento de modelos de aprendizado profundo, pois envolve a escolha de algoritmos e técnicas que permitem ajustar os pesos da rede para minimizar a função de perda.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figs/inception-module-v3.png}
+    \caption{Um módulo Inception com fatoração de convoluções.}
+    \label{inception-module-v3}
+\end{figure}
 
-Um dos algoritmos mais populares para otimização de redes neurais é o \textit{Gradient Descent} \citep{Ruder2017}. No entanto, existem outros algoritmos, cada um com suas próprias características e vantagens, que podem ser adequados para diferentes tipos de problemas e arquiteturas de redes neurais, como por exemplo o \textit{Stochastic Gradient Descent} (SGD), \textit{Momentum}, \textit{Nesterov Accelerated Gradient} (NAG), Adagrad, Adadelta, RMSprop e Adam.
+A \autoref{inception-v3-arch} apresenta a configuração da arquitetura Inception-v3, com um total de 42 camadas, que inclui a fatoração de convoluções tradicionais 7×7 em convoluções 3×3. A arquitetura substitui o otimizador padrão do SGD por um otimizador mais avançado, o RMSProp, favorecendo a convergência do modelo durante o treinamento, além de utilizar classificadores auxiliares com normalização em lote nas camadas intermediárias, melhorando a propagação do sinal do gradiente e, por consequência, a eficiência do treinamento.
 
-Para tarefas de visão computacional, \cite{Kingma2015} mostraram que o Adam é um dos algoritmos de otimização mais eficazes em redes neurais convolucionais. Testes no conjunto de dados MNIST mostraram que o Adam convergiu mais rapidamente e alcançou melhores resultados em comparação com outros algoritmos, como SGD e Adagrad.
+\begin{table}[ht]
+    \centering
+    \footnotesize
+    \begin{tabular}{|l|c|c|c|c|}
+        \hline
+        \textbf{type} & \textbf{patch size/stride} & \textbf{input size} \\
+        \hline
+        conv & $3\times3$/2 & $299\times299\times3$ \\
+        \hline
+        conv & $3\times3$/1 & $149\times149\times32$ \\
+        \hline
+        conv padded & $3\times3$/1 & $147\times147\times32$ \\
+        \hline
+        pool & $3\times3$/2 & $147\times147\times64$ \\
+        \hline
+        conv & $3\times3$/1 & $73\times73\times64$ \\
+        \hline
+        conv & $3\times3$/2 & $71\times71\times80$ \\
+        \hline
+        conv & $3\times3$/1 & $35\times35\times192$ \\
+        \hline
+        $3\times$Inception &  & $35\times35\times288$ \\
+        \hline
+        $5\times$Inception &  & $17\times17\times768$ \\
+        \hline
+        $2\times$Inception &  & $8\times8\times1280$ \\
+        \hline
+        pool & $8\times8$ & $8\times8\times2048$ \\
+        \hline
+        linear & logits & $1\times1\times2048$ \\
+        \hline
+        softmax & classifier & $1\times1\times1000$ \\
+        \hline
+    \end{tabular}
+    \caption{Configuração da arquitetura Inception-v3.}
+    \label{inception-v3-arch}
+\end{table}
+
+Além de seu excelente desempenho na tarefa de classificação de imagens do ILSVRC 2012 \citep{Russakovsky2015}, a arquitetura Inception-v3 tem sido utilizada em outras aplicações, incluindo o diagnóstico médico. Por exemplo, \cite{Mujahid2022} adotaram a arquitetura Inception-v3 para a tarefa de classificação de pneumonia em radiografias e obtiveram resultados promissores, alcançando uma acurácia de 99,29\% com um ensemble, superando outros modelos, como VGG-16 e ResNet-50.
+
+\subsection{Aprendizado por Transferência}
+
+O aprendizado por transferência \citep{Zhuang2021} é uma técnica de aprendizado de máquina no qual o conhecimento adquirido por um modelo treinado em uma tarefa é reutilizado para solucionar outra tarefa relacionada, mas diferente. Essa abordagem é especialmente útil para evitar o treinamento de modelos do zero, economizando tempo e recursos computacionais, além de melhorar o desempenho em tarefas com poucos dados disponíveis.
+
+Em redes neurais, o aprendizado por transferência é frequentemente realizado reutilizando pesos de um modelo pré-treinado, cujos estágios iniciais da rede geralmente capturam características genéricas das entradas, como bordas ou texturas, que podem ser úteis para resolver novos problemas. Por exemplo, redes neurais treinadas em grandes conjuntos de dados, como o ImageNet \citep{Russakovsky2015}, podem ser reaproveitadas para resolver tarefas específicas, como a classificação de imagens médicas.
+
+Essa estratégia é realizada através do ajuste fino (\textit{fine-tuning} do inglês) do modelo pré-treinado em duas etapas principais. Na primeira, caso seja necessário, as camadas finais do modelo são substituídas por novas camadas adaptadas à tarefa-alvo, como uma camada totalmente conectada com o número de classes correspondente. Na segunda etapa, parte ou toda a rede é treinada com os novos dados. As camadas iniciais geralmente são mantidas inalteradas, enquanto as camadas finais são ajustadas para aprender as características específicas da nova tarefa.
+
+Aplicações de visão computacional e processamento de linguagem natural têm se beneficiado da transferência de aprendizado. Ao reduzir a necessidade de grandes volumes de dados e de poder computacional, essa técnica torna-se uma alternativa viável e eficiente para o desenvolvimento de soluções baseadas em redes neurais profundas.
 
 \section{Visão Computacional}\label{sec:visao-computacional}
 
@@ -340,8 +511,6 @@ Considere um modelo classificador $\hat{f}$ e um conjunto de imagens classificad
 \end{enumerate}
 
 A predição conformal tem sido aplicada em diversas áreas, incluindo ciência forense, biometria e medicina, onde o objetivo é fornecer previsões mais confiáveis sobre a saída do modelo \citep{Fontana2023}. Por exemplo, \cite{Pereira2020} utilizaram a predição conformal para prever o intervalo de confiança da probabilidade de que pacientes com comprometimento cognitivo leve evoluam para demência.
-
-% TODO: escrever sobre avaliação de predição conformal
 
 \subsubsection{Verificação de corretude}
 
