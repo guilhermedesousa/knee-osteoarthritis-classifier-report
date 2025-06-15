@@ -51,39 +51,6 @@ onde \( L - 1 \) garante que o novo valor esteja no intervalo de intensidade da 
 
 A ideia desta técnica é expandir artificialmente o tamanho e a variabilidade de um conjunto de dados, principalmente quando o volume de dados disponível é limitado. Isso torna os modelos mais robustos e genéricos, prevenindo \textit{overfitting} e melhorando o desempenho em dados novos. As técnicas de aumento de dados que serão utilizadas nas radiografias são: rotação e reflexão (espelhamento) horizontal.
 
-\section{Arquitetura do modelo de Rede Neural Convolucional}
-
-As redes neurais convolucionais possuem um papel muito relevante no contexto de inteligência artificial, especialmente em tarefas de visão computacional devido à sua capacidade de extrair características relevantes de imagens de forma automática, sem qualquer intervenção manual. Sua arquitetura é especialmente eficaz para reconhecer e classificar objetos em imagens complexas, inclusive em radiografias, com o intuito de auxiliar no processo de diagnóstico médico. As RNCs conseguem identificar variações sutis que podem estar associadas a condições patológicas, como é o caso da osteoartrite de joelho, onde as variações entre os graus de KL reside no espaçamento articular da junção do joelho.
-
-Fazer o treinamento de uma RNC sem nenhum conhecimento prévio do modelo é custoso em termos de quantidade de dados necessário, consumo de recursos computacionais e tempo. Para resolver este problema, o uso de \textit{transfer learning} é essencial, pois permite aproveitar modelos já treinados em grandes conjuntos de dados genéricos, como o ImageNet, e adaptá-los para o conjunto de dados específico para o problema. Ao utilizar o \textit{transfer learning}, as primeiras camadas do modelo, que capturam características gerais da imagem, são congeladas, enquanto as camadas finais são ajustadas para a tarefa específica, tal processo é chamado de \textit{fine-tuning}. Isso economiza tempo e recursos computacionais e aumenta a eficácia do treinamento, resultando em modelos que podem fornecer diagnósticos precisos mesmo com volumes menores de dados disponíveis. Nos últimos anos, algumas arquiteturas performaram muito bem em algumas tarefas, como por exemplo a ResNet, VGG, Inception (GoogLeNet) e DenseNet. A arquitetura para os modelos de RNC pode ser vista na Figura \ref{modelo rnc}.
-
-\section{Arquitetura do modelo de Vision Transformer}
-
-A arquitetura Vision Transformer tem se detacado como uma abordagem poderosa para tarefas de visão computacional devido à sua capacidade de capturar relações globais em imagens através do mecanismo de atenção \cite{Dosovitskiy2021}. Essa abordagem permite que os modelos de ViTs alcancem ótimos resultados e superem as limitações das RNCs, que focam mais em características locais da imagem. Tal capacidade é particularmente relevante para o diagnóstico de patologias em imagens médicas, incluindo radiografias, onde o modelo é capaz de processar toda a imagem simultaneamente, associando partes distantes e próximas com igual relevância. Além disso, os ViTs também se beneficiam do \textit{transfer learning}, permitindo que os modelos sejam treinados de forma eficiente em conjuntos de dados limitados. Para esta pesquisa será feito o \textit{fine-tuning} de alguns modelos de ViT para a tarefa de classificação da OA de joelho, como o ViT-B/16, DeiT (Data-efficient Image Transformer), Swin Transformer (Shifted Window Transformer) e ResNet50-ViT-B/16. A arquitetura para os modelos de ViT pode ser vista na Figura \ref{modelo vit}.
-
-\subsection{ViT-B/16}
-
-O ViT-B/16 \cite{Dosovitskiy2021} é uma das primeiras variantes da arquitetura Vision Transformer, onde "B" representa o modelo base (base model) e "16" refere-se ao tamanho do \textit{patch} em que a imagem é dividida (16x16 pixels). O ViT-B/16 recebe uma imagem e a divide em \textit{patches}, tratando cada \textit{patch} como um \textit{token}, semelhante ao processamento de palavras em texto nos \textit{transformers} tradicionais. O modelo usa um mecanismo de atenção para processar os \textit{tokens} de maneira global, capturando interdependências entre diferentes regiões da radiografia. Essa abordagem permite que o ViT-B/16 compreenda melhor a estrutura geral da imagem, identificando padrões que podem se estender por grandes áreas da mesma. Este modelo pode ser especialmente eficaz para a tarefa de classificação da OA de joelho, visto que existe o padrão notável do espaçamento articular que se extende horizontalmente na radiografia.
-
-\subsection{DeiT (Data-efficient Image Transformer)}
-
-O DeiT \cite{Touvron2021} é uma versão otimizada dos ViTs, projetada para melhorar a eficiência no uso de dados. Enquanto os ViTs originais, como o ViT-B/16, geralmente precisam de grandes quantidades de dados para atingir um bom desempenho, o DeiT foi projetado para ser treinado em conjunto de dados reduzidos. Isso acontece devido à técnica do \textit{ditillation token}, que permite ao modelo aprender a partir de um "professor" (modelo mais simples), aumentando a eficiência do treinamento. Este modelo pode ser particularmente útil na tarefa de classificação da OA de joelho, podendo ser um importante fator ao comparar com outros modelos de ViTs e RNCs.
-
-\subsection{Swin Transformer (Shifted Window Transformer)}
-
-O Swin Transformer \cite{Liu2021} é uma arquitetura de ViT que introduz uma abordagem nova que utiliza \textit{hierarchical feature maps} e \textit{sliding windows} para aplicar a atenção e melhorar a eficiência e performance do modelo. Em vez de processar toda a imagem como uma sequência de \textit{patches} globalmente, o Swin Transformer aplica a atenção dentro de pequenas janelas locais, de forma hierárquica, permitindo que o modelo mantenha a eficiência computacional e ainda capture detalhes locais e globais. Conforme o modelo avança pelas camadas, as janelas se expandem e se deslocam, permitindo que o modelo agregue contexto global ao longo do processamento. Essa estrutura hierárquica é particularmente eficaz para imagens de alta resolução, como as radiografias, onde há muitos detalhes importantes em diferentes escalas. Além disso, o Swin Transformer pode ser facilmente escalado para diferentes tamanhos de imagens e é altamente eficiente em termos de uso de memória e poder computacional, sendo uma escolha apropriada para a tarefa de classificação da OA de joelho.
-
-% \subsection{ResNet50-ViT-B/16}
-
-% Uma abordagem híbrida, combinando RNC, como o ResNet, e ViT, pode ser aplicada de maneira eficaz na classificação da severidade da osteoartrite de joelho, aproveitando as vantagens de ambas as arquiteturas para obter uma melhor predição das classificações de KL \cite{Park2022, Wang2021}. Essa mescla pode ser observada no modelo ResNet50-ViT-B/16, onde o ResNet50 atua como um extrator de características iniciais, processando as radiografias e capturando padrões como texturas e bordas, e o modelo ViT-B/16 utiliza seus mecanismos de atenção para permitir uma análise mais contextualizada e eficiente. A combinação se faz promissora para melhorar a precisão na classificação da OA de joelho, equilibrando eficiência computacional e qualidade do modelo final.
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\linewidth]{figs/modelo-vit.png}
-    \caption{Metodologia para os vision transformers}
-    \label{modelo vit}
-\end{figure}
-
 \section{Métricas de avaliação}
 
 Para comparar a performance dos modelos treinados na tarefa de classificação da severidade da OA de joelho, serão utilizadas as seguintes métricas de avaliação: acurácia, precisão, revocação, F1-score e matriz de confusão. Essas métricas são amplamente utilizadas em problemas de classificação para medir a qualidade das previsões e o equilíbrio entre os diferentes tipos de erros. Para o cálculo das métricas, os seguintes acrônimos serão utilizados nas fórmulas:

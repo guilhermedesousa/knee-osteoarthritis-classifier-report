@@ -449,6 +449,56 @@ Essa estratégia é realizada através do ajuste fino (\textit{fine-tuning} do i
 
 Aplicações de visão computacional e processamento de linguagem natural têm se beneficiado da transferência de aprendizado. Ao reduzir a necessidade de grandes volumes de dados e de poder computacional, essa técnica torna-se uma alternativa viável e eficiente para o desenvolvimento de soluções baseadas em redes neurais profundas.
 
+\section{Vision Transformers}\label{sec:vision-transformers}
+
+O \textit{Vision Transformer} (ViT) é uma abordagem inovadora de aprendizado profundo que aplica a arquitetura Transformer \citep{vaswani2023attentionneed}, originalmente desenvolvida para tarefas de PLN, ao domínio da visão computacional. Introduzido por \cite{Dosovitskiy2021}, essa abordagem obteve excelentes resultados quando treinada em grandes conjuntos de dados (14M-300M de imagens), superando modelos tradicionais baseados em CNNs, como o ResNet.
+
+A ideia principal do ViT, ilustrada na \autoref{fig:vision-transformer}, é tratar imagens como sequências de blocos com tamanho fixo (por exemplo, 16×16 pixels), semelhantes aos tokens em uma sequência de texto. Cada bloco é linearmente projetado em um vetor de dimensão fixa, e esses vetores resultantes são combinados em sequência, à qual são adicionados vetores de posição para preservar a informação espacial, além de um vetor de classe para a tarefa de classificação.
+
+Esses vetores são então alimentados em um modelo Transformer Encoder, onde a sequência é processada por camadas de \textit{multi-head self-attention} e \textit{feedforward}, como no transformer tradicional. O mecanismo de \textit{self-attention} permite que o modelo aprenda relações de longo alcance entre diferentes regiões da imagem, sem a necessidade de convoluções locais, oferecendo maior flexibilidade na captura de dependências espaciais. Ao final do processamento, o token de classificação é utilizado para realizar a predição da tarefa-alvo, como prever o nível de severidade de uma doença.
+
+As CNNs tendem a apresentar melhor desempenho em cenários com poucos dados, enquanto os ViTs se destacam em cenários com grandes volumes de dados. Isso ocorre porque os Transformers não possuem os vieses indutivos herdados pelas CNNs, como a hierarquia espacial, a localidade e a translação equivariante, que são fundamentais para a generalização dos modelos. No entanto, modelos de ViT podem ser adaptados para funcionarem bem com conjuntos de dados reduzidos através do uso de técnicas de pré-treinamento e ajuste fino (\textit{fine-tuning} do inglês).
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1.0\linewidth]{figs/vision-transformer.png}
+    \caption{Arquitetura do Vision Transformer. Fonte: \cite{Dosovitskiy2021}.}
+    \label{fig:vision-transformer}
+\end{figure}
+
+A seguir, são aprensentadas as arquiteturas de ViT que serão utilizadas nesta pesquisa.
+
+\subsection{ViT-B/16}
+
+O ViT-B/16 \cite{Dosovitskiy2021} é uma das primeiras variantes da arquitetura Vision Transformer, onde "B" representa o modelo base (base model) e "16" refere-se ao tamanho do \textit{patch} em que a imagem é dividida (16x16 pixels). O ViT-B/16 recebe uma imagem e a divide em \textit{patches}, tratando cada \textit{patch} como um \textit{token}, semelhante ao processamento de palavras em texto nos \textit{transformers} tradicionais. O modelo usa um mecanismo de atenção para processar os \textit{tokens} de maneira global, capturando interdependências entre diferentes regiões da radiografia. Essa abordagem permite que o ViT-B/16 compreenda melhor a estrutura geral da imagem, identificando padrões que podem se estender por grandes áreas da mesma. Este modelo pode ser especialmente eficaz para a tarefa de classificação da OA de joelho, visto que existe o padrão notável do espaçamento articular que se extende horizontalmente na radiografia.
+
+\subsection{DeiT (Data-efficient image Transformer)}
+
+A arquitetura DeiT (\textit{Data-efficient image Transformer}), introduzida por pesquisadores do \textit{Facebook} em 2021 \citep{Touvron2021}, representa uma avanço significativo na adaptação de transformers. Além de ser uma abordagem livre de convoluções, ela se destaca por não necessitar de grandes volumes de dados e infraestrutura computacional para alcançar resultados competitivos, ao contrário do que se pressupõe de arquiteturas ViT \cite{Dosovitskiy2021}.
+
+O diferencial do DeiT reside na introdução de uma nova estratégia de distilação de conhecimento, adaptada especificamente para a arquitetura transformer. Como ilustrado na \autoref{fig:distillation-procedure}, um token de distilação é incorporado diretamente à entrada do transformer e atua de maneira similar ao token de classificação: interage com os demais tokens da rede através das camadas de \textit{self-attention} e sua saída é observada após a última camada. Este token é treinado com o objetivo de replicar a predição de um "modelo professor", estratégia conhecida como \textit{hard-label distillation}:
+
+\begin{equation}
+    L_{\text{global}}^{\text{hardDistill}} = \frac{1}{2} \, L_{CE}\left( \psi(Z_s), y \right) + \frac{1}{2} \, L_{CE}\left( \psi(Z_s), y_t \right) \text{,}
+\end{equation}
+
+onde $Z_s$ são os \textit{logits} do "modelo aluno", $L_{CE}$ é a entropia cruzada sobre os rótulos corretos $y$ e os rótulos preditos pelo "modelo professor" $y_t = \text{argmax}_c Z_t(c)$, sendo $Z_t$ os seus \textit{logits}, e $\psi$ é a função softmax. Como resultado, ambos os tokens compartilham informação ao longo das camadas e gradualmente convergem para vetores similares, porém ainda distintos. Por fim, seus valores são associados com classificadores lineares para produzir o rótulo da imagem.
+
+Entre suas variantes, o modelo DeiT-B com a estratégia de distilação, que possui arquitetura semelhante ao ViT-B, é o maior modelo em termos de número de parâmetros (87 milhões). Em experimentos com o ImageNet, tal modelo atingiu uma acurácia top-1 de 83,4\%, superando arquiteturas de redes convolucionais e inclusive variantes do ViT pré-treinadas com conjuntos de dados significativamente maiores. Adicionalmente, avaliações em tarefas de \textit{transfer learning} em diversos \textit{benchmarks} (CIFAR-10, CIFAR-100, Flowers) demonstram a capacidade de generalização do modelo, onde o DeiT ficou no mesmo nível que redes convolucionais competitivas e superou modelos ViT tradicionais.
+
+Diante desses resultados, o DeiT se mostra como uma alternativa promissora e eficiente aos modelos convolucionais e ViT clássicos para diversas tarefas, incluindo análise de imagens médicas. \cite{alotaibi2022} propuseram um modelo \textit{ensemble} com ViT e DeiT (ViT-DeiT) para classificar imagens histopatológicas do câncer de mama em oito classes (benignas e malignas), obtendo um resultado de 98,17\% de acurácia. Portanto, este trabalho utiliza a arquitetura do DeiT com sua estratégia de distilação para classificar o nível de severidade de osteoartrites de joelhos.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{figs/distillation-procedure-deit.png}
+    \caption{Estratégia de distilação em transformers através da introdução de um token de distilação. Fonte: \cite{Touvron2021}.}
+    \label{fig:distillation-procedure}
+\end{figure}
+
+\subsection{Swin Transformer (Shifted Window Transformer)}
+
+O Swin Transformer \cite{Liu2021} é uma arquitetura de ViT que introduz uma abordagem nova que utiliza \textit{hierarchical feature maps} e \textit{sliding windows} para aplicar a atenção e melhorar a eficiência e performance do modelo. Em vez de processar toda a imagem como uma sequência de \textit{patches} globalmente, o Swin Transformer aplica a atenção dentro de pequenas janelas locais, de forma hierárquica, permitindo que o modelo mantenha a eficiência computacional e ainda capture detalhes locais e globais. Conforme o modelo avança pelas camadas, as janelas se expandem e se deslocam, permitindo que o modelo agregue contexto global ao longo do processamento. Essa estrutura hierárquica é particularmente eficaz para imagens de alta resolução, como as radiografias, onde há muitos detalhes importantes em diferentes escalas. Além disso, o Swin Transformer pode ser facilmente escalado para diferentes tamanhos de imagens e é altamente eficiente em termos de uso de memória e poder computacional, sendo uma escolha apropriada para a tarefa de classificação da OA de joelho.
+
 \section{Visão Computacional}\label{sec:visao-computacional}
 
 A visão computacional é um campo da inteligência artificial (IA) e da ciência da computação (\autoref{definicao-cv}) que estuda como as máquinas podem adquirir, processar, analisar e compreender imagens e vídeos do mundo real, com o objetivo de produzir representações visuais ou descrever o conteúdo visual de forma automática \cite{huggingface2024}.
