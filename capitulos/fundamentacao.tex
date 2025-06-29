@@ -472,9 +472,9 @@ A seguir, são aprensentadas as arquiteturas de ViT que serão utilizadas nesta 
 
 O ViT-B/16 \cite{Dosovitskiy2021} é uma das primeiras variantes da arquitetura Vision Transformer, onde "B" representa o modelo base (base model) e "16" refere-se ao tamanho do \textit{patch} em que a imagem é dividida (16x16 pixels). O ViT-B/16 recebe uma imagem e a divide em \textit{patches}, tratando cada \textit{patch} como um \textit{token}, semelhante ao processamento de palavras em texto nos \textit{transformers} tradicionais. O modelo usa um mecanismo de atenção para processar os \textit{tokens} de maneira global, capturando interdependências entre diferentes regiões da radiografia. Essa abordagem permite que o ViT-B/16 compreenda melhor a estrutura geral da imagem, identificando padrões que podem se estender por grandes áreas da mesma. Este modelo pode ser especialmente eficaz para a tarefa de classificação da OA de joelho, visto que existe o padrão notável do espaçamento articular que se extende horizontalmente na radiografia.
 
-\subsection{DeiT (Data-efficient image Transformer)}
+\subsection{Data-efficient image Transformer (DeiT)}
 
-A arquitetura DeiT (\textit{Data-efficient image Transformer}), introduzida por pesquisadores do \textit{Facebook} em 2021 \citep{Touvron2021}, representa uma avanço significativo na adaptação de transformers. Além de ser uma abordagem livre de convoluções, ela se destaca por não necessitar de grandes volumes de dados e infraestrutura computacional para alcançar resultados competitivos, ao contrário do que se pressupõe de arquiteturas ViT \cite{Dosovitskiy2021}.
+A arquitetura \textit{Data-efficient image Transformer} (DeiT), introduzida por pesquisadores do \textit{Facebook} em 2021 \citep{Touvron2021}, representa uma avanço significativo na adaptação de transformers. Além de ser uma abordagem livre de convoluções, ela se destaca por não necessitar de grandes volumes de dados e infraestrutura computacional para alcançar resultados competitivos, ao contrário do que se pressupõe de arquiteturas ViT \cite{Dosovitskiy2021}.
 
 O diferencial do DeiT reside na introdução de uma nova estratégia de distilação de conhecimento, adaptada especificamente para a arquitetura transformer. Como ilustrado na \autoref{fig:distillation-procedure}, um token de distilação é incorporado diretamente à entrada do transformer e atua de maneira similar ao token de classificação: interage com os demais tokens da rede através das camadas de \textit{self-attention} e sua saída é observada após a última camada. Este token é treinado com o objetivo de replicar a predição de um "modelo professor", estratégia conhecida como \textit{hard-label distillation}:
 
@@ -493,6 +493,19 @@ Diante desses resultados, o DeiT se mostra como uma alternativa promissora e efi
     \includegraphics[width=0.5\linewidth]{figs/distillation-procedure-deit.png}
     \caption{Estratégia de distilação em transformers através da introdução de um token de distilação. Fonte: \cite{Touvron2021}.}
     \label{fig:distillation-procedure}
+\end{figure}
+
+\subsection{Dual Attention Vision Transformers (DaViT)}
+
+Com o avanço das arquiteturas de ViT, diversos métodos têm buscado o equilíbrio entre a capacidade de capturar contexto global e a eficiência computacional necessária para lidar com imagens de alta resolução. Nesse contexto, \cite{ding2022davitdualattentionvision} propuseram uma nova arquitetura de ViT que introduz um mecanismo de atenção dual, combinando \textit{spatial window attention} e \textit{channel group attention}, de forma a integrar representações locais e globais de maneira eficiente e complementar.
+
+O principal diferencial do DaViT está na aplicação do mecanismo de atenção no domínio dos canais. Após transpor o vetor de características gerado pelo mecanismo de \textit{self-attention} em blocos locais, cada canal passa a representar uma visão abstrata global da imagem. A atenção é então aplicada entre os grupos de canais, o que permite o modelo capturar interações globais com complexidade linear. A \autoref{fig:spatial-and-channel-window-self-attention} ilustra a perspectiva ortogonal do DaViT.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{figs/spatial-and-channel-window-self-attention.png}
+    \caption{(a) \textit{Spatial window multihead self-attention} divide a dimensão espacial em janelas locais, onde cada janela contém múltiplos tokens espaciais. (b) \textit{Channel group single-head self-attention} agrupa tokens de canal em múltiplos grupos. Fonte: \cite{ding2022davitdualattentionvision}.}
+    \label{fig:spatial-and-channel-window-self-attention}
 \end{figure}
 
 \subsection{Swin Transformer (Shifted Window Transformer)}
@@ -538,9 +551,160 @@ O uso de modelos de aprendizado profundo baseados em redes neurais convolucionai
 
 % \section{Transferência de Aprendizado e Ajuste Fino}\label{sec:ajuste-fino}
 
+\section{Funções de Perda} \label{sec:funcoes-perda}
+
+A função de perda é um componente essencial no treinamento de modelos, pois orienta a processo de ajuste dos pesos da rede neural ao quantificar o erro entre as previsões do modelo e os rótulos verdadeiros. Neste trabalho, foram utilizadas duas funções de perda com o objetivo de compará-las: a entropia cruzada (\textit{cross-entropy loss}) e a CORN (\textit{Conditional Ordinal Regression for Neural Networks}).
+
+\subsection{Entropia Cruzada}
+
+A entropia cruzada é uma opção comum para problemas de classificação, pois mede o quão bem as previsões do modelo se alinham com os rótulos reais. Ela é definida como:
+
+\begin{equation}
+    J(\Theta) = -\frac{1}{m} \sum_{i=1}^{m} \sum_{k=1}^{K} y_{k}^{(i)} \log(\hat{p}_k^{(i)}) \text{,}
+\end{equation}
+
+onde $y_{k}^{(i)}$ é a probabilidade real da classe $k$ para o exemplo $i$.
+
+Ao penalizar mais fortemente casos em que o modelo está pouco confiante para a classe correta, a entropia cruzada de modo geral ajuda a melhorar a precisão do modelo para tarefas de classificação. No entanto, ela não leva em consideração a natureza ordinal das classes, o que se torna uma limitação em problemas onde a ordem das classes é relevante, como no problema abordado neste trabalho.
+
+\subsection{CORN (Conditional Ordinal Regression for Neural Networks)}
+
+\cite{Shi_2023} propuseram um framework de regressão ordinal para redes neurais profundas, chamado CORN, que é projetado para lidar com tarefas de classificação ordinal, mantendo a consistência ordinal entre as classes.
+
+Dado um problema de classificação com $K$ classes e conjunto de treino $D = \{(x^{[i]}, y^{[i]})\}_{i=1}^{N}$, onde $x^{[i]}$ é a entrada e $y^{[i]}$ é o rótulo ordinal, o CORN divide o problema de classificação ordinal em $K-1$ tarefas de classificação binária associadas com classes $r_1$, $r_2$, $...$, $r_K$, onde $y_{k}^{[i]} \in \lbrace 0 \text{,} 1 \rbrace$ indica se o exemplo $y^{[i]}$ excede a classe $r_k$ ou não (\autoref{fig:corn-nn}).
+
+A saída da $k$-ésima tarefa binária $f_k (x^{[i]})$ representa a probabilidade condicional de que o exemplo $x^{[i]}$ exceda a classe $r_k$, e é calculada como:
+
+\begin{equation}
+    f_k (x^{[i]}) = \hat{P} (y^{[i]} > r_k | y^{[i]} > r_{k-1}) \text{,}
+\end{equation}
+
+onde os eventos estão aninhados: $\lbrace y^{[i]} > r_k \rbrace \subseteq \lbrace y^{[i]} > r_{k-1} \rbrace$.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{figs/corn-nn.png}
+    \caption{Arquitetura do CORN. Fonte: \cite{Shi_2023}.}
+    \label{fig:corn-nn}
+\end{figure}
+
+Com o objetivo de estimar $f_1 (x^{[i]})$ e as probabilidades condicionais $f_2 (x^{[i]})$, ..., $f_{K-1} (x^{[i]})$, o modelo CORN utiliza uma rede neural com $K-1$ saídas, onde cada saída é treinada para prever a probabilidade de que o rótulo ordinal exceda a classe correspondente. Para isso, são construídos subconjuntos de treino condicionais da seguinte maneira:
+
+\begin{equation}
+    \begin{split}
+        &S_1: \text{todo } \lbrace (x^{[i]}, y^{[i]}) \rbrace \text{, para } i \in \lbrace 1,...,N \rbrace \text{,}\\
+        &S_2: \lbrace (x^{[i]}, y^{[i]}) | y^{[i]} > r_1 \rbrace \text{,}\\
+        &...\\
+        &S_{K-1}: \lbrace (x^{[i]}, y^{[i]}) | y^{[i]} > r_{k-2} \rbrace \text{,}
+    \end{split}
+\end{equation}
+
+onde $N = |S_1| \ge |S_2| \geq |S_3| \geq ... \geq |S_{K-1}|$, e $|S_k|$ é o número de exemplos no subconjunto $S_k$.
+
+Para treinar o modelo CORN, seja $f_j (x^{[i]})$ o valor predito pela rede neural para o $j$-ésimo nó da camada de saída, a função de perda a ser minimizada é definida como:
+
+\begin{equation}
+    \begin{split}
+        L(X,y) = -\frac{1}{\sum_{j=1}^{K-1} |S_j|} \sum_{j=1}^{K-1} \sum_{i=1}^{|S_j|} [\text{log}(f_j (x^{[i]})) \cdot \mathbb{I}(y^{[i]} > r_j) \\
+        +\text{log}(1 - f_j (x^{[i]})) \cdot \mathbb{I}(y^{[i]} \leq r_j)] \text{,}
+    \end{split}
+\end{equation}
+
+onde $\mathbb{I}(\cdot)$ é a função indicadora, que retorna 1 se a condição for verdadeira e 0 caso contrário. Essa função de perda penaliza as previsões incorretas de forma proporcional à distância ordinal entre as classes, permitindo que o modelo aprenda a estrutura ordinal dos rótulos. Por fim, para obter o índice da classe predita $q$ do $i$-ésimo exemplo, basta calcular:
+
+\begin{equation}
+    q^{[i]} = 1 + \sum_{j=1}^{K-1} \mathbb{I}(\hat{P}(y^{[i]} > r_j) > 0.5) \text{,}
+\end{equation}
+
+onde a classe predita será $r_{q^{[i]}}$.
+
 \section{Avaliação e métricas de desempenho} \label{sec:avaliacao-metricas}
 
-\subsection{Predição Conformal}
+Para avaliar o desempenho dos modelos na tarefa de classificação da severidade da OA de joelho, foram empregadas as métricas mais comuns, como acurácia, precisão, revocação, F1-score e \textit{Quadratic Weighted Kappa} (QWK). A matriz de confusão foi utilizada para visualizar a distribuição das previsões corretas e incorretas entre as diferentes classes. Além disso, para o cenário de classificação binária, foi utilizada a métrica AUC-ROC (Área Sob a Curva da Característica de Operação do Receptor), que avalia a capacidade do modelo em distinguir entre duas classes. Essas métricas são amplamente utilizadas em problemas de classificação e fornecem uma visão abrangente do desempenho dos modelos. Para o cálculo dessas métricas, foram adotados os seguintes acrônimos nas respectivas fórmulas:
+
+\begin{itemize}
+    \item $TP$ é o número de verdadeiros positivos,
+    \item $TN$ é o número de verdadeiros negativos,
+    \item $FP$ é o número de falsos positivos,
+    \item $FN$ é o número de falsos negativos.
+\end{itemize}
+
+\subsection{Acurácia}
+A acurácia mede a proporção de previsões corretas em relação ao total de exemplos. Ela pode ser calculada pela fórmula:
+
+\begin{equation}
+    \text{Acurácia} = \frac{TP + TN}{TP + TN + FP + FN}
+\end{equation}
+
+\subsection{Precisão}
+A precisão indica a proporção de exemplos classificados como positivos que realmente são positivos. Ela é calculada pela fórmula:
+
+\begin{equation}
+    \text{Precisão} = \frac{TP}{TP + FP}
+\end{equation}
+
+\subsection{Revocação}
+A revocação (ou \textit{recall} do inglês) mede a capacidade do modelo de identificar corretamente todos os exemplos positivos. É definido como:
+
+\begin{equation}
+    \text{Revocação} = \frac{TP}{TP + FN}
+\end{equation}
+
+\subsection{F1-Score}
+O F1-score é a média harmônica entre a precisão e a revocação, e é uma métrica útil quando busca-se um equilíbrio entre os dois. A fórmula do F1-score é:
+
+\begin{equation}
+    F1 = 2 \cdot \frac{\text{Precisão} \cdot \text{Recall}}{\text{Precisão} + \text{Recall}}
+\end{equation}
+
+\subsection{Quadratic Weighted Kappa (QWK)}
+O QWK é uma métrica que avalia a concordância entre as previsões do modelo e os rótulos reais, levando em consideração a característica ordinal das classes. É especialmente útil para este estudo devido à natureza ordinal das classes de severidade da OA de joelho, onde erros maiores são mais penalizados do que erros menores. O QWK é calculado pela seguinte fórmula:
+
+\begin{equation}
+    QWK = 1 - \frac{\sum_{i,j} w_{ij} O_{ij}}{\sum_{i,j} w_{ij} E_{ij}} \text{,}
+\end{equation}
+
+onde $w_{ij}$ é a matriz de pesos que penaliza os erros de classificação, $O_{ij}$ é a matriz de confusão observada e $E_{ij}$ é a matriz de confusão esperada. O QWK varia entre -1 e 1, onde 1 indica concordância perfeita, 0 indica concordância aleatória e valores negativos indicam discordância.
+
+\subsection{Matriz de Confusão}
+A matriz de confusão é uma ferramenta para visualizar o desempenho do modelo de classificação, detalhando as previsões corretas e incorretas em cada classe. Ela apresenta os valores de $TP$, $TN$, $FP$ e $FN$ de forma estruturada, permitindo avaliar o desempenho em classes específicas.
+
+\[
+\begin{array}{|c|c|c|}
+\hline
+ & \text{Previsto Positivo} & \text{Previsto Negativo} \\
+\hline
+\text{Verdadeiro Positivo} & TP & FN \\
+\hline
+\text{Verdadeiro Negativo} & FP & TN \\
+\hline
+\end{array}
+\]
+
+\subsection{AUC-ROC}
+Para tarefas de classificação binária, a métrica AUC-ROC (Área Sob a Curva da Característica de Operação do Receptor) é bastante útil, pois mede a capacidade do modelo de separar as classes positivas e negativas. A curva ROC é um gráfico que exibe a taxa de verdadeiros positivos (sensibilidade) em função da taxa de falsos positivos. A AUC, por sua vez, quantifica a área sob essa curva, variando de 0 a 1, onde 0,5 representa um modelo aleatório e 1 representa um modelo perfeito. A AUC-ROC é calculada pela seguinte integral:
+
+\begin{equation}
+    \text{AUC-ROC} = \int_{0}^{1} \text{TPR}(FPR) \text{ d}FPR \text{,}
+\end{equation}
+
+onde $TPR$ é a taxa de verdadeiros positivos e $FPR$ é a taxa de falsos positivos.
+
+\subsection{Eficiência computacional}
+
+Além da performance em termos de métricas relacionadas à classificação, a eficiência computacional constitui um aspecto fundamental na avaliação de modelos de aprendizado profundo, especialmente em contextos com restrições de tempo ou recursos computacionais. Essa métrica torna-se ainda mais relevante quando se considera a aplicabilidade clínica dos modelos, onde a rapidez na inferência pode ser crucial para a tomada de decisão em tempo real.
+
+Para mensurar a eficiência computacional, foram considerados dois aspectos principais: o tempo de treinamento e a quantidade de operações computacionais realizadas por cada modelo. O tempo de treinamento, medido em minutos, foi calculado por meio da diferença entre os instantes de término e início do processo de treinamento:
+
+\begin{equation}
+    \text{Tempo de Treinamento} = \text{Tempo Final} - \text{Tempo Inicial} \text{.}
+\end{equation}
+
+A segunda métrica adotada foi a quantidade estimada de operações de ponto flutuante, conhecida como FLOPs (\textit{Floating Point Operations} do inglês), uma medida amplamente utilizada para quantificar o custo computacional associado à execução de modelos de redes neurais. A quantidade de FLOPs está diretamente relacionada à complexidade arquitetural do modelo, abrangendo as operações realizadas durante as fases de \textit{forward} e \textit{backward}, bem como o número de amostras e épocas de treinamento \citep{Lohn2022}.
+
+Neste trabalho, a estimativa de FLOPs foi realizada com o auxílio da biblioteca \textit{FLOPs Counter PyTorch} \citep{ptflops}, que permite a análise do custo computacional por meio da instrumentação do modelo em PyTorch. Essa análise visa fornecer uma perspectiva complementar à avaliação de desempenho, destacando modelos que, além de eficazes, também são eficientes em termos de recursos computacionais, o que é especialmente relevante para implementação em ambientes com capacidade limitada, como dispositivos embarcados ou sistemas hospitalares com restrições de hardware.
+
+\subsection{Predição Conformal} \label{sec:conformal-prediction}
 
 A predição conformal é uma técnica estatística que fornece intervalos de confiança às previsões de qualquer modelo de aprendizado de máquina. Dada uma probabilidade de erro $\epsilon$, o método gera, para cada nova entrada, um conjunto de possíveis rótulos que inclui a predição $\hat{y}$ do modelo, com garantia teórica de que o rótulo verdadeiro estará nesse conjunto com probabilidade de ao menos $1 - \epsilon$ \citep{angelopoulos2021gentle}.
 
@@ -578,7 +742,7 @@ A verificação de corretude é uma técnica para testar se a predição conform
 Para calcular a cobertura $C$, é necessário executar o algoritmo de predição conformal em um conjunto de teste. A cobertura é então calculada como a proporção de casos em que o rótulo verdadeiro $Y_\text{test}$ está contido no conjunto de predição $C(X_\text{test})$:
 
 \begin{equation}
-    C = \frac{1}{N} \sum_{i=1}^{N} \mathbb{I}(Y_i \in C(X_i))
+    C = \frac{1}{N} \sum_{i=1}^{N} \mathbb{I}(Y_i \in C(X_i)) \text{,}
 \end{equation}
 
 onde $N$ é o número de casos no conjunto de teste e $\mathbb{I}$ é a função indicadora, que retorna 1 se a condição for verdadeira e 0 caso contrário. A cobertura deve ser comparada com o nível de confiança $\epsilon$ para verificar se a predição conformal atende às garantias teóricas.

@@ -4,125 +4,106 @@ Esta seção descreve a metodologia proposta para a tarefa de classificação da
 
 \section{Coleta de dados}
 
-A escolha e coleta dos dados é a primeira tarefa a ser realizada quando o objetivo é treinar um modelo de aprendizado profundo, incluindo redes neurais artificiais e vision transformers. Um conjunto de dados adequado é essencial para que o modelo tenha uma boa performance e seja útil para se tornar uma ferramenta de suporte no diagnóstico de OA de joelho. O conjunto de dados foi obtido a partir da plataforma Kaggle \cite{dataset-kaggle}, uma fonte amplamente reconhecida por fornecer dados de alta qualidade e de domínio público para estudos acadêmicos e projetos de aprendizado de máquina. O conjunto de dados escolhido é baseado na Osteoarthritis Initiative (OAI), um estudo observacional multicêntrico de dez anos de homens e mulheres, patrocionado pelo National Institutes of Health (NIH), com o objetivo de permitir uma melhor compreensão da prevenção e tratamento da osteoartrite de joelho \cite{oai}. Este conjunto contém radiografias de joelhos, juntamente com suas respectivas classificações de severidade da OA, conforme o sistema de Kellgren/Lawrence. Este dataset foi selecionado por sua relevância na plataforma, fornecendo uma base sólida para o treinamento dos modelos de RNCs e ViTs propostos nesta pesquisa. A \autoref{dataset-distribuition} ilustra a distribuição do conjunto de dados entre treino, teste e validação.
+A seleção e coleta de dados constituem etapas iniciais fundamentais no desenvolvimento de modelos de aprendizado profundo. Nesse estudo, o conjunto de dados (ou \textit{dataset} do inglês) foi obtido por meio da plataforma Kaggle \citep{dataset-kaggle}, amplamente reconhecida por disponibilizar dados de alta qualidade e de acesso público para fins acadêmicos. O \textit{dataset} escolhido baseia-se na Osteoarthritis Initiative (OAI) e contém 9.786 radiografias de joelho rotuladas com suas respectivas classificações de severidade da OA, seguindo o sistema de Kellgren-Lawrence (\autoref{tabela-kl}). A escolha desta fonte deve-se à sua ampla utilização na plataforma e na literatura \citep{Tariq2023, Mohammed2023}, além do volume de imagens, fornecendo uma base sólida e representativa para o treinamento e avaliação dos modelos propostos. Um resumo do \textit{dataset} é apresentado na \autoref{dataset-summary}.
 
-\begin{figure}[h]
+\begin{table}[ht]
     \centering
-    \includegraphics[width=\linewidth]{figs/num-imagens-por-escala-kl.png}
-    \caption{Número de imagens em cada classe do conjunto de dados}
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        \textbf{Classe KL} & \textbf{Descrição} & \textbf{Total de imagens} & \textbf{\% do total} \\
+        \hline
+        0 & saudável & 3857 & 40\% \\
+        1 & duvidoso & 1770 & 18\% \\
+        2 & mínimo & 2578 & 26\% \\
+        3 & moderado & 1286 & 13\% \\
+        4 & severo & 295 & 3\% \\
+        \hline
+        \textbf{Total} & - & 9786 & 100\% \\
+        \hline
+    \end{tabular}
+    \caption{Número de radiografias por classe KL no conjunto de dados original.}
+    \label{dataset-summary}
+\end{table}
+
+Todas as imagens possuem resolução de 224x224 pixels e estão no formato PNG. As imagens foram agrupadas em subconjuntos de treino, teste, validação e calibração, com uma proporção de 7:1:1:1. O conjunto de treino é utilizado para treinar os modelos, o conjunto de validação é usado para ajustar os hiperparâmetros e monitorar o desempenho do modelo durante o treinamento, o conjunto de teste é utilizado para avaliar o desempenho final do modelo e verificar sua capacidade de generalização em dados novos, e o conjunto de calibração é usado para aplicar a estratégia de predição conformal, discutida na \autoref{sec:conformal-prediction}. A distribuição das imagens por subconjunto de dados pode ser visualizada na \autoref{dataset-distribuition}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{figs/dataset-class-distribution.png}
+    \caption{Distribuição das radiografias por classe KL nos subconjuntos de treino, teste, validação e calibração.}
     \label{dataset-distribuition}
 \end{figure}
 
-O conjunto de dados contém quatro pastas nomeadas ``auto\_test'', ``test'', ``train'' e ``val'', cada uma contendo as subpastas com imagens 224x224 representando cada um dos graus de KL. O dataset foi dividido entre dados de treino, teste e validação, com uma proporção de 7:2:1. O conjunto de treino é usado para treinar os modelos e consiste na maior proporção de imagens. O conjunto de validação é usado para ajustar os hiperparâmetros do modelo e monitorar o seu desempenho, enquanto o conjunto de teste é usado após o treinamento completo do modelo, para medir o desempenho final e verificar sua capacidade de generalização em dados completamente novos.
+Com o objetivo de explorar diferentes abordagens para a classificação da severidade da OA de joelho, foram derivados, a partir do \textit{dataset} original contendo cinco classes, três novos conjuntos de dados: com 4, 3 e 2 classes. O conjunto com 4 classes foi construído por meio da exclusão da classe 1 (duvidosa), com a finalidade de simplificar o problema de classificação. O conjunto com 3 classes foi obtido pela remoção das classes 0 e 1 (respectivamente, saudável e duvidosa), resultando em um subconjunto composto apenas pelas instâncias que apresentavam algum grau de severidade (mínima, moderada ou severa). Por fim, o conjunto com 2 classes foi gerado ao se agrupar as classes 0 e 1, representando a ausência de OA, e as classes 2, 3 e 4, representando a presença de OA, formando, assim, um conjunto de dados binário.
 
 \section{Pré-processamento das imagens}
 
-O pré-processamento de imagens de raio-X é crucial para melhorar a qualidade e facilitar a análise automatizada pelos modelos. Para isso, algumas técnicas devem ser utilizadas, incluindo:
-
-\subsection{Normalização}
-
-A normalização de dados visa ajustar os valores para um intervalo padrão, melhorando a consistência dos dados e a eficiências dos modelos treinados. Para as radiografias, os pixels devem ter seus valores transformados para o intervalo entre 0 e 1.
+A etapa de pré-processamento é essencial para garantir que as imagens estejam em um formato adequado para o treinamento dos modelos. Neste estudo, o pré-processamento das radiografias foi dividido em duas etapas: pré-processamento geral e pré-processamento específico para cada modelo. O pré-processamento geral, realizado antes do treinamento, inclui técnicas como equalização de histograma e filtro gaussiano. Já o pré-processamento específico para cada modelo, realizado durante o treinamento, envolve a adaptação das imagens às exigências de entrada dos modelos selecionados, como redimensionamento e normalização dos valores dos pixels. Além disso, o aumento de dados foi aplicado para expandir a variabilidade do conjunto de dados e mitigar o efeito do desbalanceamento entre as classes.
 
 \subsection{Equalização de Histograma}
 
-A equalização de histograma é um método de processamento de imagem que busca melhorar o contraste e a visibilidade dos detalhes em uma imagem. Para isso, esta técnica redistribui os níveis de cinza da imagem, de forma que a distribuição dos valores de intensidade seja mais uniforme. Isso é feito calculando o histograma acumulado da imagem original e utilizando-o para redistribuir os valores de cada pixel. Em particular, a equalização de histograma é útil para radiografias, onde a variação de intensidade pode ser sutil e a distinção entre diferentes graus de KL pode ser difícil.
+A equalização de histograma foi utilizada como técnica de pré-processamento com o intuito de melhorar o contraste das radiografias coletadas do conjunto original. Esse método redistribuiu os níveis de intensidade dos pixels de forma a abranger a maior faixa de valores possíveis, aumentando a separabilidade entre as regiões mais claras e mais escuras da radiografia. Em particular, essa técnica foi útil para realçar o contraste das estruturas ósseas e o espaço articular do joelho, assim como alterações ósseas sutis que podem ser indicativas de OA.
 
-Dada uma imagem \( I(x, y) \) com intensidades de pixel \( i \in \{0, 1, \dots, L-1\} \) e número total de pixels \( N \), onde \( x \) e \( y \) são as coordenadas do pixel, e \( L \) é o número de níveis de intensidade (normalmente \( L = 256 \) para imagens de 8 bits), a probabilidade de ocorrência de cada intensidade \( i \) é calculada como:
+A aplicação da equalização de histograma foi realizada utilizando a biblioteca OpenCV \citep{opencv} do Python. A \autoref{fig:histogram-equalization}(a) ilustra uma radiografia original do joelho, enquanto a \autoref{fig:histogram-equalization}(b) mostra a mesma radiografia após a equalização de histograma. É possível observar que a equalização melhorou o contraste da imagem, tornando as estruturas ósseas mais visíveis. As respectivas distribuições de intensidade dos pixels antes e depois da equalização são apresentadas na \autoref{fig:histogram-equalization-histogram}.
 
-\[
-p(i) = \frac{n(i)}{N}
-\]
+\begin{figure}
+    \centering
+    \begin{tabular}{@{}c@{}}
+        \includegraphics[width=0.45\textwidth]{figs/imagem-nao-equalizada.png} \\[\abovecaptionskip]
+        \small (a) Radiografia original do joelho.
+    \end{tabular}
+    \hfill
+    \begin{tabular}{@{}c@{}}
+        \includegraphics[width=0.45\textwidth]{figs/image-equalizada.png} \\[\abovecaptionskip]
+        \small (b) Radiografia após equalização de histograma.
+    \end{tabular}
+    \caption{Exemplo de equalização de histograma aplicada a uma radiografia de joelho.}
+    \label{fig:histogram-equalization}
+\end{figure}
 
-onde \( n(i) \) é o número de pixels com intensidade \( i \) na imagem. O histograma acumulado \( H \) é então calculado como:
+\begin{figure}
+    \centering
+    \begin{tabular}{@{}c@{}}
+        \includegraphics[width=0.45\textwidth]{figs/histograma-imagem-nao-equalizada.png} \\[\abovecaptionskip]
+        \small (a) Histograma da radiografia original.
+    \end{tabular}
+    \hfill
+    \begin{tabular}{@{}c@{}}
+        \includegraphics[width=0.45\textwidth]{figs/histograma-imagem-equalizada.png} \\[\abovecaptionskip]
+        \small (b) Histograma da radiografia após equalização.
+    \end{tabular}
+    \caption{Distribuições de intensidade dos pixels antes e depois da equalização de histograma.}
+    \label{fig:histogram-equalization-histogram}
+\end{figure}
 
-\[
-H(i) = \sum_{j=0}^{i} p(j)
-\]
+\subsection{Normalização}
 
-O novo valor de intensidade \( j \) para um pixel com intensidade \( i \) é calculado como:
+A normalização das radiografias consistiu em uma etapa fundamental do pré-processamento, com o objetivo de padronizar a escala dos valores dos pixels e, assim, facilitar o aprendizado pelos modelos. Essa técnica foi aplicada convertendo os valores de intensidade dos pixels, originalmente na faixa de 0 a 255, para uma faixa padronizada entre 0 e 1.
 
-\[
-j = (L-1) \times H(i)
-\]
+Neste estudo, a normalização foi implementada em todos os subconjuntos de dados utilizando a função \texttt{transforms.Normalize} da biblioteca PyTorch \citep{pytorch}, que aplica a normalização em cada canal (RGB), subtraindo a média e dividindo pelo desvio padrão. Para modelos baseados em arquiteturas tradicionais, como ResNet e VGG, utilizaram-se os valores convencionais:
 
-onde \( L - 1 \) garante que o novo valor esteja no intervalo de intensidade da imagem. O resultado da equalização é normalmente arredondado para o valor inteiro mais próximo.
+\begin{itemize}
+    \item Média: 0.485, 0.456 e 0.406
+    \item Desvio padrão: 0.229, 0.224 e 0.225
+\end{itemize}
+
+Para modelos baseados em ViTs, como o DeiT e o Swin Transformer, foram utilizados os valores de normalização específicos para esses modelos, obtidos diretamente do objeto \texttt{processor}, utilizando a função \texttt{processor.image\_mean} e \texttt{processor.image\_std}, garantindo a compatibilidade com o pré-processamento original desses modelos.
 
 \subsection{Aumento de dados}
 
-A ideia desta técnica é expandir artificialmente o tamanho e a variabilidade de um conjunto de dados, principalmente quando o volume de dados disponível é limitado. Isso torna os modelos mais robustos e genéricos, prevenindo \textit{overfitting} e melhorando o desempenho em dados novos. As técnicas de aumento de dados que serão utilizadas nas radiografias são: rotação e reflexão (espelhamento) horizontal.
+Com o objetivo de melhorar a generalização dos modelos e reduzir o risco de \textit{overfitting}, foi aplicado o aumento de dados (\textit{data augmentation}) nas radiografias durante o treinamento dos modelos.
 
-\section{Métricas de avaliação}
+A técnica consistiu na aplicação de transformações geométricas simples nas imagens do conjunto de treinamento, de forma a simular variações naturais que poderiam ocorrer nas radiografias. As transformações incluíram a inversão horizontal (reflexão), com probabilidade de 50\%, e rotações aleatórias limitadas a um intervalo de -10 a 10 graus.
 
-Para comparar a performance dos modelos treinados na tarefa de classificação da severidade da OA de joelho, serão utilizadas as seguintes métricas de avaliação: acurácia, precisão, revocação, F1-score e matriz de confusão. Essas métricas são amplamente utilizadas em problemas de classificação para medir a qualidade das previsões e o equilíbrio entre os diferentes tipos de erros. Para o cálculo das métricas, os seguintes acrônimos serão utilizados nas fórmulas:
+Antes das transformações, as imagens foram redimensionadas para o tamanho esperado pelo modelo, definido como 224x224 pixels para todos os modelos, exceto para o modelo InceptionV3, que requer imagens de 299x299 pixels.
 
-\begin{itemize}
-    \item $TP$ é o número de verdadeiros positivos,
-    \item $TN$ é o número de verdadeiros negativos,
-    \item $FP$ é o número de falsos positivos,
-    \item $FN$ é o número de falsos negativos.
-\end{itemize}
+\subsection{Subamostragem}
 
-\subsection{Acurácia}
-A acurácia mede a proporção de previsões corretas em relação ao total de exemplos. Ela pode ser calculada pela fórmula:
+Como pode ser observado na \autoref{dataset-summary}, o conjunto de dados original apresenta um desbalanceamento significativo entre as classes, com a classe 0 (saudável) representando 40\% do total de imagens e a classe 4 (severo) apenas 3\%. Para lidar com esse desbalanceamento, além do aumento de dados, foi aplicada a técnica de subamostragem (\textit{undersampling}) nas classes majoritárias e reduzindo o número de imagens dessas classes, equilibrando sua proporção em relação às classes minoritárias.
 
-\begin{equation}
-    \text{Acurácia} = \frac{TP + TN}{TP + TN + FP + FN}
-\end{equation}
+A subamostragem foi aplicada apenas no conjunto de treinamento, de modo a não comprometer a representatividade das distribuições no conjunto de validação, testes e calibração. A técnica consistiu na seleção aleatória de um subconjunto das amostras das classes até um limite definido de 1.700 imagens por classe. Esse limite foi escolhido com base na classe 2 (mínima), que possui o maior número de imagens entre as classes com severidade, garantindo que todas as classes fossem representadas de forma equilibrada no conjunto de treinamento.
 
-\subsection{Precisão}
-A precisão indica a proporção de exemplos classificados como positivos que realmente são positivos. Ela é calculada pela fórmula:
-
-\begin{equation}
-    \text{Precisão} = \frac{TP}{TP + FP}
-\end{equation}
-
-\subsection{Recall}
-O recall mede a capacidade do modelo de identificar corretamente todos os exemplos positivos. É definido como:
-
-\begin{equation}
-    \text{Recall} = \frac{TP}{TP + FN}
-\end{equation}
-
-\subsection{F1-Score}
-O F1-score é a média harmônica entre precisão e recall, e é uma métrica útil quando busca-se um equilíbrio entre os dois. A fórmula do F1-score é:
-
-\begin{equation}
-    F1 = 2 \cdot \frac{\text{Precisão} \cdot \text{Recall}}{\text{Precisão} + \text{Recall}}
-\end{equation}
-
-\subsection{Matriz de Confusão}
-A matriz de confusão é uma ferramenta para visualizar o desempenho do modelo de classificação, detalhando as previsões corretas e incorretas em cada classe. Ela apresenta os valores de $TP$, $TN$, $FP$ e $FN$ de forma estruturada, permitindo avaliar o desempenho em classes específicas.
-
-\[
-\begin{array}{|c|c|c|}
-\hline
- & \text{Previsto Positivo} & \text{Previsto Negativo} \\
-\hline
-\text{Verdadeiro Positivo} & TP & FN \\
-\hline
-\text{Verdadeiro Negativo} & FP & TN \\
-\hline
-\end{array}
-\]
-
-\subsection{AUC-ROC}
-Para tarefas de classificação binária, será utilizada também a métrica AUC-ROC (Área Sob a Curva da Característica de Operação do Receptor), que mede a capacidade do modelo de separar as classes positivas e negativas. A curva ROC é um gráfico que exibe a taxa de verdadeiros positivos (sensibilidade) em função da taxa de falsos positivos.
-
-\begin{equation}
-    \text{AUC-ROC} = \int_{0}^{1} \text{TPR}(FPR) dFPR
-\end{equation}
-
-onde $TPR$ é a taxa de verdadeiros positivos e $FPR$ é a taxa de falsos positivos.
-
-\section{Eficiência computacional}
-
-Além da performance dos modelos, a eficiência computacional é um fator importante a ser considerado devido ao custo associado ao treinamento e inferência dos modelos. Para avaliar essa métrica, serão considerados o tempo de treinamento e a quantidade de computação utilizada por cada modelo. O tempo de treinamento, medido em minutos, é calculado da seguinte forma:
-
-\begin{equation}
-    \text{Tempo de Treinamento} = \text{Tempo Final} - \text{Tempo Inicial}
-\end{equation}
-
-onde o tempo final é o momento em que o treinamento é concluído e o tempo inicial é o momento em que ele é iniciado. A quantidade de computação é medida em FLOPs (operações de ponto flutuante por segundo), que representa uma métrica largamente utilizada para medir a quantidade de cálculos necessários para treinar um modelo de aprendizado profundo e está diretamente relacionada à eficiência computacional. A quantidade de FLOPs pode ser calculada de uma forma aproximada a partir do número de operações nas etapas de \textit{forward} e \textit{backward} do modelo, o número de exemplos no conjunto de dados e o número de épocas de treinamento \cite{Lohn2022}. Para esta pesquisa, será utilizada a biblioteca \textit{FLOPs Counter PyTorch} \cite{ptflops} para calcular a quantidade de FLOPs de cada modelo.
+Embora essa estratégia possa levar à perda de informações potencialmente úteis, ela ajuda a reduzir o viés do modelo em direção às classes majoritárias e melhora sua capacidade de aprender padrões relevantes em todas as classes.
 
 \section{Método de visualização}
 
