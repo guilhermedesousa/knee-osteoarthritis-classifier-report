@@ -104,39 +104,3 @@ Como pode ser observado na \autoref{dataset-summary}, o conjunto de dados origin
 A subamostragem foi aplicada apenas no conjunto de treinamento, de modo a não comprometer a representatividade das distribuições no conjunto de validação, testes e calibração. A técnica consistiu na seleção aleatória de um subconjunto das amostras das classes até um limite definido de 1.700 imagens por classe. Esse limite foi escolhido com base na classe 2 (mínima), que possui o maior número de imagens entre as classes com severidade, garantindo que todas as classes fossem representadas de forma equilibrada no conjunto de treinamento.
 
 Embora essa estratégia possa levar à perda de informações potencialmente úteis, ela ajuda a reduzir o viés do modelo em direção às classes majoritárias e melhora sua capacidade de aprender padrões relevantes em todas as classes.
-
-\section{Método de visualização}
-
-A visualização é uma técnica importante para avaliar quais foram as regiões da imagens que ajudaram o modelo a fazer determinada previsão. O método de visualização Grad-CAM (Gradient-weighted Class Activation Mapping) é uma técnica usada para interpretar e visualizar as decisões feitas por redes neurais convolucionais (RNCs). Em tarefas de classificação, como a avaliação da severidade da OA de joelho a partir de radiografias, entender quais regiões da imagem contribuíram para a decisão do modelo é crucial para a validação e a confiança nos resultados do modelo.
-
-O Grad-CAM fornece mapas de ativação que mostram quais partes da imagem foram mais influentes para a predição de uma classe específica \cite{Selvaraju2016}. Para isso, essa técnica utiliza os gradientes da saída da camada final da rede em relação às ativações das camadas intermediárias para gerar uma visualização da importância das regiões da imagem.
-
-Primeiro, é gerado um mapa de localização a partir da RNC utilizada para classificar a imagem usando a técnica do Class Activation Mapping (CAM). O CAM utiliza mapas de características convolucionais, que são globalmente agrupados usando a técnica de \textit{Global Average Pooling} (GAP) e transformados linearmente para produzir uma pontuação \( y_c \) para cada classe \( c \). Especificamente, se a penúltima camada da RNC produz \( K \) mapas de características \( A_k \in \mathbb{R}^{u \times v} \), esses mapas são agrupados espacialmente e combinados linearmente para gerar a pontuação:
-
-\[
-y_c = \sum_k w_{ck} \frac{1}{Z} \sum_i \sum_j A_{k_{ij}}
-\]
-
-Para produzir o mapa de localização \( L_c^{CAM} \) para a classe \( c \), CAM calcula a combinação linear dos mapas de características finais usando os pesos aprendidos da camada final:
-
-\[
-L_c^{CAM} = \sum_k w_{ck} A_k
-\]
-
-Este mapa é então normalizado para o intervalo entre 0 e 1 para fins de visualização.
-
-Em seguida, os gradientes são então globalmente averiguados (\textit{pooling}) para obter pesos que indicam a importância de cada canal de ativação. Esses pesos são usados para ponderar as ativações da camada convolucional final. A seguinte fórmula representa este cálculo dos pesos:
-
-\[
-\alpha_{k}^{c} = \frac{1}{Z} \sum_i \sum_j \frac{\partial y^{c}}{\partial A_{ij}^{k}}
-\]
-
-O peso \( \alpha_{k}^{c} \) representa a linearização parcial da rede e captura a importância de \(k \) para a classe \(c \). Por fim, o mapa de ativação é obtido ao multiplicar as ativações ponderadas pelos pesos dos gradientes. Esse mapa é então normalizado e sobreposto na imagem original para mostrar as áreas mais influentes na decisão do modelo.
-
-A fórmula para o Grad-CAM pode ser expressa como:
-
-\[
-\text{Grad-CAM} = \text{ReLU} \left( \sum_{k} \alpha_{k}^{c} A^{k} \right)
-\]
-
-Para esta pesquisa, a utilização do Grad-CAM permitirá a visualização das regiões das radiografias que o modelo considera mais relevantes para suas decisões de classificação. Isso não só facilita a interpretação dos resultados do modelo, mas também ajuda na validação de sua eficácia ao garantir que o modelo está focando nas áreas corretas da imagem, como o espaço articular do joelho.
