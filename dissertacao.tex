@@ -15,7 +15,7 @@
 	a4paper,					% tamanho do papel. 
 	% -- opções da classe abntex2 --
 	%chapter=TITLE,			% títulos de capítulos convertidos em letras maiúsculas
-	section=TITLE,			% títulos de seções convertidos em letras maiúsculas
+	% section=TITLE,			% títulos de seções convertidos em letras maiúsculas
 	% subsection=TITLE,		% títulos de subseções convertidos em letras maiúsculas
 	% subsubsection=TITLE,	% títulos de subsubseções convertidos em letras maiúsculas
 	% -- opções do pacote babel --
@@ -28,6 +28,7 @@
 % ---------------------
 % Pacotes OBRIGATÓRIOS
 % ---------------------
+% \usepackage{newtxtext,newtxmath}	% Usa a fonte Times New Roman
 \usepackage{lmodern}				% Usa a fonte Latin Modern			
 \usepackage[T1]{fontenc}			% Selecao de codigos de fonte.
 \usepackage[utf8]{inputenc}		% Codificacao do documento (conversão automática dos acentos)
@@ -77,6 +78,15 @@
 
 % Controle do espaçamento entre um parágrafo e outro:
 \setlength{\parskip}{0.2cm}  % tente também \onelineskip
+
+% Altera as fontes dos títulos e legendas para a família serifada (padrão do corpo de texto)
+\renewcommand{\ABNTEXchapterfont}{\rmfamily}
+\renewcommand{\ABNTEXpartfont}{\rmfamily}
+\renewcommand{\ABNTEXsectionfont}{\rmfamily}
+\renewcommand{\ABNTEXsubsectionfont}{\rmfamily}
+\renewcommand{\ABNTEXsubsubsectionfont}{\rmfamily}
+\renewcommand{\captionnamefont}{\rmfamily\bfseries}
+\renewcommand{\captiontitlefont}{\rmfamily}
 
 % ---------------------
 % Compila o indice
