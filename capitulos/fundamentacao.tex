@@ -451,13 +451,11 @@ Aplicações de visão computacional e processamento de linguagem natural têm s
 
 \section{Vision Transformer (ViT)}\label{sec:vision-transformers}
 
-O \textit{Vision Transformer} (ViT) é uma abordagem inovadora de aprendizado profundo que aplica a arquitetura Transformer \citep{vaswani2023attentionneed}, originalmente desenvolvida para tarefas de PLN, ao domínio da visão computacional. Introduzido por \cite{Dosovitskiy2021}, essa abordagem obteve excelentes resultados quando treinada em grandes conjuntos de dados (14M-300M de imagens), superando modelos tradicionais baseados em CNNs, como o ResNet.
+O \textit{Vision Transformer} (ViT) é uma abordagem inovadora de aprendizado profundo que aplica a arquitetura Transformer \citep{vaswani2023attentionneed}, originalmente desenvolvida para tarefas de PLN, ao domínio da visão computacional. Introduzido por \cite{Dosovitskiy2021} no artigo ``An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale'', o ViT demonstrou que os Transformers podem ser eficazes para tarefas de classificação de imagens ao obter excelentes resultados quando treinada em grandes conjuntos de dados (14M-300M de imagens), superando modelos tradicionais baseados em RNCs, como o ResNet.
 
-A ideia principal do ViT, ilustrada na \autoref{fig:vision-transformer}, é tratar imagens como sequências de blocos com tamanho fixo (por exemplo, 16×16 pixels), semelhantes aos tokens em uma sequência de texto. Cada bloco é linearmente projetado em um vetor de dimensão fixa, e esses vetores resultantes são combinados em sequência, à qual são adicionados vetores de posição para preservar a informação espacial, além de um vetor de classe para a tarefa de classificação.
+A ideia principal do ViT, ilustrada na \autoref{fig:vision-transformer}, é tratar imagens como sequências de blocos com tamanho fixo (por exemplo, 16×16 pixels), semelhantes aos tokens em uma sequência de texto. Cada bloco é linearmente projetado em um vetor de dimensão fixa, e esses vetores resultantes são combinados em sequência junto com vetores de posição e de classe, para preservar a informação espacial e representar a classe da tarefa de classificação, respectivamente. Esses vetores são então alimentados em um modelo \textit{encoder}, onde a sequência é processada por camadas de \textit{multi-head self-attention} e \textit{feedforward}, como no transformer tradicional. O mecanismo de \textit{self-attention} permite que o modelo aprenda relações de longo alcance entre diferentes regiões da imagem, sem a necessidade de convoluções locais, oferecendo maior flexibilidade na captura de dependências espaciais. Ao final do processamento, o token de classificação é utilizado para realizar a predição da tarefa-alvo, como prever o nível de severidade de uma doença.
 
-Esses vetores são então alimentados em um modelo Transformer Encoder, onde a sequência é processada por camadas de \textit{multi-head self-attention} e \textit{feedforward}, como no transformer tradicional. O mecanismo de \textit{self-attention} permite que o modelo aprenda relações de longo alcance entre diferentes regiões da imagem, sem a necessidade de convoluções locais, oferecendo maior flexibilidade na captura de dependências espaciais. Ao final do processamento, o token de classificação é utilizado para realizar a predição da tarefa-alvo, como prever o nível de severidade de uma doença.
-
-As CNNs tendem a apresentar melhor desempenho em cenários com poucos dados, enquanto os ViTs se destacam em cenários com grandes volumes de dados. Isso ocorre porque os Transformers não possuem os vieses indutivos herdados pelas CNNs, como a hierarquia espacial, a localidade e a translação equivariante, que são fundamentais para a generalização dos modelos. No entanto, modelos de ViT podem ser adaptados para funcionarem bem com conjuntos de dados reduzidos através do uso de técnicas de pré-treinamento e ajuste fino (\textit{fine-tuning} do inglês).
+Em cenários com poucos dados, as RNCs tendem a apresentar melhor desempenho, enquanto os ViTs se destacam no cenário oposto. Isso ocorre porque os transformers não possuem os vieses indutivos herdados pelas redes convolucionais, como a hierarquia espacial, a localidade e a translação equivariante, que são fundamentais para a generalização dos modelos. No entanto, modelos de ViT podem ser adaptados para funcionarem bem com conjuntos de dados reduzidos através do uso de técnicas de pré-treinamento e ajuste fino (\textit{fine-tuning} do inglês).
 
 \begin{figure}
     \centering
@@ -466,27 +464,23 @@ As CNNs tendem a apresentar melhor desempenho em cenários com poucos dados, enq
     \label{fig:vision-transformer}
 \end{figure}
 
-A seguir, são aprensentadas as arquiteturas de ViT que serão utilizadas nesta pesquisa.
-
-\subsection{ViT-B/16}
-
-O ViT-B/16 \cite{Dosovitskiy2021} é uma das primeiras variantes da arquitetura Vision Transformer, onde "B" representa o modelo base (base model) e "16" refere-se ao tamanho do \textit{patch} em que a imagem é dividida (16x16 pixels). O ViT-B/16 recebe uma imagem e a divide em \textit{patches}, tratando cada \textit{patch} como um \textit{token}, semelhante ao processamento de palavras em texto nos \textit{transformers} tradicionais. O modelo usa um mecanismo de atenção para processar os \textit{tokens} de maneira global, capturando interdependências entre diferentes regiões da radiografia. Essa abordagem permite que o ViT-B/16 compreenda melhor a estrutura geral da imagem, identificando padrões que podem se estender por grandes áreas da mesma. Este modelo pode ser especialmente eficaz para a tarefa de classificação da OA de joelho, visto que existe o padrão notável do espaçamento articular que se extende horizontalmente na radiografia.
+Todas as variantes de ViT compartilham a mesma estrutura básica, que consiste na divisão da imagem em \textit{patches} de tamanho fixo, a projeção linear desses \textit{patches} em vetores de dimensão fixa, a inclusão de vetores de posição e um token de classe, e o processamento desses vetores em um \textit{encoder} de transformer. O ViT-B/16 \citep{Dosovitskiy2021} é uma das primeiras variantes da arquitetura, onde ``B'' representa o modelo base e ``16'' refere-se ao tamanho do \textit{patch} em que a imagem é dividida (16x16 pixels). Os modelos que surgiram posteriormente introduziram melhorias e adaptações buscando aumentar a eficiência e/ou reduzir a necessidade de grandes volumes de dados para treinamento. A seguir, são aprensentadas as variantes que serão utilizadas nesta pesquisa.
 
 \subsection{Data-efficient image Transformer (DeiT)}
 
-A arquitetura \textit{Data-efficient image Transformer} (DeiT), introduzida por pesquisadores do \textit{Facebook} em 2021 \citep{Touvron2021}, representa uma avanço significativo na adaptação de transformers. Além de ser uma abordagem livre de convoluções, ela se destaca por não necessitar de grandes volumes de dados e infraestrutura computacional para alcançar resultados competitivos, ao contrário do que se pressupõe de arquiteturas ViT \cite{Dosovitskiy2021}.
+A arquitetura \textit{Data-efficient image Transformer} (DeiT), introduzida por pesquisadores do \textit{Facebook} em 2021 \citep{Touvron2021}, representa uma avanço significativo na adaptação de transformers. Além de ser uma abordagem livre de convoluções, ela se destaca por não necessitar de grandes volumes de dados e infraestrutura computacional para alcançar resultados competitivos, ao contrário do que se pressupõe de arquiteturas ViT \citep{Dosovitskiy2021}.
 
-O diferencial do DeiT reside na introdução de uma nova estratégia de distilação de conhecimento, adaptada especificamente para a arquitetura transformer. Como ilustrado na \autoref{fig:distillation-procedure}, um token de distilação é incorporado diretamente à entrada do transformer e atua de maneira similar ao token de classificação: interage com os demais tokens da rede através das camadas de \textit{self-attention} e sua saída é observada após a última camada. Este token é treinado com o objetivo de replicar a predição de um "modelo professor", estratégia conhecida como \textit{hard-label distillation}:
+O diferencial do DeiT reside na introdução de uma nova estratégia de distilação de conhecimento, adaptada especificamente para a arquitetura transformer. Como ilustrado na \autoref{fig:distillation-procedure}, um token de distilação é incorporado diretamente à entrada do transformer e atua de maneira similar ao token de classificação: interage com os demais tokens da rede através das camadas de \textit{self-attention} e sua saída é observada após a última camada. Este token é treinado com o objetivo de replicar a predição de um ``modelo professor'', estratégia conhecida como \textit{hard-label distillation}:
 
 \begin{equation}
     L_{\text{global}}^{\text{hardDistill}} = \frac{1}{2} \, L_{CE}\left( \psi(Z_s), y \right) + \frac{1}{2} \, L_{CE}\left( \psi(Z_s), y_t \right) \text{,}
 \end{equation}
 
-onde $Z_s$ são os \textit{logits} do "modelo aluno", $L_{CE}$ é a entropia cruzada sobre os rótulos corretos $y$ e os rótulos preditos pelo "modelo professor" $y_t = \text{argmax}_c Z_t(c)$, sendo $Z_t$ os seus \textit{logits}, e $\psi$ é a função softmax. Como resultado, ambos os tokens compartilham informação ao longo das camadas e gradualmente convergem para vetores similares, porém ainda distintos. Por fim, seus valores são associados com classificadores lineares para produzir o rótulo da imagem.
+onde $Z_s$ são os \textit{logits} do ``modelo aluno'', $L_{CE}$ é a entropia cruzada sobre os rótulos corretos ($y$) e os rótulos preditos pelo ``modelo professor'' ($y_t = \text{argmax}_c Z_t(c)$), sendo $Z_t$ os seus \textit{logits}, e $\psi$ é a função softmax. Como resultado, ambos os tokens compartilham informação ao longo das camadas e gradualmente convergem para vetores similares, porém ainda distintos. Por fim, seus valores são associados com classificadores lineares para produzir o rótulo da imagem.
 
-Entre suas variantes, o modelo DeiT-B com a estratégia de distilação, que possui arquitetura semelhante ao ViT-B, é o maior modelo em termos de número de parâmetros (87 milhões). Em experimentos com o ImageNet, tal modelo atingiu uma acurácia top-1 de 83,4\%, superando arquiteturas de redes convolucionais e inclusive variantes do ViT pré-treinadas com conjuntos de dados significativamente maiores. Adicionalmente, avaliações em tarefas de \textit{transfer learning} em diversos \textit{benchmarks} (CIFAR-10, CIFAR-100, Flowers) demonstram a capacidade de generalização do modelo, onde o DeiT ficou no mesmo nível que redes convolucionais competitivas e superou modelos ViT tradicionais.
+Entre suas variantes, o modelo DeiT-B com a estratégia de distilação, que possui arquitetura semelhante ao ViT-B, é o maior modelo em termos de número de parâmetros (87 milhões). Em experimentos com o ImageNet-1K, tal modelo atingiu uma acurácia top-1 de 83,4\% (com entrada 224), superando arquiteturas de redes convolucionais e inclusive variantes do ViT pré-treinadas com conjuntos de dados significativamente maiores. Adicionalmente, avaliações em tarefas de \textit{transfer learning} em diversos \textit{benchmarks} (CIFAR-10, CIFAR-100, Flowers) demonstram a capacidade de generalização do modelo, onde o DeiT ficou no mesmo nível que redes convolucionais competitivas e superou modelos ViT tradicionais.
 
-Diante desses resultados, o DeiT se mostra como uma alternativa promissora e eficiente aos modelos convolucionais e ViT clássicos para diversas tarefas, incluindo análise de imagens médicas. \cite{alotaibi2022} propuseram um modelo \textit{ensemble} com ViT e DeiT (ViT-DeiT) para classificar imagens histopatológicas do câncer de mama em oito classes (benignas e malignas), obtendo um resultado de 98,17\% de acurácia. Portanto, este trabalho utiliza a arquitetura do DeiT com sua estratégia de distilação para classificar o nível de severidade de osteoartrites de joelhos.
+Diante desses resultados, o DeiT se mostra como uma alternativa promissora e eficiente aos modelos convolucionais e ViT clássicos para diversas tarefas, incluindo análise de imagens médicas. \cite{alotaibi2022} propuseram um modelo \textit{ensemble} com ViT e DeiT (ViT-DeiT) para classificar imagens histopatológicas do câncer de mama em oito classes (benignas e malignas), obtendo um resultado de 98,17\% de acurácia. Este trabalho utiliza a arquitetura do DeiT-B com sua estratégia de distilação para classificar o nível de severidade de osteoartrites de joelhos.
 
 \begin{figure}
     \centering
@@ -495,9 +489,50 @@ Diante desses resultados, o DeiT se mostra como uma alternativa promissora e efi
     \label{fig:distillation-procedure}
 \end{figure}
 
+\subsection{Swin Transformer}
+
+A adaptação de arquiteturas transformer para tarefas de visão computacional apresenta desafios únicos, como a grande variação de escala das entidades visuais e a alta resolução das imagens. Em resposta a esses desafios, \cite{Liu2021} propuseram o Swin Transformer, uma nova arquitetura de ViT que serve como uma espinha dorsal (\textit{backbone} do inglês) de propósito geral para a área. O modelo introduz uma abordagem hierárquica e um mecanismo de auto-atenção baseado em janelas deslocadas, o que lhe confere eficiência e flexibilidade para modelar em múltiplas escalas com complexidade computacional linear em relação ao tamanho da imagem.
+
+A representação hierárquica do Swin Transformer, começando com pequenos \textit{patches} e aumentando gradualmente a resolução (\autoref{fig:swin-t-vs-vit}), e o esquema de janelas deslocadas diferencia o Swin Transformer de outras arquiteturas ViT, limitando o cálculo da auto-atenção a janelas locais e não sobrepostas, ao mesmo tempo que permite conexões cruzadas entre essas janelas em camadas consecutivas. Essa estratégia aumenta significativamente o poder de modelagem sem sacrificar a eficiência.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\linewidth]{figs/swin_t_vs_vit.png}
+    \caption{(a) Mapa de características hierárquico do Swin Transformer. (b) Em contraste, o formato de resolução única dos mapas de características do ViT. Fonte: \cite{Liu2021}.}
+    \label{fig:swin-t-vs-vit}
+\end{figure}
+
+A arquitetura do Swin Transformer, ilustrada na \autoref{fig:swin-t-arch}, representa a versão tiny (Swin-T) do modelo, que é a menor variante do modelo. Inicialmente, a imagem é dividida em \textit{patches} (tokens), e um conjunto de blocos Swin Transformer é aplicado sobre esses tokens. Para criar a hierarquia, camadas de fusão de \textit{patches} reduzem a resolução espacial (por um fator de 2x) e aumentam a dimensão dos canais (por 2x) à medida que a rede se aprofunda. Isso permite que o modelo gere mapas de características em múltiplas escalas (por exemplo, 4x, 8x, 16x e 32x), tornando-o compatível com tarefas de predição densa como detecção de objetos e segmentação.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{figs/swin_t-arch.png}
+    \caption{(a) A arquitetura do Swin Transformer (Swin-T); (b) Dois blocos Swin Transformer sucessivos. Fonte: \cite{Liu2021}.}
+    \label{fig:swin-t-arch}
+\end{figure}
+
+Em camadas consecutivas, os blocos Swin Transformer alternam entre duas configurações de atenção: uma baseada em janelas regulares (W-MSA) e outra em janelas deslocadas (SW-MSA). A formulação de dois blocos sucessivos é dada por:
+
+\begin{equation}
+    \hat{z}^{l} = \text{W-MSA}(\text{LN}(z^{l-1}))+z^{l-1} \text{ ,}
+\end{equation}
+\begin{equation}
+    z^{l} = \text{MLP}(\text{LN}(\hat{z}^{l}))+\hat{z}^{l} \text{ ,}
+\end{equation}
+\begin{equation}
+    \hat{z}^{l+1} = \text{SW-MSA}(\text{LN}(z^{l}))+z^{l} \text{ ,}
+\end{equation}
+\begin{equation}
+    z^{l+1} = \text{MLP}(\text{LN}(\hat{z}^{l+1}))+\hat{z}^{l+1} \text{ ,}
+\end{equation}
+
+onde $\hat{z}$ e $z$ denotam as saídas dos módulos de atenção e da MLP para um bloco $l$, respectivamente. A atenção é sempre calculada com um viés de posição relativa, o que se mostrou crucial para o desempenho do modelo.
+
+O Swin Transformer possui quatro configurações principais: Swin-T, Swin-S, Swin-B e Swin-L, que variam em capacidade. A versão base, Swin-B, possui 88 milhões de parâmetros e alcançou uma acurácia top-1 de 83,5\% no ImageNet-1K (com entrada 224), superando modelos ViT-B/16 (77,91\%) e DeiT-B com distilação (83,4\%) \citep{Dosovitskiy2021, Touvron2021}. Com isso, o Swin-B será a variante utilizada neste trabalho, pois apresenta um bom equilíbrio entre complexidade e desempenho, além de possibilitar um bom \textit{benchmark} para comparação com as demais arquiteturas.
+
 \subsection{Dual Attention Vision Transformers (DaViT)}
 
-Com o avanço das arquiteturas de ViT, diversos métodos têm buscado o equilíbrio entre a capacidade de capturar contexto global e a eficiência computacional necessária para lidar com imagens de alta resolução. Nesse contexto, \cite{ding2022davitdualattentionvision} propuseram uma nova arquitetura de ViT que introduz um mecanismo de atenção dual, combinando \textit{spatial window attention} e \textit{channel group attention}, de forma a integrar representações locais e globais de maneira eficiente e complementar.
+Com o avanço das arquiteturas de ViT, diversos métodos têm buscado o equilíbrio entre a capacidade de capturar contexto global e a eficiência computacional necessária para lidar com imagens de alta resolução. Nesse contexto, \cite{ding2022davitdualattentionvision} propuseram uma nova arquitetura de ViT que introduz um mecanismo de atenção dual, combinando janelas espaciais de atenção e grupos de canais de atenção, de forma a integrar representações locais e globais de maneira eficiente e complementar.
 
 O principal diferencial do DaViT está na aplicação do mecanismo de atenção no domínio dos canais. Após transpor o vetor de características gerado pelo mecanismo de \textit{self-attention} em blocos locais, cada canal passa a representar uma visão abstrata global da imagem. A atenção é então aplicada entre os grupos de canais, o que permite o modelo capturar interações globais com complexidade linear. A \autoref{fig:spatial-and-channel-window-self-attention} ilustra a perspectiva ortogonal do DaViT.
 
@@ -508,9 +543,90 @@ O principal diferencial do DaViT está na aplicação do mecanismo de atenção 
     \label{fig:spatial-and-channel-window-self-attention}
 \end{figure}
 
-\subsection{Swin Transformer (Shifted Window Transformer)}
+O mecanismo de atenção local, aplicado em janelas espaciais, está ilustrado na \autoref{fig:davit-arch}(b). Ele divide a imagem em janelas não sobrepostas e aplica a atenção apenas entre os tokens espaciais (\textit{patches} da imagem) dentro de cada janela. Supondo $N_w$ janelas diferentes contendo $P_w$ \textit{patches} cada, onde $P=P_w * N_w$, o mecanismo de atenção local pode ser representado como:
 
-O Swin Transformer \cite{Liu2021} é uma arquitetura de ViT que introduz uma abordagem nova que utiliza \textit{hierarchical feature maps} e \textit{sliding windows} para aplicar a atenção e melhorar a eficiência e performance do modelo. Em vez de processar toda a imagem como uma sequência de \textit{patches} globalmente, o Swin Transformer aplica a atenção dentro de pequenas janelas locais, de forma hierárquica, permitindo que o modelo mantenha a eficiência computacional e ainda capture detalhes locais e globais. Conforme o modelo avança pelas camadas, as janelas se expandem e se deslocam, permitindo que o modelo agregue contexto global ao longo do processamento. Essa estrutura hierárquica é particularmente eficaz para imagens de alta resolução, como as radiografias, onde há muitos detalhes importantes em diferentes escalas. Além disso, o Swin Transformer pode ser facilmente escalado para diferentes tamanhos de imagens e é altamente eficiente em termos de uso de memória e poder computacional, sendo uma escolha apropriada para a tarefa de classificação da OA de joelho.
+\begin{equation}
+    \text{A}_{\text{window}}(Q, K, V) = \lbrace \text{A}(Q_i,K_i,V_i) \rbrace ^{N_w}_{i=0} \text{ ,}
+\end{equation}
+
+onde $Q_i$, $K_i$ e $V_i$ são os vetores de consulta, chave e valor correspondentes a cada janela. Isso reduz significativamente o custo computacional, visto que a complexidade é linear com tamanho espacial $P$, embora isso limite a capacidade do modelo de capturar relações de longo alcance.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{figs/davit-arch.png}
+    \caption{Arquitetura DaViT do bloco \textit{dual attention}. Fonte: \cite{ding2022davitdualattentionvision}.}
+    \label{fig:davit-arch}
+\end{figure}
+
+Já o mecanismo de atenção global, aplicado em grupos de canais, é ilustrado na \autoref{fig:davit-arch}(c). Ao invés de atuar sobre \textit{patches} espaciais, esta abordagem transpõe o vetor de características e aplica a atenção em tokens de canal. Cada token de canal representa uma visão abstrata global da imagem, pois abrange todos os locais espaciais. Ao computar a atenção entre esses tokens, o modelo consegue naturalmente capturar interações globais com complexidade linear. Formalmente, seja $N_g$ o número de grupos e $C_g$ o número de canais em cada grupo, tem-se $C=N_g * C_g$. Assim:
+
+\begin{equation}
+    \text{A}_{\text{channel}}(Q, K, V) = \lbrace \text{A}_{\text{group}}(Q_i,K_i,V_i)^T \rbrace^{N_g}_{i=0}
+\end{equation}
+
+\begin{equation}
+    \text{A}_{\text{group}}(Q_i, K_i, V_i) = \text{softmax}\left(\frac{Q_i^T K_i}{\sqrt{C_g}}\right) V_i^T \text{ ,}
+\end{equation}
+
+onde $Q_i$, $K_i$, $V_i$ $\in \mathbb{R}^{P \times C_g}$ são os vetores de consulta, chave e valor correspondentes a cada grupo de canais.
+
+Existem três configurações diferentes da arquitetura DaViT para classificação de imagens, detecção de objetos e segmentação, que diferem na quantidade de camadas, tamanho do \textit{patch}, número de grupos em cada canal e número de cabeças de atenção. O modelo DaViT-B, que será utilizado neste trabalho, é a maior configuração, com quase 88 milhões de parâmetros, e obteve acurácia top-1 de 84,6\% no ImageNet-1K (com entrada 224), superando modelos como o DeiT-B com distilação (83,4\%) e o Swin-B (83,5\%) \citep{Touvron2021, Liu2021}.
+
+\subsection{Multi-Axis Vision Transformer (MaxViT)}
+
+A escalabilidade da auto-atenção em Transformers para imagens de alta resolução tem sido um desafio significativo, limitando sua aplicação em arquiteturas de visão de ponta. Para superar essa barreira, \cite{maxvit2022} propuseram o MaxViT, uma arquitetura que introduz um modelo de atenção eficiente e escalável, denominado auto-atenção multi-eixo (Max-SA), ou \textit{multi-axis self-attention} do inglês. Essa abordagem combina convoluções e um novo módulo de atenção que efetivamente captura interações espaciais locais e globais com complexidade apenas linear, permitindo que o modelo ``veja'' globalmente em todas as etapas da rede.
+
+A \autoref{fig:max-sa} ilustra o conceito fundamental do Max-SA. O mecanismo de atenção em bloco (\textit{block-attention} do inglês) é responsável pelas interações locais. Seja $X \in \mathbb{R}^{H \times W \times C}$ a entrada de um mapa de características, a ideia é dividi-lo em um vetor na forma $(\frac{H}{P} \times \frac{W}{P} \text{, } P \times P \times C)$, representando a partição da imagem em janelas não sobrepostas de tamanho $P \times P$. A atenção é então aplicada dentro dessas janelas, permitindo que o modelo capture relações locais.
+
+O módulo de atenção em grade (\textit{grid-attention} do inglês), por outro lado, é responsável pelas interações globais do espaço 2D. Em vez de usar janelas de tamanho fixo, ela divide o mapa de características em uma grade uniforme na forma ($G \times G \text{, } \frac{H}{G} \times \frac{W}{G} \text{, } C$) usando um tamanho de grade fixo $G \times G$. Isso cria janelas de tamanho adaptativo, e a auto-atenção é aplicada entre os pixels que caem na mesma posição relativa dentro de cada célula da grade. Esse processo corresponde a uma mistura espacial dilatada e global dos tokens, permitindo um campo receptivo global com complexidade também linear.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{figs/max-sa.png}
+    \caption{Módulo de atenção multi-eixo do MaxViT (Max-SA). O módulo \textit{block-attention} aplica atenção dentro das janelas, enquanto o módulo \textit{grid-attention} atua globalmente no espaço 2D. Fonte: \cite{maxvit2022}.}
+    \label{fig:max-sa}
+\end{figure}
+
+Esses dois mecanismos de atenção são combinados com uma camada de convolução MBConv para formar o bloco MaxViT, a unidade fundamental da arquitetura, conforme ilustrado na \autoref{fig:maxvit-arch}. Esses blocos são empilhados para formar a arquitetura MaxViT, que por sua vez possui algumas variantes, como MaxViT-T, MaxViT-B e MaxViT-L, que aumentam em número de blocos e canais em cada estágio para escalar a capacidade do modelo. O modelo MaxViT-L, por exemplo, estabeleceu um novo estado da arte na classificação do ImageNet-1K, alcançando uma acurácia top-1 de 85,17\% (com entrada 224), seguido pelo MaxViT-B com 84,95\%, superando também modelos anteriores como o DeiT-B, Swin-B e DaViT-B.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{figs/maxvit-arch.png}
+    \caption{Arquitetura MaxViT. Fonte: \cite{maxvit2022}.}
+    \label{fig:maxvit-arch}
+\end{figure}
+
+\subsection{Global Context Vision Transformer (GC ViT)}
+
+Em 2022, \cite{gcvit2022} introduziram o Global Context Vision Transformer (GC ViT), uma nova arquitetura que aumenta a eficiência de cômputo e parâmetros ao integrar módulos de auto-atenção de contexto global com a atenção local tradicional, modelando de forma eficaz as interações espaciais de curta e longa distância. Além disso, os autores propuseram o uso de blocos residuais Fused-MBConv modificados, que incorporam o viés indutivo convolucional na arquitetura.
+
+O GC ViT surgiu para resolver as limitações dos modelos ViT anteriores, que apesar do progresso, o campo receptivo limitado das janelas locais restringia a capacidade de capturar informações de longo alcance, e esquemas de deslocamento de janelas apenas cubriam uma pequena fração do contexto global.
+
+O diferencial do GC ViT é a sua capacidade de capturar informações globais sem a necessidade de operações custosas, como o deslocamento de janelas. Para isso, a cada estágio da sua arquitetura hierárquica, o modelo utiliza um gerador de consultas para extrair ``tokens de query globais''. Esses tokens globais, que contêm informações contextuais de diferentes regiões da imagem, são então compartilhados entre todos os módulos de atenção global para interagir com as representações locais de chave e valor. A \autoref{fig:gcvit-attention} ilustra a diferença entre a atenção local e a atenção global com queries globais.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{figs/gcvit-attention.png}
+    \caption{Formulação da atenção no GC ViT. A atenção local (esquerda) é restrita a uma janela local. Na atenção global (direita), um gerador de queries extrai características de toda a imagem para formar tokens de query globais, que então interagem com os tokens de chave e valor locais, permitindo a captura de informações de longo alcance. Fonte: \cite{gcvit2022}.}
+    \label{fig:gcvit-attention}
+\end{figure}
+
+A arquitetura geral do GC ViT é apresentada na \autoref{fig:gcvit-arch}. A cada estágio, blocos de atenção local e global são aplicados de forma alternada. Enquanto a atenção local modela as informações de curto alcance, a atenção global utiliza os queries pré-calculados pelo gerador de queries para interagir com as representações locais de chave e valor dentro de cada janela. A atenção global é formulada como:
+
+\begin{equation}
+    \text{Attention}(q_g, k, v) = \text{Softmax}\left(\frac{q_g k}{\sqrt{d}} + b\right)v \text{ ,}
+\end{equation}
+
+onde $q_g$ são os queries globais, $k$ e $v$ são as chaves e valores locais, $d$ é um fator de escala e $b$ é um viés de posição relativa aprendido. Adicionalmente, o GC ViT incorpora blocos Fused-MBConv modificados, tanto no gerador de queries quanto nos módulos de \textit{downsampling}, para introduzir um viés indutivo convolucional e modelar dependências entre canais.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{figs/gcvit-arch.png}
+    \caption{Arquitetura do GC ViT. A cada estágio, um gerador de tokens extrai queries globais que interagem com as representações locais de chave e valor para capturar contexto de longo alcance. Fonte: \cite{gcvit2022}.}
+    \label{fig:gcvit-arch}
+\end{figure}
+
+O GC ViT é apresentado em diversas configurações, que variam em capacidade. Na classificação no ImageNet-1K, as variantes GC ViT-S (51 milhões de parâmetros) e GC ViT-B (90 milhões de parâmetros) atingiram acurácias top-1 de 84,3\% e 85,0\%, respectivamente, com resolução de 224×224 e sem pré-treinamento. Esses resultados superam modelos de tamanho comparável, como o Swin-B (83,3\%) e o MaxViT-B (84,9\%).
 
 % \section{Visão Computacional}\label{sec:visao-computacional}
 

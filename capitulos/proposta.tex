@@ -109,10 +109,34 @@ Embora essa estratégia possa levar à perda de informações potencialmente út
 
 A técnica de \textit{transfer learning} foi aplicada no treinamento dos modelos de classificação da OA de joelho com o objetivo de reaproveitar os pesos dos modelos pré-treinados e acelear o processo de convergência. Esse processo envolveu o uso de modelos pré-treinados no conjunto de dados ImageNet 1K \citep{Russakovsky2015}, onde tais modelos foram treinados para classificar imagens em 1.000 categorias distintas. O uso deste método de treinamento foi especialmente útil para este estudo, pois o conjunto de dados de radiografias de joelho é limitado em tamanho, o que poderia dificultar a capacidade dos modelos de aprender padrões significativos nas imagens.
 
-O processo de treinamento dos modelos foi conduzido segundo um protocolo padronizado, assegurando robustez e reprodutibilidade. As arquiteturas foram inicializadas com pesos pré‑treinados obtidos de repositórios conhecidos, como o \textit{PyTorch} e o \textit{Hugging Face}, e tiveram sua camada de saída ajustada para corresponder ao número de classes da tarefa específica (5, 4, 3 ou 2 classes) e ao exigido pela função de perda empregada, sendo que para a \textit{CORN} o número de classes da camada de saída é subtraído em uma unidade. Além disso, adotou‑se a estratégia de não extração de características, na qual todas as camadas da rede permaneceram treináveis.
+O processo de treinamento dos modelos foi conduzido segundo um protocolo padronizado, assegurando robustez e reprodutibilidade. As arquiteturas foram inicializadas com pesos pré‑treinados obtidos de repositórios conhecidos, como o \textit{PyTorch} e o \textit{Hugging Face}, e tiveram sua camada de saída ajustada para corresponder ao número de classes da tarefa específica (5, 4, 3 ou 2 classes) e ao exigido pela função de perda empregada, sendo que para a \textit{CORN} o número de classes da camada de saída é subtraído em uma unidade. Por fim, adotou‑se a estratégia na qual todas as camadas da rede permaneceram treináveis. A última escolha foi motivada pela melhoria que essa abordagem pode proporcionar, embora aumente o tempo de treinamento.
 
 Cada modelo foi treinado com um \textit{batch size} de 28 imagens durante 60 épocas, utilizando uma política de embaralhamento aleatório dos dados. O otimizador Adam foi selecionado, com uma taxa de aprendizado inicial de 0,0001, e um \textit{scheduler} para diminuir a taxa de aprendizado em um fator de 10 a cada 5 épocas. Além disso, foi implementado um mecanismo de parada antecipada, com paciência de 5 épocas, baseado na perda de validação, para evitar o \textit{overfitting} dos modelos. A cada época, registraram‑se as métricas de desempenho em treinamento e validação; a taxa de aprendizado foi reduzida em ordem de magnitude a intervalos pré‑definidos, e o modelo de melhor acurácia de validação foi preservado.
 
-Concluído o treinamento, recarregaram‑se os pesos do melhor modelo e traçaram‑se curvas de desempenho para análise visual da convergência. A avaliação final foi conduzida no conjunto de teste, produzindo relatório abrangente de métricas de classificação. A complexidade computacional de cada arquitetura, em termos de FLOPs e quantidade de parâmetros, foi estimada com auxílio da bibliteca \cite{ptflops}. Todos os resultados, incluindo métricas, tempo de execução e medidas de complexidade, foram armazenados em formato JSON para análise posterior.
+Concluído o treinamento, obteve-se os pesos do melhor modelo e traçaram‑se curvas de desempenho para análise visual da convergência. A avaliação final foi conduzida no conjunto de teste, produzindo o relatório de métricas de classificação descrita na \autoref{sec:avaliacao-metricas}. A complexidade computacional de cada arquitetura, em termos de FLOPs e quantidade de parâmetros, foi estimada com auxílio da bibliteca \texttt{ptflops} \citep{ptflops}. Todos os resultados, incluindo métricas, tempo de execução e medidas de complexidade, foram armazenados em formato JSON para análise posterior.
 
 Todos os modelos foram treinados no ambiente de computação em nuvem Google Colab, utilizando uma Nvidia T4 GPU com 16 GB de memória, adequada para a tarefa de ajuste fino em modelos pequenos. A escolha dessa plataforma foi motivada pela sua acessibilidade e capacidade de fornecer recursos computacionais adequados a um custo reduzido. A seguir, são apresentados os experimentos realizados com cada modelo, incluindo as métricas de desempenho obtidas e a análise dos resultados.
+
+\section{Experimentos}
+
+Os modelos de classificação foram treinados e avaliados em diferentes cenários, variando o número de classes e a função de perda utilizada, com o objetivo de analisar o impacto dessas variáveis no desempenho dos modelos. A seguir, são apresentados os cenários de experimentos realizados:
+
+\subsection{Número de classes}
+
+Os modelos foram treinados em quatro cenários distintos, variando o número de classes na camada de saída:
+
+\begin{itemize}
+    \item \textbf{5 classes}: O cenário original, com as classes 0 (saudável), 1 (duvidosa), 2 (mínima), 3 (moderada) e 4 (severa).
+    \item \textbf{4 classes}: Cenário com a exclusão da classe 1 (duvidosa), resultando nas classes 0 (saudável), 2 (mínima), 3 (moderada) e 4 (severa). Esse cenário foi escolhido devido à dificuldade de classificar a classe 1, que muitas vezes é considerada ambígua ou de difícil distinção entre saudável e mínima.
+    \item \textbf{3 classes}: Cenário com a exclusão das classes 0 (saudável) e 1 (duvidosa), resultando nas classes 2 (mínima), 3 (moderada) e 4 (severa), que representam apenas os casos de OA de joelho com algum grau de severidade.
+    \item \textbf{2 classes}: Cenário binário, onde as classes 0 (saudável) e 1 (duvidosa) foram agrupadas em uma única classe, representando a ausência de OA, enquanto as classes 2 (mínima), 3 (moderada) e 4 (severa) foram agrupadas em outra classe, representando a presença de OA.
+\end{itemize}
+
+\subsection{Função de perda}
+
+Além da variação no número de classes, os modelos foram treinados utilizando duas funções de perda distintas:
+
+\begin{itemize}
+    \item \textbf{Cross-Entropy Loss}: A função de perda padrão para problemas de classificação multiclasse, que mede a discrepância entre as distribuições de probabilidade previstas e as reais. É uma opção comum, mas não leva em consideração a característica ordinal das classes.
+    \item \textbf{CORN Loss}: Uma função de perda adaptada para problemas de classificação ordinal, que considera a ordem das classes e penaliza erros de classificação com base na distância ordinal entre as classes.
+\end{itemize}
