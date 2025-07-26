@@ -137,6 +137,44 @@ Os modelos foram treinados em quatro cenários distintos, variando o número de 
 Além da variação no número de classes, os modelos foram treinados utilizando duas funções de perda distintas:
 
 \begin{itemize}
-    \item \textbf{Cross-Entropy Loss}: A função de perda padrão para problemas de classificação multiclasse, que mede a discrepância entre as distribuições de probabilidade previstas e as reais. É uma opção comum, mas não leva em consideração a característica ordinal das classes.
-    \item \textbf{CORN Loss}: Uma função de perda adaptada para problemas de classificação ordinal, que considera a ordem das classes e penaliza erros de classificação com base na distância ordinal entre as classes.
+    \item \textbf{Cross-Entropy}: A função de perda padrão para problemas de classificação multiclasse, que mede a discrepância entre as distribuições de probabilidade previstas e as reais. É uma opção comum, mas não leva em consideração a característica ordinal das classes.
+    \item \textbf{CORN}: Uma função de perda adaptada para problemas de classificação ordinal, que considera a ordem das classes e penaliza erros de classificação com base na distância ordinal entre as classes.
 \end{itemize}
+
+\section{Avaliação e Análise Complementar}
+
+Além das métricas de classificação padrão, foram realizadas análises complementares para avaliar a incerteza, a eficiência e a interpretabilidade dos modelos.
+
+\subsection{Predição Conformal}
+
+Para quantificar a incerteza associada às previsões dos modelos, este estudo empregou a técnica de predição conformal. Diferentemente de uma predição única, a predição conformal fornece um conjunto de classes que contém a classe verdadeira com uma alta probabilidade, analisando uma nova amostra e respondendo algo como ``Esta radiografia é classificada com nível de osteoartrie de joelho 2 com 95\% de confiança''. Essa abordagem é particularmente útil em cenários médicos, onde a incerteza pode ter implicações significativas para o diagnóstico e tratamento.
+
+A predição conformal foi aplicada utilizando o conjunto de calibração, previamente separado com 10\% das imagens do conjunto de dados original, com um valor de confiança de 95\% ($\epsilon = 0.05$). Para modelos treinados com a função de perda \textit{cross-entropy}, o limiar de confiança $\hat{q}$ foi calculado seguindo a abordagem descrita na \autoref{sec:conformal-prediction}, onde os \textit{scores} foram obtidos a partir das previsões do modelo. No entanto, para modelos treinados com o CORN, seguir a abordagem tradicional não é viável, pois seria necessário reconstruir explicitamente as probabilidades por classe. Em vez disso, foi adotada uma abordagem alternativa, tratando como conjunto de tarefas binárias ordenadas, que é exatamente como o CORN opera. Assim, para um problema com $K$ classes KL, a predição conformal foi aplicada por limiar, da seguinte forma:
+
+\begin{itemize}
+    \item Para cada exemplo do conjunto de calibração:
+    \begin{itemize}
+        \item Para cada limiar $k \in \lbrace 0 \text{, } ... \text{, } K-2 \rbrace$:
+            \begin{itemize}
+                \item Se $y_{\text{true}} > k$, $\text{score} = 1 - p$, onde $p$ é a probabilidade prevista pelo modelo para o limiar $k$.
+                \item Se $y_{\text{true}} \leq k$, $\text{score} = p$.
+            \end{itemize}
+    \end{itemize}
+    \item Calcular o limiar de confiança $\hat{q}_i$ para cada limiar do problema $k$ da mesma forma que na abordagem tradicional.
+    \item Durante a inferência:
+        \begin{itemize}
+            \item Para cada limiar $k$, adicione a classe $k+1$ ao intervalo de predição se $1 - p_k \leq \hat{q}_k$.
+        \end{itemize}
+    \item Construir a predição ordinal intervalar:
+        \begin{itemize}
+            \item Exemplo: $\hat{y} \in [0,2]$ se apenas $k_0$ e $k_1$ estiverem acima do limiar de confiança.
+        \end{itemize}
+\end{itemize}
+
+\subsection{Análise do Tempo de Inferência}
+
+Para avaliar a viabilidade prática dos modelos em cenários de aplicação real, além da complexidade teórica (FLOPs), foi mensurado o tempo de inferência. Para cada modelo treinado, o tempo necessário para realizar uma predição em uma nova radiografia foi registrado. A fim de garantir uma medida robusta e estável, o \textit{script} de inferência foi executado 50 vezes para cada modelo, e a média dos tempos foi calculada e registrada. Essa análise é fundamental para comparar a eficiência computacional prática das diferentes arquiteturas.
+
+\subsection{Análise de Interpretabilidade com Grad-CAM}
+
+Para entender e interpretar as decisões dos modelos, foi utilizada a técnica de visualização Grad-CAM (Gradient-weighted Class Activation Mapping). Essa abordagem gera mapas de calor que destacam as regiões da radiografia que foram mais influentes para a predição de uma determinada classe. Foram geradas e registradas imagens Grad-CAM para todos os modelos treinados. O objetivo dessa análise foi inspecionar visualmente se os modelos estavam focando em regiões clinicamente relevantes, como o espaço articular e a formação de osteófitos, e comparar os padrões de ativação entre as diferentes arquiteturas.
