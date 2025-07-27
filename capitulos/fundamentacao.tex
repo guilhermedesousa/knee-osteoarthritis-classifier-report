@@ -77,7 +77,7 @@ Essa avaliação é tipicamente feita por radiologistas a partir de radiografias
 
 No entanto, a classificação manual pode ser subjetiva e suscetível a erros, assim como foi observado pelos autores, o que pode levar a diagnósticos tardios ou incorretos num cenário onde a detecção precoce é crucial para retardar a progressão da doença, uma vez que não existem medicamentos capazes de retardar o seu desenvolvimento .
 
-\begin{table}[htbp]
+\begin{table}[h]
     \centering
     \begin{tabular}{|c|c|c|c|c|}
         \hline
@@ -115,9 +115,9 @@ Durante o treinamento, a CNN ajusta os pesos dos filtros por meio do algoritmo d
 
 A \autoref{fig:cnn} ilustra uma rede neural convolucional composta por cinco camadas. O número de camadas, a disposição dessas camadas, o número e tamanho dos filtros, a forma de conexão entre as camadas, entre outros fatores, podem variar dependendo da arquitetura escolhida. Em seguida, serão aprensentadas algumas das arquiteturas populares de CNN que serão utilizadas neste trabalho.
 
-\begin{figure}
+\begin{figure}[h]
     \centering
-    \includegraphics[width=0.5\linewidth]{figs/convolution-neural-network.png}
+    \includegraphics[width=0.7\linewidth]{figs/convolution-neural-network.png}
     \caption{Uma rede neural convolucional simples, composta por apenas cinco camadas. Fonte: \cite{Saxena2022}.}
     \label{fig:cnn}
 \end{figure}
@@ -187,16 +187,16 @@ A tabela \ref{vgg-arch} apresenta a configuração das arquiteturas VGG-16 e VGG
 
 \subsection{ResNet (Residual Network)}
 
-\cite{He2016} venceram a competição ILSVRC 2015 com a arquitetura \textit{Residual Network} (\textit{ResNet}), que introduziu a ideia de blocos residuais e alcançou uma taxa de erro de 3,57\% no conjunto de validação do \textit{ImageNet} com um \textit{ensemble} de seus modelos. Os autores abordaram o problema da degradação de desempenho: conforme a profundidade da rede aumentava, a acurácia saturava e começava a diminuir. Para resolver, eles introduziram a ideia de conexões de atalho (\textit{skip connections}) entre as camadas, onde o sinal de entrada de uma camada é somado ao sinal de saída de uma camada subsequente (\autoref{residual-learning}).
-
-Formalmente, considerando que o objetivo de uma rede neural é aprender uma função \( H(x) \), onde \( x \) é a entrada, a ResNet propõe que a rede aprenda uma função residual \( F(x) = H(x) - x \), onde a entrada \( x \) é adicionada à saída \( H(x) \), reformulando a função de aprendizado como \( H(x) = F(x) + x \). Essa abordagem permite que a rede aprenda funções de identidade mais facilmente, facilitando o treinamento de redes mais profundas sem adicionar complexidade.
+\cite{He2016} venceram a competição ILSVRC 2015 com a arquitetura \textit{Residual Network} (\textit{ResNet}), que introduziu a ideia de blocos residuais e alcançou uma taxa de erro de 3,57\% no conjunto de validação do \textit{ImageNet} com um \textit{ensemble} de seus modelos. Os autores abordaram o problema da degradação de desempenho: conforme a profundidade da rede aumentava, a acurácia saturava e começava a diminuir. Para resolver, eles introduziram a ideia de conexões de atalho (\textit{skip connections}) entre as camadas, onde o sinal de entrada de uma camada é somado ao sinal de saída de uma camada subsequente (\autoref{fig:residual-learning}).
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.5\linewidth]{figs/residual-connection.png}
     \caption{Aprendizado residual}
-    \label{residual-learning}
+    \label{fig:residual-learning}
 \end{figure}
+
+Formalmente, considerando que o objetivo de uma rede neural é aprender uma função \( H(x) \), onde \( x \) é a entrada, a ResNet propõe que a rede aprenda uma função residual \( F(x) = H(x) - x \), onde a entrada \( x \) é adicionada à saída \( H(x) \), reformulando a função de aprendizado como \( H(x) = F(x) + x \). Essa abordagem permite que a rede aprenda funções de identidade mais facilmente, facilitando o treinamento de redes mais profundas sem adicionar complexidade.
 
 A arquitetura ResNet é composta por pilhas de blocos residuais que consistem em duas camadas convolucionais, com um \textit{Batch Normalization} e uma função de ativação ReLU entre elas. As camadas convolucionais utilizam filtros de tamanho 3×3, com um \textit{stride} de 1 e \textit{padding} de 1, para manter a dimensão da imagem. A saída do bloco residual é então somada à entrada original, permitindo que o modelo aprenda a função residual. A rede termina com uma camada de \textit{average pooling} global e uma camada totalmente conectada (ou \textit{fully connected} do inglês) com ativação \textit{softmax} para classificação.
 
@@ -399,7 +399,7 @@ A arquitetura Inception-v3 \citep{Szegedy2016} representa uma evolução signifi
 
 A \autoref{inception-v3-arch} apresenta a configuração da arquitetura Inception-v3, com um total de 42 camadas, que inclui a fatoração de convoluções tradicionais 7×7 em convoluções 3×3. A arquitetura substitui o otimizador padrão do SGD por um otimizador mais avançado, o RMSProp, favorecendo a convergência do modelo durante o treinamento, além de utilizar classificadores auxiliares com normalização em lote nas camadas intermediárias, melhorando a propagação do sinal do gradiente e, por consequência, a eficiência do treinamento.
 
-\begin{table}[ht]
+\begin{table}[h]
     \centering
     \footnotesize
     \begin{tabular}{|l|c|c|c|c|}
@@ -457,7 +457,7 @@ A ideia principal do ViT, ilustrada na \autoref{fig:vision-transformer}, é trat
 
 Em cenários com poucos dados, as RNCs tendem a apresentar melhor desempenho, enquanto os ViTs se destacam no cenário oposto. Isso ocorre porque os transformers não possuem os vieses indutivos herdados pelas redes convolucionais, como a hierarquia espacial, a localidade e a translação equivariante, que são fundamentais para a generalização dos modelos. No entanto, modelos de ViT podem ser adaptados para funcionarem bem com conjuntos de dados reduzidos através do uso de técnicas de pré-treinamento e ajuste fino (\textit{fine-tuning} do inglês).
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \includegraphics[width=1.0\linewidth]{figs/vision-transformer.png}
     \caption{Arquitetura do Vision Transformer. Fonte: \cite{Dosovitskiy2021}.}
@@ -482,7 +482,7 @@ Entre suas variantes, o modelo DeiT-B com a estratégia de distilação, que pos
 
 Diante desses resultados, o DeiT se mostra como uma alternativa promissora e eficiente aos modelos convolucionais e ViT clássicos para diversas tarefas, incluindo análise de imagens médicas. \cite{alotaibi2022} propuseram um modelo \textit{ensemble} com ViT e DeiT (ViT-DeiT) para classificar imagens histopatológicas do câncer de mama em oito classes (benignas e malignas), obtendo um resultado de 98,17\% de acurácia. Este trabalho utiliza a arquitetura do DeiT-B com sua estratégia de distilação para classificar o nível de severidade de osteoartrites de joelhos.
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \includegraphics[width=0.5\linewidth]{figs/distillation-procedure-deit.png}
     \caption{Estratégia de distilação em transformers através da introdução de um token de distilação. Fonte: \cite{Touvron2021}.}
@@ -495,7 +495,7 @@ A adaptação de arquiteturas transformer para tarefas de visão computacional a
 
 A representação hierárquica do Swin Transformer, começando com pequenos \textit{patches} e aumentando gradualmente a resolução (\autoref{fig:swin-t-vs-vit}), e o esquema de janelas deslocadas diferencia o Swin Transformer de outras arquiteturas ViT, limitando o cálculo da auto-atenção a janelas locais e não sobrepostas, ao mesmo tempo que permite conexões cruzadas entre essas janelas em camadas consecutivas. Essa estratégia aumenta significativamente o poder de modelagem sem sacrificar a eficiência.
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \includegraphics[width=0.7\linewidth]{figs/swin_t_vs_vit.png}
     \caption{(a) Mapa de características hierárquico do Swin Transformer. (b) Em contraste, o formato de resolução única dos mapas de características do ViT. Fonte: \cite{Liu2021}.}
@@ -504,7 +504,7 @@ A representação hierárquica do Swin Transformer, começando com pequenos \tex
 
 A arquitetura do Swin Transformer, ilustrada na \autoref{fig:swin-t-arch}, representa a versão tiny (Swin-T) do modelo, que é a menor variante do modelo. Inicialmente, a imagem é dividida em \textit{patches} (tokens), e um conjunto de blocos Swin Transformer é aplicado sobre esses tokens. Para criar a hierarquia, camadas de fusão de \textit{patches} reduzem a resolução espacial (por um fator de 2x) e aumentam a dimensão dos canais (por 2x) à medida que a rede se aprofunda. Isso permite que o modelo gere mapas de características em múltiplas escalas (por exemplo, 4x, 8x, 16x e 32x), tornando-o compatível com tarefas de predição densa como detecção de objetos e segmentação.
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \includegraphics[width=\linewidth]{figs/swin_t-arch.png}
     \caption{(a) A arquitetura do Swin Transformer (Swin-T); (b) Dois blocos Swin Transformer sucessivos. Fonte: \cite{Liu2021}.}
@@ -536,7 +536,7 @@ Com o avanço das arquiteturas de ViT, diversos métodos têm buscado o equilíb
 
 O principal diferencial do DaViT está na aplicação do mecanismo de atenção no domínio dos canais. Após transpor o vetor de características gerado pelo mecanismo de \textit{self-attention} em blocos locais, cada canal passa a representar uma visão abstrata global da imagem. A atenção é então aplicada entre os grupos de canais, o que permite o modelo capturar interações globais com complexidade linear. A \autoref{fig:spatial-and-channel-window-self-attention} ilustra a perspectiva ortogonal do DaViT.
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \includegraphics[width=\linewidth]{figs/spatial-and-channel-window-self-attention.png}
     \caption{(a) \textit{Spatial window multihead self-attention} divide a dimensão espacial em janelas locais, onde cada janela contém múltiplos tokens espaciais. (b) \textit{Channel group single-head self-attention} agrupa tokens de canal em múltiplos grupos. Fonte: \cite{ding2022davitdualattentionvision}.}
@@ -551,7 +551,7 @@ O mecanismo de atenção local, aplicado em janelas espaciais, está ilustrado n
 
 onde $Q_i$, $K_i$ e $V_i$ são os vetores de consulta, chave e valor correspondentes a cada janela. Isso reduz significativamente o custo computacional, visto que a complexidade é linear com tamanho espacial $P$, embora isso limite a capacidade do modelo de capturar relações de longo alcance.
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \includegraphics[width=\linewidth]{figs/davit-arch.png}
     \caption{Arquitetura DaViT do bloco \textit{dual attention}. Fonte: \cite{ding2022davitdualattentionvision}.}
@@ -580,7 +580,7 @@ A \autoref{fig:max-sa} ilustra o conceito fundamental do Max-SA. O mecanismo de 
 
 O módulo de atenção em grade (\textit{grid-attention} do inglês), por outro lado, é responsável pelas interações globais do espaço 2D. Em vez de usar janelas de tamanho fixo, ela divide o mapa de características em uma grade uniforme na forma ($G \times G \text{, } \frac{H}{G} \times \frac{W}{G} \text{, } C$) usando um tamanho de grade fixo $G \times G$. Isso cria janelas de tamanho adaptativo, e a auto-atenção é aplicada entre os pixels que caem na mesma posição relativa dentro de cada célula da grade. Esse processo corresponde a uma mistura espacial dilatada e global dos tokens, permitindo um campo receptivo global com complexidade também linear.
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \includegraphics[width=\linewidth]{figs/max-sa.png}
     \caption{Módulo de atenção multi-eixo do MaxViT (Max-SA). O módulo \textit{block-attention} aplica atenção dentro das janelas, enquanto o módulo \textit{grid-attention} atua globalmente no espaço 2D. Fonte: \cite{maxvit2022}.}
@@ -589,7 +589,7 @@ O módulo de atenção em grade (\textit{grid-attention} do inglês), por outro 
 
 Esses dois mecanismos de atenção são combinados com uma camada de convolução MBConv para formar o bloco MaxViT, a unidade fundamental da arquitetura, conforme ilustrado na \autoref{fig:maxvit-arch}. Esses blocos são empilhados para formar a arquitetura MaxViT, que por sua vez possui algumas variantes, como MaxViT-T, MaxViT-B e MaxViT-L, que aumentam em número de blocos e canais em cada estágio para escalar a capacidade do modelo. O modelo MaxViT-L, por exemplo, estabeleceu um novo estado da arte na classificação do ImageNet-1K, alcançando uma acurácia top-1 de 85,17\% (com entrada 224), seguido pelo MaxViT-B com 84,95\%, superando também modelos anteriores como o DeiT-B, Swin-B e DaViT-B.
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \includegraphics[width=\linewidth]{figs/maxvit-arch.png}
     \caption{Arquitetura MaxViT. Fonte: \cite{maxvit2022}.}
@@ -604,7 +604,7 @@ O GC ViT surgiu para resolver as limitações dos modelos ViT anteriores, que ap
 
 O diferencial do GC ViT é a sua capacidade de capturar informações globais sem a necessidade de operações custosas, como o deslocamento de janelas. Para isso, a cada estágio da sua arquitetura hierárquica, o modelo utiliza um gerador de consultas para extrair ``tokens de query globais''. Esses tokens globais, que contêm informações contextuais de diferentes regiões da imagem, são então compartilhados entre todos os módulos de atenção global para interagir com as representações locais de chave e valor. A \autoref{fig:gcvit-attention} ilustra a diferença entre a atenção local e a atenção global com queries globais.
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \includegraphics[width=\linewidth]{figs/gcvit-attention.png}
     \caption{Formulação da atenção no GC ViT. A atenção local (esquerda) é restrita a uma janela local. Na atenção global (direita), um gerador de queries extrai características de toda a imagem para formar tokens de query globais, que então interagem com os tokens de chave e valor locais, permitindo a captura de informações de longo alcance. Fonte: \cite{gcvit2022}.}
@@ -619,7 +619,7 @@ A arquitetura geral do GC ViT é apresentada na \autoref{fig:gcvit-arch}. A cada
 
 onde $q_g$ são os queries globais, $k$ e $v$ são as chaves e valores locais, $d$ é um fator de escala e $b$ é um viés de posição relativa aprendido. Adicionalmente, o GC ViT incorpora blocos Fused-MBConv modificados, tanto no gerador de queries quanto nos módulos de \textit{downsampling}, para introduzir um viés indutivo convolucional e modelar dependências entre canais.
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \includegraphics[width=\linewidth]{figs/gcvit-arch.png}
     \caption{Arquitetura do GC ViT. A cada estágio, um gerador de tokens extrai queries globais que interagem com as representações locais de chave e valor para capturar contexto de longo alcance. Fonte: \cite{gcvit2022}.}
@@ -697,7 +697,7 @@ A saída da $k$-ésima tarefa binária $f_k (x^{[i]})$ representa a probabilidad
 
 onde os eventos estão aninhados: $\lbrace y^{[i]} > r_k \rbrace \subseteq \lbrace y^{[i]} > r_{k-1} \rbrace$.
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \includegraphics[width=\linewidth]{figs/corn-nn.png}
     \caption{Arquitetura do CORN. Fonte: \cite{Shi_2023}.}
