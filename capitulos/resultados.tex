@@ -1,14 +1,10 @@
 \chapter{Resultados} \label{cap:resultados}
 
-Este capítulo apresenta os resultados obtidos e discute as implicações do estudo comparativo. Os resultados são apresentados em tabelas e gráficos, seguidos de uma análise detalhada do que fora observado. A seção é dividida em subseções que abordam os diferentes cenários de classificação, trazendo uma discussão sobre vantagens e desvantagens de cada abordagem.
+Este capítulo apresenta os resultados obtidos e discute as implicações do estudo comparativo. Os resultados são apresentados em tabelas e gráficos, seguidos de uma análise detalhada do que fora observado.
 
-\subsection{Classificação em Cinco Classes}
+\section{Métricas Gerais de Desempenho}
 
-Para o cenário de classificação em cinco classes, os resultados das métricas de desempenho geral dos modelos de RNCs e ViTs são apresentados na \autoref{tab:overall_metrics_all_models}. A acurácia geral variou de 0.6894 a 0.7885, com o modelo DenseNet-169 alcançando a maior acurácia com uso da entropia cruzada. Considerando a característica ordinal da classificação, a métrica QWK oferece uma visão mais precisa do desempenho dos modelos. O modelo DenseNet-121 obteve o melhor QWK de 0.8878, seguido pelo GCViT-B com QWK de 0.8832, ambos com uso da entropia cruzada.
-
-Ao avaliar o impacto da função de perda no desempenho, observou-se que, na maioria dos casos, modelos treinados usando entropia cruzada superaram seus equivalentes treinados com a CORN em termos de acurácia. Na média, houve uma queda de x\% na acurácia geral, sugerindo que a função de perda CORN pode não ser tão eficaz na previsão de classes corretas. No entanto, a CORN melhorou consistentemente o QWK para a maioria dos modelos (x\%). O modelo Inception-v3, por exemplo, teve uma melhoria de 0.8571 para 0.8813. Quanto ao MAE, também houve uma leve redução com uso da CORN, confirmando sua eficácia em reduzir a distância entre predições incorretas. Portanto, caso o objetivo seja maximizar o número de classes corretamente previstas, a entropia cruzada pode ser a melhor escolha. No entanto, para uma ferramenta de suporte à decisão clínica, onde a predição de uma classe 2 para uma classe 3 é menos grave do que prever para uma classe 0, a função de perda CORN é mais adequada, pois isso produz modelos que realizam predições mais próximas do rótulo real, mesmo que não sejam exatamente corretas.
-
-% A \autoref{tab:resultados} mostra a acurácia dos modelos de RNCs e ViTs treinados para a classificação da OA de joelho usando a função de perda \textit{crossentropy}. Em relação ao tempo de treinamento, é possível notar que o modelo mais rápido foi o ResNet-50, com um tempo de 11.29 segundos. Por outro lado, o modelo mais lento foi o DeiT, com um tempo de 79.5 segundos. Tais valores não necessariamente indicam que o modelo mais rápido é o pior, ou o contrário, mas é importante considerar o tempo de treinamento como um fator relevante ao escolher um modelo, especialmente se houver restrições de recursos computacionais. O tempo de treinamento mostrado varia, principalmente, com o número de épocas, já que modelos que levaram mais tempo são aqueles que tiveram a parada antecipada mais tarde, ou executaram as 30 épocas completas.
+Os resultados das métricas de desempenho geral dos modelos de RNC e ViT são apresentados na \autoref{tab:overall_metrics_all_models}. A acurácia geral variou de 0.6894 (DeiT-Distilled-B) a 0.7885 (DenseNet-169), com o modelo DenseNet-169 alcançando a maior acurácia com uso da entropia cruzada. No entanto, considerando a característica ordinal da classificação, a métrica QWK oferece uma visão mais precisa do desempenho dos modelos. O modelo DenseNet-121 obteve o melhor QWK de 0.8878, seguido pelo GCViT-B com QWK de 0.8832, ambos com uso da entropia cruzada. No geral, esses resultados sugerem que os modelos da família DenseNet foram particularmente úteis para capturar as características visuais da OA de joelho, principalmente devido à sua arquitetura densa que permite que as camadas mais profundas acessem diretamente as características de baixo nível, sem precisar reaprendê-las \citep{Huang2017}.
 
 \begin{table}[ht]
     \centering
@@ -32,8 +28,6 @@ Ao avaliar o impacto da função de perda no desempenho, observou-se que, na mai
         DenseNet-169 & \text{CORN} & 0.7324 & 0.8767 & 0.2919 \\
         Inception-v3 & \text{Entropia cruzada} & 0.7247 & 0.8571 & 0.3172 \\
         Inception-v3 & \text{CORN} & 0.7533 & 0.8813 & 0.2742 \\
-        Google-ViT-B & \text{Entropia cruzada} & 0.6938 & 0.8296 & 0.3634 \\
-        Google-ViT-B & \text{CORN} & 0.6894 & 0.8442 & 0.3502 \\
         DeiT-Distilled-B & \text{Entropia cruzada} & 0.6938 & 0.8321 & 0.3634 \\
         DeiT-Distilled-B & \text{CORN} & 0.6960 & 0.8514 & 0.3381 \\
         DaViT-B & \text{Entropia cruzada} & 0.7709 & 0.8758 & 0.2687 \\
@@ -46,17 +40,35 @@ Ao avaliar o impacto da função de perda no desempenho, observou-se que, na mai
         Swin-B & \text{CORN} & 0.7026 & 0.8617 & 0.3293 \\
         \bottomrule
     \end{tabular}
-    \caption{Métricas de desempenho de cada modelo na tarefa de classificar a OA de joelho em cinco classes, usando as funções de perda entropia cruzada e CORN.}
+    \caption{Métricas de desempenho de cada modelo na tarefa de classificar a OA de joelho em cinco classes, considerando as funções de perda Entropia Cruzada e CORN.}
     \label{tab:overall_metrics_all_models}
 \end{table}
 
-A \autoref{tab:f1_scores_all_models} apresenta as métricas F1-score para cada uma das cinco classes e revela um desafio significativo na classificação da classe KL 1, que representa o estágio duvidoso da OA de joelho. O valor do F1-score entre todos os modelos e funções de perda é drasticamente menor do que para as outras classes, variando de 0.3750 (VGG-19) a 0.5970 (DenseNet-169). Esta baixa performance na classe KL 1 sugere fortemente que suas características visuais são mais difíceis de serem distinguidas das classes adjacentes, levando a uma baixa concordância entre as predições. Isso valida o estudo experimental que exclui a categoria "duvidosa".
+A avaliação comparativa das funções de perda revelou um claro \textit{trade-off} entre a acurácia categórica e a correção ordinal. Na maioria dos cenários, os modelos treinados com a função de perda de entropia cruzada apresentaram um desempenho superior em termos de acurácia, com uma média de 1,58\% a mais em relação aos seus equivalentes treinados com a função CORN. Isso sugere que a entropia cruzada é mais eficaz para maximizar o número de classificações exatamente corretas.
+
+Em contrapartida, a função CORN demonstrou sua superioridade em métricas que avaliam a natureza ordinal do problema. Observou-se um aumento médio de 1,06\% no QWK, como exemplificado pelo modelo Inception-v3, cujo QWK aumentou de 0.8571 para 0.8813. Adicionalmente, houve uma redução de 0,89\% no Erro Absoluto Médio (MAE), confirmando a eficácia do CORN em minimizar a magnitude dos erros de predição.
+
+Portanto, a escolha da função de perda está muito ligada ao objetivo da aplicação. Para maximizar a precisão categórica, a entropia cruzada é a abordagem preferível. No entanto, em um contexto de suporte à decisão clínica, onde um erro ordinal pequeno (por exemplo, prever KL-2 para um KL-3 real) é significativamente menos crítico do que um erro grande (por exemplo, prever KL-0), a função CORN é mais adequada. Isso se deve à sua capacidade de gerar modelos que, mesmo quando erram, produzem predições mais próximas do rótulo verdadeiro, alinhando-se melhor à relevância clínica dos erros.
+
+% A \autoref{tab:resultados} mostra a acurácia dos modelos de RNCs e ViTs treinados para a classificação da OA de joelho usando a função de perda \textit{crossentropy}. Em relação ao tempo de treinamento, é possível notar que o modelo mais rápido foi o ResNet-50, com um tempo de 11.29 segundos. Por outro lado, o modelo mais lento foi o DeiT, com um tempo de 79.5 segundos. Tais valores não necessariamente indicam que o modelo mais rápido é o pior, ou o contrário, mas é importante considerar o tempo de treinamento como um fator relevante ao escolher um modelo, especialmente se houver restrições de recursos computacionais. O tempo de treinamento mostrado varia, principalmente, com o número de épocas, já que modelos que levaram mais tempo são aqueles que tiveram a parada antecipada mais tarde, ou executaram as 30 épocas completas.
+
+\section{Métricas de Desempenho por Classe}
+
+A análise detalhada dos F1-scores por classe, apresentada na \autoref{tab:f1_scores_all_models}, revela padrões de desempenho que vão além da simples identificação de um modelo superior. Os resultados expõem a complexidade intrínseca da classificação da escala KL e destacam como diferentes arquiteturas respondem a cada estágio da doença.
+
+A tabela revela a observação central onde o desempenho dos modelos é consistentemente baixo na classe KL-1 (duvidoso). Nenhum modelo, independentemente da arquitetura (RNC ou ViT) ou da função de perda, consegui superar um F1-score de 0.60 para esta classe, com o melhor sendo o DenseNet-169 (0.5970) e o pior sendo o VGG-19 (0.3750). Esse resultado sugere que a classe KL-1 é inerentemente ambígua e inconsistente, assim como diz \cite{Spector1993}. Ela representa um estágio da OA, onde os achados radiológicos, como um possível estreitamento do espaço articular ou a formação de osteófitos, são muito sutis. Como consequência, essa classe sofre com a sobreposição de características entre as classes adjacentes, tornando a classificação pelos modelos mais desafiadora.
+
+Em forte contraste com a classe KL-1, as classes nos extremos da escala, KL-0 (saudável) e KL-4 (severo), apresentam F1-scores consistentemente altos na maioria dos modelos. Para a classe KL-0, modelos como DenseNet-121 (0.8454) e GCViT-B (0.8409) demostraram uma boa capacidade de identificar corretamente um joelho saudável. Já para a classe KL-4, os resultados são ainda mais expressivos, com modelos como DaViT-B e MaxViT-T alcançando F1-scores muito elevados (ambos com 0.9310).
+
+As classes KL-2 (mínimo) e KL-3 (moderado) representam estágios onde a doença já está presente e o desempenho dos modelos foi mais equilibrado. Modelos como DaViT-B (0.9212 para KL-3) e DenseNet-169 (0.9016 para KL-3) mostraram uma capacidade notável de distinguir os estágios intermediários da doença.
+
+Essa análise por classe não apenas valida a decisão de realizar experimentos excluindo a classe KL-1, mas também confirma que o desempenho dos modelos está fortemente alinhado à realidade clínica da OA de joelho: alta certeza nos casos extremos e dificuldade na zona de transição (KL-1).
 
 \begin{sidewaystable}[ht]
     \centering
     \begin{tabular}{llcccccc}
         \toprule
-        \textbf{Modelo} & \textbf{Função de perda} & \textbf{Macro avg} & \textbf{Grade 0} & \textbf{Grade 1} & \textbf{Grade 2} & \textbf{Grade 3} & \textbf{Grade 4} \\
+        \textbf{Modelo} & \textbf{Função de perda} & \textbf{Média Macro} & \textbf{KL-0} & \textbf{KL-1} & \textbf{KL-2} & \textbf{KL-3} & \textbf{KL-4} \\
         \midrule
         ResNet-34 & \text{Entropia cruzada} & 0.7384 & 0.7932 & 0.4669 & 0.7187 & 0.8465 & 0.8667 \\
         ResNet-34 & \text{CORN} & 0.7431 & 0.8034 & 0.5117 & 0.6837 & 0.8354 & 0.8814 \\
@@ -74,8 +86,6 @@ A \autoref{tab:f1_scores_all_models} apresenta as métricas F1-score para cada u
         DenseNet-169 & \text{CORN} & 0.7583 & 0.8066 & 0.5433 & 0.7097 & 0.8608 & 0.8710 \\
         Inception-v3 & \text{Entropia cruzada} & 0.7487 & 0.7959 & 0.4734 & 0.7166 & 0.8455 & 0.9123 \\
         Inception-v3 & \text{CORN} & 0.7811 & 0.8067 & 0.5464 & 0.7589 & 0.8780 & 0.9153 \\
-        Google-ViT-B & \text{Entropia cruzada} & 0.7204 & 0.7599 & 0.4307 & 0.6842 & 0.8502 & 0.8772 \\
-        Google-ViT-B & \text{CORN} & 0.7277 & 0.7589 & 0.4589 & 0.6781 & 0.8571 & 0.8852 \\
         DeiT-Distilled-B & \text{Entropia cruzada} & 0.7206 & 0.7670 & 0.3938 & 0.6790 & 0.8631 & 0.9000 \\
         DeiT-Distilled-B & \text{CORN} & 0.7378 & 0.7527 & 0.4230 & 0.7157 & 0.8852 & 0.9123 \\
         DaViT-B & \text{Entropia cruzada} & 0.7968 & 0.8111 & 0.5401 & 0.7807 & 0.9212 & 0.9310 \\
@@ -88,53 +98,138 @@ A \autoref{tab:f1_scores_all_models} apresenta as métricas F1-score para cada u
         Swin-B & \text{CORN} & 0.7261 & 0.7994 & 0.4261 & 0.6681 & 0.8405 & 0.8966 \\
         \bottomrule
     \end{tabular}
-    \caption{Métrica F1-score para cada uma das cinco classes e modelo, usando as funções de perda entropia cruzada e CORN.}
+    \caption{Métrica F1-score para cada uma das cinco classes e modelo, considerando as funções de perda Entropia Cruzada e CORN.}
     \label{tab:f1_scores_all_models}
 \end{sidewaystable}
 
-Modelos como o DaViT-B (CE) e GCViT-B (CE) também apresentam resultados promissores, alcançando acurácia de 0.7709 e 0.7555, respectivamente, com QWK de 0.8758 e 0.8832. Esses resultados indicam que os modelos de ViT podem ser competitivos com as RNCs tradicionais, especialmente em tarefas de classificação ordinal. No entanto, ao observar o custo computacional pela \autoref{tab:computational_performance}, nota-se que esses modelos de ViT são mais pesados em termos de FLOPs (15.28 GMac e 13.89 GMac) e parâmetros (86.93 M e 89.3 M), o que impacta no tempo de treinamento. Nesse sentido, arquiteturas da família DenseNet demonstram ser mais eficientes, com o DenseNet-169 usando apenas 12.49 M de parâmetros e 3.44 GMac FLOPs, ou seja, seis quatro menos parâmetros FLOPs do que o DaViT-B (CE).
+\section{Eficiência Computacional}
+
+A análise dos tempos de treinamento e inferência, apresentada na \autoref{tab:computational_performance}, revela distinções cruciais entre os modelos e funções de perda, oferecendo um respaldo da aplicação prática e que complementa as métricas de desempenho preditivo.
+
+O tempo de inferência por imagem é uma métrica crítica para a aplicação clínica, e as RNCs demonstram uma vantagem sobre os ViTs. Modelos como ResNet-34 (1,55 ms/imagem), ResNet-50 (2,87 ms/imagem) e DenseNet/121 (3,11 ms/imagem) são os mais rápidos, estabelecendo uma linha de base de alta eficiência. Suas arquiteturas são bem otimizadas para o hardware de GPU, o que permite um processamento rápido.
+
+Em contraste, os ViTs apresentaram tempos de inferência significativamente mais altos. O mais rápido entre eles, MaxViT-T (6,92 ms/imagem), já é mais de duas vezes mais lento do que as RNCs eficientes. Essa disparidade pode ser justificada pela natureza das operações. Embora ViTs tenham alcançado complexidade computacional linear em relação ao tamanho de imagem, como citam \cite{ding2022davitdualattentionvision} e \cite{maxvit2022}, seus blocos de atenção ainda envolvem operações de multiplicação de matrizes em larga escala que são mais custosas do que as operações de convolução. Isso também pode ser visualizado na \autoref{tab:model_list}, na coluna de FLOPs (GMac).
+
+A literatura sobre modelos como MaxViT e DaViT foca em tornar a atenção global mais eficiente e de fato tornam, mas os resultados práticos da \autoref{tab:computational_performance} demonstram que, na GPU utilizada, a sobrecarga computacional da auto-atenção ainda é um obstáculo significativo para a inferência quando comparada às RNCs.
+
+% Ao observar o custo computacional pela \autoref{tab:computational_performance}, nota-se que esses modelos de ViT são mais pesados em termos de FLOPs (15.28 GMac e 13.89 GMac) e parâmetros (86.93 M e 89.3 M), o que impacta no tempo de treinamento. Nesse sentido, arquiteturas da família DenseNet demonstram ser mais eficientes, com o DenseNet-169 usando apenas 12.49 M de parâmetros e 3.44 GMac FLOPs, ou seja, seis quatro menos parâmetros FLOPs do que o DaViT-B (CE).
+
+\begin{sidewaystable}[ht]
+    \centering
+    \begin{tabular}{llccc}
+        \toprule
+        \textbf{Modelo} & \textbf{Função de perda} & \textbf{Treinamento (min)} & \textbf{Inferência média/batch (ms)} & \textbf{Inferência média/imagem (ms)} \\
+        \midrule
+        ResNet-34 & Entropia Cruzada & 33.46 & 43.53 & 1.55 \\
+        ResNet-34 & CORN & 89.29 & 43.71 & 1.56 \\
+        ResNet-50 & Entropia Cruzada & 14.55 & 80.45 & 2.87 \\
+        ResNet-50 & CORN & 9.87 & 80.83 & 2.89 \\
+        ResNet-101 & Entropia Cruzada & 22.02 & 137.90 & 4.93 \\
+        ResNet-101 & CORN & 16.94 & 139.76 & 4.99 \\
+        VGG-16 & Entropia Cruzada & 37.70 & 128.08 & 4.57 \\
+        VGG-16 & CORN & 28.45 & 126.44 & 4.52 \\
+        VGG-19 & Entropia Cruzada & 39.32 & 153.06 & 5.47 \\
+        VGG-19 & CORN & 34.68 & 154.96 & 5.53 \\
+        DenseNet-121 & Entropia Cruzada & 12.74 & 87.02 & 3.11 \\
+        DenseNet-121 & CORN & 9.22 & 87.26 & 3.12 \\
+        DenseNet-169 & Entropia Cruzada & 15.06 & 108.95 & 3.89 \\
+        DenseNet-169 & CORN & 16.72 & 108.48 & 3.87 \\
+        Inception-v3 & Entropia Cruzada & 12.52 & 108.58 & 3.88 \\
+        Inception-v3 & CORN & 14.39 & 108.86 & 3.89 \\
+        DeiT-Distilled-B & Entropia Cruzada & 77.31 & 331.55 & 11.84 \\
+        DeiT-Distilled-B & CORN & 40.20 & 330.48 & 11.80 \\
+        DaViT-B & Entropia Cruzada & 57.83 & 335.72 & 11.99 \\
+        DaViT-B & CORN & 27.08 & 339.09 & 12.11 \\
+        MaxViT-T & Entropia Cruzada & 28.03 & 193.82 & 6.92 \\
+        MaxViT-T & CORN & 29.36 & 194.79 & 6.96 \\
+        GCViT-B & Entropia Cruzada & 49.57 & 408.07 & 14.57 \\
+        GCViT-B & CORN & 34.65 & 409.04 & 14.61 \\
+        Swin-B & Entropia Cruzada & 46.61 & 344.37 & 12.30 \\
+        Swin-B & CORN & 36.02 & 348.65 & 12.45 \\
+        \bottomrule
+    \end{tabular}
+    \caption{Tempos de treinamento e inferência de cada modelo.}
+    \label{tab:computational_performance}
+\end{sidewaystable}
+
+% \section{RNCs e ViTs}
+
+\section{Análise Quantitativa}
+
+A predição conformal foi aplicada para quantificar a incerteza dos modelos, gerando conjuntos de predição com um nível de confiança estatisticamente garantido de 95\%. A análise dos resultados da \autoref{tab:conformal_coverage} sugere um \textit{trade-off} entre a robustez da garantia de cobertura e a utilidade prática dos conjuntos de predição.
+
+Como descrito na \autoref{sec:conformal-prediction}, a cobertura mede a porcentagem de vezes que a classe verdadeira esteve contida no conjunto de predição conformal no conjunto de teste. Modelos com entropia cruzada demonstraram uma cobertura muito alta, consistentemente alcançando valores de 100\%, como é o caso do ResNet-50, VGG-16, DenseNet-121, DeiT-Distilled e Swin-B. Embora isso satisfaça a garantia teórica de cobrir pelo menos 95\% dos casos, valores altos sugerem que o método é excessivamente conservador, com valores de $\hat{q}$ muito alto.
+
+Já a cobertura para os modelos com CORN for mais variável, geralmente situando-se mais próxima ao objetivo de 95\%, exemplo do ResNet-50 (93,61\%) e Inception-v3 (94,16\%). No entanto, alguns modelos apresentaram uma cobertura abaixo do esperado, como o DenseNet-121, com 86,67\%, indicando que a abordagem ordinal, embora mais ``justa'' em sua calibração, pode ser menos estável em garantir a cobertura em todos os casos.
+
+A utilidade do método de predição conformal é inversamente proporcional ao tamanho dos conjuntos de predição gerados, ou seja, conjuntos menores indicam maior confiança e são mais informativos. Nesse sentido, a abordagem ordinal com CORN desmonstrou uma superioridade.
+
+% TODO: adicionar analise com base no tamanho dos sets
 
 \begin{table}[ht]
     \centering
-    \begin{tabular}{lccc}
+    \begin{tabular}{llr}
         \toprule
-        \textbf{Modelo} & \textbf{Tempo (min)} & \textbf{FLOPs (GMac)} & \textbf{Parâmetros (M)} \\
+        \textbf{Modelo} & \textbf{Função de perda} & \textbf{Cobertura} \\
         \midrule
-        ResNet-34 CE & 33.46 & 3.68 & 21.29 \\
-        ResNet-34 CORN & 89.29 & 3.68 & 21.29 \\
-        ResNet-50 CE & 14.55 & 4.13 & 23.52 \\
-        ResNet-50 CORN & 9.87 & 4.13 & 23.52 \\
-        ResNet-101 CE & 22.02 & 7.86 & 42.51 \\
-        ResNet-101 CORN & 16.94 & 7.86 & 42.51 \\
-        VGG-16 CE & 37.70 & 19.63 & 138.36 \\
-        VGG-16 CORN & 28.45 & 19.63 & 138.36 \\
-        VGG-19 CE & 39.32 & 19.69 & 139.64 \\
-        VGG-19 CORN & 34.68 & 19.69 & 139.64 \\
-        DenseNet-121 CE & 12.74 & 2.9 & 6.96 \\
-        DenseNet-121 CORN & 9.22 & 2.9 & 6.96 \\
-        DenseNet-169 CE & 15.06 & 3.44 & 12.49 \\
-        DenseNet-169 CORN & 16.72 & 3.44 & 12.49 \\
-        Inception-v3 CE & 12.52 & 2.85 & 25.12 \\
-        Inception-v3 CORN & 14.39 & 2.85 & 25.12 \\
-        Google-ViT-B CE & 68.52 & 16.87 & 85.8 \\
-        Google-ViT-B CORN & 35.45 & 16.87 & 85.8 \\
-        DeiT-Distilled-B CE & 77.31 & 16.95 & 85.8 \\
-        DeiT-Distilled-B CORN & 40.20 & 16.95 & 85.8 \\
-        DaViT-B CE & 57.83 & 15.28 & 86.93 \\
-        DaViT-B CORN & 27.08 & 15.28 & 86.9 \\
-        MaxViT-T CE & 28.03 & 5.48 & 30.41 \\
-        MaxViT-T CORN & 29.36 & 5.48 & 30.41 \\
-        GCViT-B CE & 49.57 & 13.89 & 89.3 \\
-        GCViT-B CORN & 34.65 & 13.89 & 89.3 \\
-        Swin-B CE & 46.61 & 10.55 & 86.75 \\
-        Swin-B CORN & 36.02 & 10.55 & 86.75 \\
-        \bottomrule
+            ResNet-34 & Entropia Cruzada &    0.9989 \\
+            ResNet-34 & CORN &    0.8822 \\
+            ResNet-50 & Entropia Cruzada &    1.0000 \\
+            ResNet-50 & CORN &    0.9361 \\
+            ResNet-101 & Entropia Cruzada &    0.9956 \\
+            ResNet-101 & CORN &    0.8844 \\
+            VGG-16 & Entropia Cruzada &    1.0000 \\
+            VGG-16 & CORN &    0.9273 \\
+            VGG-19 & Entropia Cruzada &    0.9989 \\
+            VGG-19 & CORN &    0.9262 \\
+            DenseNet-121 & Entropia Cruzada &    1.0000 \\
+            DenseNet-121 & CORN &    0.8667 \\
+            DenseNet-169 & Entropia Cruzada &    0.9989 \\
+            DenseNet-169 & CORN &    0.9163 \\
+            Inception-v3 & Entropia Cruzada &    0.9989 \\
+            Inception-v3 & CORN &    0.9416 \\
+            DeiT-Distilled-B & Entropia Cruzada &    1.0000 \\
+            DeiT-Distilled-B & CORN &    0.9163 \\
+            DaViT-B & Entropia Cruzada &    0.9989 \\
+            DaViT-B & CORN &    0.8844 \\
+            MaxViT-T & Entropia Cruzada &    0.9989 \\
+            MaxViT-T & CORN &    0.9031 \\
+            GCViT-B & Entropia Cruzada &    0.9989 \\
+            GCViT-B & CORN &    0.8954 \\
+            Swin-B & Entropia Cruzada &    1.0000 \\
+            Swin-B & CORN &    0.8822 \\
+    \bottomrule
     \end{tabular}
-    \caption{Computational performance for all models and loss functions (5-class classification).}
-    \label{tab:computational_performance}
+    \caption{Valores de cobertura da predição conformal para cada modelo e função de perda.}
+    \label{tab:conformal_coverage}
 \end{table}
 
-De modo geral, os resultados indicam que os modelos de RNCs superaram os modelos de ViT, especialmente em termos de acurácia. Modelos como DenseNet-169, DenseNet-121 e Inception-v3 se destacaram, com acurácias gerais de 78.87\%, 77.09\% e 75.33\%, respectivamente. Os modelos de ViT, como DaViT-B e GCViT-B, também apresentaram resultados competitivos, com acurácias de 77.09\% e 75.55\%. No entanto, a performance de QWK foi muito próxima entre os modelos, indicando que ambas as arquiteturas são capazes de entender a natureza ordinal da classificação da OA de joelho e evitar erros significativos.
+\section{Interpretabilidade dos Modelos}
+
+Para garantir que o desempenho quantitativo dos modelos seja acompanhado de um processo de decisão clinicamente relevante, foi realizada uma análise qualitativa utilizando a técnica de Grad-CAM. A análise revelou padrões consistentes e distintos entre as arquiteturas, reforçando a confiabilidade dos modelos de melhor desempenho. A \autoref{tab:gradcams_top5_models} ilustra as Grad-CAMs para os modelos que tiveram o melhor desempenho preditivo.
+
+Uma observação fundamental foi que os modelos de modo geral focaram sua atenção em regiões cruciais para o diagnóstico da OA, como o espaço articular. Por exemplo, como ilustrado na \autoref{tab:gradcams_top5_models}, para uma classificação correta de KL-3 (moderado), o mapa de calor evidencia uma forte ativação sobre o espaço articular com o menor estreitamento (lado esquerdo). Esse comportamento foi observado na grande maioria das predições corretas, indicando que os modelos não apenas acertaram a classe, mas o fizeram com base nos mesmos indicadores visuais que um radiologista utilizaria, aumentando a confiança em sua validade clínica.
+
+Além disso, o Grad-CAM revelou estratégias visuais distintas entre as RNCs e os ViTs. Para a mesma radiografia de entrada, as RNCs tenderam a produzir mapas de calor mais focados e localizados. Sua atenção se concentrou onde existem bordas de alta frequência, ou seja, nos espaços articulares. Isso reflete o forte viés indutivo das convoluções para a detecção desses padrões locais.
+
+Por outro lado, os ViTs geraram maps de calor mais difusos e contextuais. Em vez de focar em um único ponto, a atenção frequentemente se espalhou por uma região mais ampla, como é o caso dos modelos DaViT-B e MaxViT-T. Isso também está alinhado com a capacidade dos transformers de modelar relações de longo alcance.
+
+\begin{sidewaystable}[ht]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|}
+        \hline
+        \textbf{Modelo} & \textbf{KL-0} & \textbf{KL-1} & \textbf{KL-2} & \textbf{KL-3} & \textbf{KL-4} \\ \hline
+        DenseNet-169 & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_densenet169_kl0.png} & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_densenet169_kl1.png} & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_densenet169_kl2.png} & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_densenet169_kl3.png} & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_densenet169_kl4.png} \\ \hline
+        DenseNet-121 & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_densenet121_kl0.png} & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_densenet121_kl1.png} & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_densenet121_kl2.png} & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_densenet121_kl3.png} & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_densenet121_kl4.png} \\ \hline
+        GCViT-B & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_gcvit_kl0.png} & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_gcvit_kl1.png} & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_gcvit_kl2.png} & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_gcvit_kl3.png} & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_gcvit_kl4.png} \\ \hline
+        DaViT-B & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_davit_kl0.png} & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_davit_kl1.png} & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_davit_kl2.png} & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_davit_kl3.png} & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_davit_kl4.png} \\ \hline
+        MaxViT-T & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_maxvit_kl0.png} & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_maxvit_kl1.png} & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_maxvit_kl2.png} & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_maxvit_kl3.png} & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_maxvit_kl4.png} \\ \hline
+    \end{tabular}
+    \caption{Visualização Grad-CAM para os melhores 5 modelos.}
+    \label{tab:gradcams_top5_models}
+\end{sidewaystable}
+
+% De modo geral, os resultados indicam que os modelos de RNCs superaram os modelos de ViT, especialmente em termos de acurácia. Modelos como DenseNet-169, DenseNet-121 e Inception-v3 se destacaram, com acurácias gerais de 78.87\%, 77.09\% e 75.33\%, respectivamente. Os modelos de ViT, como DaViT-B e GCViT-B, também apresentaram resultados competitivos, com acurácias de 77.09\% e 75.55\%. No entanto, a performance de QWK foi muito próxima entre os modelos, indicando que ambas as arquiteturas são capazes de entender a natureza ordinal da classificação da OA de joelho e evitar erros significativos.
 
 % Quanto à acurácia geral (\textit{overall}), todos os modelos apresentaram resultados razoavelmente bons, com valores variando de 0.6723 a 0.7319. Isso indica que todos os modelos foram capazes de aprender padrões relevantes para a classificação da OA de joelho. No entanto, é importante notar que o modelo DenseNet-169 obteve a maior acurácia geral, com um valor de 0.7319. Isso sugere que arquiteturas de RNCs densamente conectadas podem ser muito eficazes na extração de características relevantes em imagens médicas como radiografias de joelho. Além disso, os modelos de conexões residuais (ResNet) também apresentaram resultados competitivos, com acurácias gerais variando de 0.7044 a 0.7248, onde o ResNet-50 obteve a maior acurácia dentre eles e com o menor tempo de treinamento, oferecendo um bom equilíbrio entre generalização do modelo e custo computacional.
 
