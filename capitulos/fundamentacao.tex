@@ -1,8 +1,6 @@
 \chapter{Fundamentação Teórica}\label{cap:fundamentacao}
 
-Neste capítulo, são apresentados os conceitos e as definições necessárias para o entendimento deste trabalho. A Seção \ref{sec:osteoartrite} apresenta a osteoartrite de joelhos e suas características clínicas. A seção \ref{sec:visao-computacional} aborda a visão computacional na área da saúde. A Seção \ref{sec:aprendizado-profundo} mostra alguns conceitos fundamentais de arquiteturas de aprendizado profundo, incluindo as redes neurais convolucionais e os vision transformers.
-
-% Por fim, a seção \ref{sec:ajuste-fino} apresenta os conceitos de transferência de aprendizado através do ajuste fino de modelos pré-treinados.
+Neste capítulo, são apresentados os principais conceitos e definições que fundamentam este trabalho. A Seção \ref{sec:osteoartrite} aborda a osteoartrite de joelho, destacando suas características clínicas. A Seção \ref{sec:rnc} introduz as Redes Neurais Convolucionais (RNCs) e as arquiteturas exploradas neste estudo. Em seguida, a Seção \ref{sec:vision-transformers} apresenta os Vision Transformers (ViTs) e suas respectivas arquiteturas. A Seção \ref{sec:funcoes-perda} descreve as funções de perda utilizadas na comparação entre os modelos. Por fim, a Seção \ref{sec:avaliacao-metricas} detalha as métricas de avaliação adotadas para comparar o desempenho das diferentes abordagens.
 
 \section{Osteoartrite de Joelho}\label{sec:osteoartrite}
 
@@ -94,15 +92,15 @@ No entanto, a classificação manual pode ser subjetiva e suscetível a erros, a
 
 Uma rede neural artificial é um modelo computacional inspirado no cérebro humano \citep{McCulloch1943}, onde neurônios artificiais recebem um conjunto de entradas ponderadas, realizam uma soma dessas entradas e aplicam uma função de ativação para produzir uma saída. Essa estrutura permite que as redes neurais aprendam padrões complexos a partir de dados, tornando-as adequadas para tarefas de processamento de linguagem natural, visão computacional, entre outras aplicações.
 
-Em 2006, \cite{Hinton2006} propuseram o uso de redes neurais artificiais com múltiplas camadas com o objetivo de melhorar a capacidade dos modelos, o que levou a um renascimento do interesse nessas redes e ao desenvolvimento de novas arquiteturas, como é o caso da rede neural convolucional (CNN, do inglês \textit{Convolutional Neural Network}).
+Em 2006, \cite{Hinton2006} propuseram o uso de redes neurais artificiais com múltiplas camadas com o objetivo de melhorar a capacidade dos modelos, o que levou a um renascimento do interesse nessas redes e ao desenvolvimento de novas arquiteturas, como é o caso da rede neural convolucional (RNC).
 
-As CNNs são modelos de aprendizado profundo projetados para processar dados com estrutura de grade, como imagens. Inspiradas na organização do córtex visual, CNNs são amplamente utilizadas em tarefas de visão computacional, como classificação de imagens, detecção de objetos e segmentação semântica.
+As RNCs são modelos de aprendizado profundo projetados para processar dados com estrutura de grade, como imagens. Inspiradas na organização do córtex visual, RNCs são amplamente utilizadas em tarefas de visão computacional, como classificação de imagens, detecção de objetos e segmentação semântica.
 
-A camada de convolução é o componente central das CNNs, responsável por extrair características locais dos dados de entrada. Essa camada utiliza filtros (ou \textit{kernels}), que são pequenas matrizes de pesos (por exemplo, 3x3 ou 5x5) aplicadas em toda a imagem de entrada para gerar um mapa de características (ou \textit{feature maps}), representando a presença dessas características em diferentes regiões da imagem.
+A camada de convolução é o componente central das RNCs, responsável por extrair características locais dos dados de entrada. Essa camada utiliza filtros (ou \textit{kernels}), que são pequenas matrizes de pesos (por exemplo, 3x3 ou 5x5) aplicadas em toda a imagem de entrada para gerar um mapa de características (ou \textit{feature maps}), representando a presença dessas características em diferentes regiões da imagem.
 
-Esses filtros são ajustados durante o treinamento da rede, permitindo que a CNN aprenda a detectar padrões relevantes, como bordas, texturas e formas. Conforme a rede avança pelas camadas, os filtros se tornam mais complexos e capazes de capturar características de alto nível, como objetos inteiros. Após as convoluções, é comum utilizar a função de ativação ReLU (\textit{Rectified Linear Unit}), que substitui valores negativos por zero e introduz não linearidades no modelo, permitindo que ele aprenda representações complexas.
+Esses filtros são ajustados durante o treinamento da rede, permitindo que a RNC aprenda a detectar padrões relevantes, como bordas, texturas e formas. Conforme a rede avança pelas camadas, os filtros se tornam mais complexos e capazes de capturar características de alto nível, como objetos inteiros. Após as convoluções, é comum utilizar a função de ativação ReLU (\textit{Rectified Linear Unit}), que substitui valores negativos por zero e introduz não linearidades no modelo, permitindo que ele aprenda representações complexas.
 
-Após as camadas de convolução, as CNNs geralmente incluem camadas de \textit{pooling} para reduzir a dimensionalidade dos \textit{feature maps}, enquanto preservam as características mais relevantes. O \textit{pooling} pode ser feito de várias maneiras, como \textit{max pooling} (onde o valor máximo de uma região é mantido) ou \textit{average pooling} (onde a média dos valores é calculada). Esse processo contribui para:
+Após as camadas de convolução, as RNCs geralmente incluem camadas de \textit{pooling} para reduzir a dimensionalidade dos \textit{feature maps}, enquanto preservam as características mais relevantes. O \textit{pooling} pode ser feito de várias maneiras, como \textit{max pooling} (onde o valor máximo de uma região é mantido) ou \textit{average pooling} (onde a média dos valores é calculada). Esse processo contribui para:
 
 \begin{itemize}
     \item reduzir a quantidade de parâmetros e o custo computacional da rede.
@@ -111,9 +109,9 @@ Após as camadas de convolução, as CNNs geralmente incluem camadas de \textit{
 
 Após diversas camadas de convolução e \textit{pooling}, uma ou mais camadas totalmente conectadas (\textit{fully connected}) são adicionadas ao final da rede para combinar as características extraídas de camadas anteriores e realizar a tarefa de classificação. Cada neurônio dessas camadas está conectado a todos os valores da camada anterior, permitindo decisões baseadas em combinações globais das informações aprendidas. Em tarefas de classificação, a última camada totalmente conectada geralmente utiliza a função de ativação \textit{softmax}, que transforma as saídas em probabilidades.
 
-Durante o treinamento, a CNN ajusta os pesos dos filtros por meio do algoritmo de retropropagação (\textit{backpropagation}), em que o erro de saída é retropropagado pela rede para atualizar os pesos e minimizar a função de perda. Esse processo é repetido por várias épocas, permitindo que a rede aprenda a reconhecer padrões complexos nos dados de entrada.
+Durante o treinamento, a RNC ajusta os pesos dos filtros por meio do algoritmo de retropropagação (\textit{backpropagation}), em que o erro de saída é retropropagado pela rede para atualizar os pesos e minimizar a função de perda. Esse processo é repetido por várias épocas, permitindo que a rede aprenda a reconhecer padrões complexos nos dados de entrada.
 
-A \autoref{fig:cnn} ilustra uma rede neural convolucional composta por cinco camadas. O número de camadas, a disposição dessas camadas, o número e tamanho dos filtros, a forma de conexão entre as camadas, entre outros fatores, podem variar dependendo da arquitetura escolhida. Em seguida, serão aprensentadas algumas das arquiteturas populares de CNN que serão utilizadas neste trabalho.
+A \autoref{fig:cnn} ilustra uma rede neural convolucional composta por cinco camadas. O número de camadas, a disposição dessas camadas, o número e tamanho dos filtros, a forma de conexão entre as camadas, entre outros fatores, podem variar dependendo da arquitetura escolhida. Em seguida, serão aprensentadas algumas das arquiteturas populares de RNC que foram utilizadas neste trabalho.
 
 \begin{figure}[h]
     \centering
@@ -128,9 +126,9 @@ Os modelos VGG foram introduzidos pelo \textit{Visual Geometry Group} da Univers
 
 A arquitetura VGG processa imagens RGB de 224×224 pixels, utilizando uma série de camadas convolucionais seguidas por camadas de \textit{pooling}, onde cada camada contém um número crescente de filtros 3×3. O \textit{stride} é fixo em 1 pixel, e o \textit{padding} é utilizado para manter a dimensão da imagem. Após as camadas convolucionais, são aplicadas camadas de \textit{max-pooling} com um tamanho de 2×2 e \textit{stride} de 2, reduzindo a dimensão da imagem pela metade. Por fim, são adicionadas três camadas totalmente conectadas (ou \textit{fully connected} do inglês), seguidas por uma camada de saída com ativação \textit{softmax} para classificação. Além disso, as camadas escondidas são ativadas por funções ReLU, reponsáveis por introduzir a não-linearidade no modelo.
 
-A tabela \ref{vgg-arch} apresenta a configuração das arquiteturas VGG-16 e VGG-19, com um total de 16 e 19 camadas, respectivamente. Ambas se destacaram na competição do \textit{ImageNet} e são amplamente utilizadas devido à sua performance em tarefas de classificação, incluindo o diagnóstico a partir de imagens médicas \citep{Saini2023, Sitaula2021}. Por esse motivo, estas arquiteturas serão utilizadas nesta pesquisa como comparação com os demais modelos.
+A \autoref{tab:vgg-arch} apresenta a configuração das arquiteturas VGG-16 e VGG-19, com um total de 16 e 19 camadas, respectivamente. Ambas se destacaram na competição do \textit{ImageNet} e são amplamente utilizadas devido à sua performance em tarefas de classificação, incluindo o diagnóstico a partir de imagens médicas \citep{Saini2023, Sitaula2021}.
 
-\begin{table}[h]
+\begin{table}[ht]
     \centering
     \footnotesize
     \begin{tabular}{|c|c|}
@@ -182,7 +180,7 @@ A tabela \ref{vgg-arch} apresenta a configuração das arquiteturas VGG-16 e VGG
         \hline
     \end{tabular}
     \caption{Configuração dos modelos VGG-16 e VGG-19. Os parâmetros de cada camada convolucional são denotados por "conv<tamanho do campo receptivo>-<número de canais>". A função de ativação ReLU não é exibida por motivos de simplicidade.}
-    \label{vgg-arch}
+    \label{tab:vgg-arch}
 \end{table}
 
 \subsection{ResNet (Residual Network)}
@@ -200,9 +198,9 @@ Formalmente, considerando que o objetivo de uma rede neural é aprender uma fun�
 
 A arquitetura ResNet é composta por pilhas de blocos residuais que consistem em duas camadas convolucionais, com um \textit{Batch Normalization} e uma função de ativação ReLU entre elas. As camadas convolucionais utilizam filtros de tamanho 3×3, com um \textit{stride} de 1 e \textit{padding} de 1, para manter a dimensão da imagem. A saída do bloco residual é então somada à entrada original, permitindo que o modelo aprenda a função residual. A rede termina com uma camada de \textit{average pooling} global e uma camada totalmente conectada (ou \textit{fully connected} do inglês) com ativação \textit{softmax} para classificação.
 
-A tabela \ref{resnet-arch} apresenta a configuração das arquiteturas ResNet-34, ResNet-50 e ResNet-101, que são variantes da ResNet com diferentes profundidades. Essas arquiteturas foram escolhidas devido à sua popularidade e eficácia em tarefas de classificação de imagens, especialmente em radiografias. \cite{Leung2020} utilizaram a arquitetura ResNet-34 para diagnosticar a OA de joelhos em pacientes submetidos à artroplastia total do joelho (TKA) e obtiveram resultados que superaram modelos de resultados binários.
+A \autoref{resnet-arch} apresenta a configuração das arquiteturas ResNet-34, ResNet-50 e ResNet-101, que são variantes da ResNet com diferentes profundidades. Essas arquiteturas foram escolhidas devido à sua popularidade e eficácia em tarefas de classificação de imagens, especialmente em radiografias. \cite{Leung2020} utilizaram a arquitetura ResNet-34 para diagnosticar a OA de joelhos em pacientes submetidos à artroplastia total do joelho (TKA) e obtiveram resultados que superaram modelos de resultados binários.
 
-\begin{table}[h]
+\begin{table}[ht]
     \centering
     \footnotesize
     \begin{tabular}{|c|c|c|c|c|}
@@ -293,13 +291,13 @@ A arquitetura DenseNet introduziu uma nova abordagem para lidar com redes profun
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.5\linewidth]{figs/dense-network.png}
-    \caption{Um bloco de 5 camadas de uma DenseNet. Cada camada recebe como entrada a saída de todas as camadas anteriores.}
+    \caption{Um bloco de 5 camadas de uma DenseNet. Cada camada recebe como entrada a saída de todas as camadas anteriores. Fonte: \cite{Huang2017}}
     \label{dense-network}
 \end{figure}
 
 O componente fundamental da DenseNet é o bloco denso (ou \textit{dense block} em inglês), que consiste em várias camadas convolucionais conectadas densamente. Cada camada dentro do bloco denso aplica três operações consecutivas: \textit{batch normalization} (BN), seguido de uma função de ativação ReLU e, por fim, uma convolução 3×3. Após a aplicação do bloco denso, uma transição (ou \textit{transition} em inglês) é realizada para reduzir a dimensão dos \textit{feature maps} usando uma camada de convolução 1×1, seguida por uma camada de \textit{average pooling} 2×2.
 
-Portanto, a arquitetura DenseNet é composta por quatro blocos densos, cada um seguido por camadas de transição. A saída final (classificador) é obtida através de uma camada de \textit{global average pooling} e uma camada totalmente conectada com ativação \textit{softmax} para classificação. A tabela \ref{densenet-arch} apresenta a configuração das arquiteturas DenseNet-121 e DenseNet-169, que são variantes da DenseNet com diferentes profundidades que serão utilizadas neste trabalho, pois fornecem um bom equilíbrio entre complexidade e desempenho comparado com outras arquiteturas mais profundas.
+Portanto, a arquitetura DenseNet é composta por quatro blocos densos, cada um seguido por camadas de transição. A saída final (classificador) é obtida através de uma camada de \textit{global average pooling} e uma camada totalmente conectada com ativação \textit{softmax} para classificação. A \autoref{densenet-arch} apresenta a configuração das arquiteturas DenseNet-121 e DenseNet-169, que são variantes da DenseNet com diferentes profundidades e que foram utilizadas neste trabalho, pois fornecem um bom equilíbrio entre complexidade e desempenho comparado com outras arquiteturas mais profundas.
 
 Nos últimos anos, as arquiteturas DenseNet têm sido amplamente utilizadas em diversas tarefas de classificação de imagens, incluindo diagnósticos médicos. Por exemplo, \citep{Rajpurkar2017} propuseram um modelo chamado CheXNet baseado na arquitetura DenseNet-121 para detectar pneumonia a partir de radiografias torácicas, superando o desempenho médio de radiologistas na métrica F1-score.
 
@@ -384,7 +382,7 @@ O modelo GoogLeNet, uma instância da arquitetura Inception com 22 camadas profu
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.5\linewidth]{figs/inception-module.png}
-    \caption{Um módulo Inception.}
+    \caption{Um módulo Inception. Fonte: \cite{Szegedy2015}}
     \label{inception-module}
 \end{figure}
 
@@ -393,7 +391,7 @@ A arquitetura Inception-v3 \citep{Szegedy2016} representa uma evolução signifi
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.5\linewidth]{figs/inception-module-v3.png}
-    \caption{Um módulo Inception com fatoração de convoluções.}
+    \caption{Um módulo Inception com fatoração de convoluções. Fonte: \cite{Szegedy2015}}
     \label{inception-module-v3}
 \end{figure}
 
@@ -464,7 +462,7 @@ Em cenários com poucos dados, as RNCs tendem a apresentar melhor desempenho, en
     \label{fig:vision-transformer}
 \end{figure}
 
-Todas as variantes de ViT compartilham a mesma estrutura básica, que consiste na divisão da imagem em \textit{patches} de tamanho fixo, a projeção linear desses \textit{patches} em vetores de dimensão fixa, a inclusão de vetores de posição e um token de classe, e o processamento desses vetores em um \textit{encoder} de transformer. O ViT-B/16 \citep{Dosovitskiy2021} é uma das primeiras variantes da arquitetura, onde ``B'' representa o modelo base e ``16'' refere-se ao tamanho do \textit{patch} em que a imagem é dividida (16x16 pixels). Os modelos que surgiram posteriormente introduziram melhorias e adaptações buscando aumentar a eficiência e/ou reduzir a necessidade de grandes volumes de dados para treinamento. A seguir, são aprensentadas as variantes que serão utilizadas nesta pesquisa.
+Todas as variantes de ViT compartilham a mesma estrutura básica, que consiste na divisão da imagem em \textit{patches} de tamanho fixo, a projeção linear desses \textit{patches} em vetores de dimensão fixa, a inclusão de vetores de posição e um token de classe, e o processamento desses vetores em um \textit{encoder} de transformer. O ViT-B/16 \citep{Dosovitskiy2021} é uma das primeiras variantes da arquitetura, onde ``B'' representa o modelo base e ``16'' refere-se ao tamanho do \textit{patch} em que a imagem é dividida (16x16 pixels). Os modelos que surgiram posteriormente introduziram melhorias e adaptações buscando aumentar a eficiência e/ou reduzir a necessidade de grandes volumes de dados para treinamento. A seguir, são aprensentadas as variantes que foram utilizadas nesta pesquisa.
 
 \subsection{Data-efficient image Transformer (DeiT)}
 
@@ -480,7 +478,7 @@ onde $Z_s$ são os \textit{logits} do ``modelo aluno'', $L_{CE}$ é a entropia c
 
 Entre suas variantes, o modelo DeiT-B com a estratégia de distilação, que possui arquitetura semelhante ao ViT-B, é o maior modelo em termos de número de parâmetros (87 milhões). Em experimentos com o ImageNet-1K, tal modelo atingiu uma acurácia top-1 de 83,4\% (com entrada 224), superando arquiteturas de redes convolucionais e inclusive variantes do ViT pré-treinadas com conjuntos de dados significativamente maiores. Adicionalmente, avaliações em tarefas de \textit{transfer learning} em diversos \textit{benchmarks} (CIFAR-10, CIFAR-100, Flowers) demonstram a capacidade de generalização do modelo, onde o DeiT ficou no mesmo nível que redes convolucionais competitivas e superou modelos ViT tradicionais.
 
-Diante desses resultados, o DeiT se mostra como uma alternativa promissora e eficiente aos modelos convolucionais e ViT clássicos para diversas tarefas, incluindo análise de imagens médicas. \cite{alotaibi2022} propuseram um modelo \textit{ensemble} com ViT e DeiT (ViT-DeiT) para classificar imagens histopatológicas do câncer de mama em oito classes (benignas e malignas), obtendo um resultado de 98,17\% de acurácia. Este trabalho utiliza a arquitetura do DeiT-B com sua estratégia de distilação para classificar o nível de severidade de osteoartrites de joelhos.
+Diante desses resultados, o DeiT se mostra como uma alternativa promissora e eficiente aos modelos convolucionais e ViT clássicos para diversas tarefas, incluindo análise de imagens médicas. \cite{alotaibi2022} propuseram um modelo \textit{ensemble} com ViT e DeiT (ViT-DeiT) para classificar imagens histopatológicas do câncer de mama em oito classes (benignas e malignas), obtendo um resultado de 98,17\% de acurácia. Este trabalho utilizou a arquitetura do DeiT-B com sua estratégia de distilação para classificar o nível de severidade de OA de joelhos.
 
 \begin{figure}[h]
     \centering
@@ -528,7 +526,7 @@ Em camadas consecutivas, os blocos Swin Transformer alternam entre duas configur
 
 onde $\hat{z}$ e $z$ denotam as saídas dos módulos de atenção e da MLP para um bloco $l$, respectivamente. A atenção é sempre calculada com um viés de posição relativa, o que se mostrou crucial para o desempenho do modelo.
 
-O Swin Transformer possui quatro configurações principais: Swin-T, Swin-S, Swin-B e Swin-L, que variam em capacidade. A versão base, Swin-B, possui 88 milhões de parâmetros e alcançou uma acurácia top-1 de 83,5\% no ImageNet-1K (com entrada 224), superando modelos ViT-B/16 (77,91\%) e DeiT-B com distilação (83,4\%) \citep{Dosovitskiy2021, Touvron2021}. Com isso, o Swin-B será a variante utilizada neste trabalho, pois apresenta um bom equilíbrio entre complexidade e desempenho, além de possibilitar um bom \textit{benchmark} para comparação com as demais arquiteturas.
+O Swin Transformer possui quatro configurações principais: Swin-T, Swin-S, Swin-B e Swin-L, que variam em capacidade. A versão base, Swin-B, possui 88 milhões de parâmetros e alcançou uma acurácia top-1 de 83,5\% no ImageNet-1K (com entrada 224), superando modelos ViT-B/16 (77,91\%) e DeiT-B com distilação (83,4\%) \citep{Dosovitskiy2021, Touvron2021}. Com isso, o Swin-B foi a variante utilizada neste trabalho, pois apresenta um bom equilíbrio entre complexidade e desempenho, além de possibilitar um bom \textit{benchmark} para comparação com as demais arquiteturas.
 
 \subsection{Dual Attention Vision Transformers (DaViT)}
 
@@ -570,7 +568,7 @@ Já o mecanismo de atenção global, aplicado em grupos de canais, é ilustrado 
 
 onde $Q_i$, $K_i$, $V_i$ $\in \mathbb{R}^{P \times C_g}$ são os vetores de consulta, chave e valor correspondentes a cada grupo de canais.
 
-Existem três configurações diferentes da arquitetura DaViT para classificação de imagens, detecção de objetos e segmentação, que diferem na quantidade de camadas, tamanho do \textit{patch}, número de grupos em cada canal e número de cabeças de atenção. O modelo DaViT-B, que será utilizado neste trabalho, é a maior configuração, com quase 88 milhões de parâmetros, e obteve acurácia top-1 de 84,6\% no ImageNet-1K (com entrada 224), superando modelos como o DeiT-B com distilação (83,4\%) e o Swin-B (83,5\%) \citep{Touvron2021, Liu2021}.
+Existem três configurações diferentes da arquitetura DaViT para classificação de imagens, detecção de objetos e segmentação, que diferem na quantidade de camadas, tamanho do \textit{patch}, número de grupos em cada canal e número de cabeças de atenção. O modelo DaViT-B, que foi utilizado neste trabalho, é a maior configuração, com quase 88 milhões de parâmetros, e obteve acurácia top-1 de 84,6\% no ImageNet-1K (com entrada 224), superando modelos como o DeiT-B com distilação (83,4\%) e o Swin-B (83,5\%) \citep{Touvron2021, Liu2021}.
 
 \subsection{Multi-Axis Vision Transformer (MaxViT)}
 
@@ -897,4 +895,4 @@ A fórmula para o Grad-CAM pode ser expressa como:
 \text{Grad-CAM} = \text{ReLU} \left( \sum_{k} \alpha_{k}^{c} A^{k} \right)
 \]
 
-Para esta pesquisa, a utilização do Grad-CAM permitirá a visualização das regiões das radiografias que o modelo considera mais relevantes para suas decisões de classificação. Isso não só facilita a interpretação dos resultados do modelo, mas também ajuda na validação de sua eficácia ao garantir que o modelo está focando nas áreas corretas da imagem, como o espaço articular do joelho.
+Para esta pesquisa, a utilização do Grad-CAM permitiu a visualização das regiões das radiografias que o modelo considera mais relevantes para suas decisões de classificação. Isso não só facilita a interpretação dos resultados do modelo, mas também ajuda na validação de sua eficácia ao garantir que o modelo está focando nas áreas corretas da imagem, como o espaço articular do joelho.
