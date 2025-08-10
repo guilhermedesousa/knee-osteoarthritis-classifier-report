@@ -114,24 +114,36 @@ A estratégia central de treinamento foi o uso de \textit{transfer learning} a p
 
 \begin{table}[ht]
     \centering
-    \begin{tabular}{llcc}
-        \toprule
+    \begin{tabular}{|l|l|c|c|}
+        \hline
         \textbf{Modelo} & \textbf{Fonte} & \textbf{Parâmetros (M)} & \textbf{FLOPs (GMac)} \\
-        \midrule
-        ResNet-34 & PyTorch & 21.29 & 3.68 \\
-        ResNet-50 & PyTorch & 23.52 & 4.13 \\
-        ResNet-101 & PyTorch & 42.51 & 7.86 \\
-        VGG-16 & PyTorch & 138.36 & 19.63 \\
-        VGG-19 & PyTorch & 139.64 & 19.69 \\
-        DenseNet-121 & PyTorch & 6.96 & 2.9 \\
-        DenseNet-169 & PyTorch & 12.49 & 3.44 \\
-        Inception-v3 & PyTorch & 25.12 & 2.85 \\
-        DeiT-Distilled-Base & Hugging Face & 85.8 & 16.95 \\
-        DaViT-Base & PyTorch & 86.93 & 57 \\
-        MaxViT-Tiny & PyTorch & 30.41 & 5.48 \\
-        GCViT-Base & PyTorch & 89.3 & 13.89 \\
-        Swin-Base & PyTorch & 86.75 & 10.55 \\
-        \bottomrule
+        \hline
+        ResNet-34 & PyTorch & 21,29 & 3,68 \\
+        \hline
+        ResNet-50 & PyTorch & 23,52 & 4,13 \\
+        \hline
+        ResNet-101 & PyTorch & 42,51 & 7,86 \\
+        \hline
+        VGG-16 & PyTorch & 138,36 & 19,63 \\
+        \hline
+        VGG-19 & PyTorch & 139,64 & 19,69 \\
+        \hline
+        DenseNet-121 & PyTorch & 6,96 & 2,9 \\
+        \hline
+        DenseNet-169 & PyTorch & 12,49 & 3,44 \\
+        \hline
+        Inception-v3 & PyTorch & 25,12 & 2,85 \\
+        \hline
+        DeiT-Distilled-Base & Hugging Face & 85,8 & 16,95 \\
+        \hline
+        DaViT-Base & PyTorch & 86,93 & 57,00 \\
+        \hline
+        MaxViT-Tiny & PyTorch & 30,41 & 5,48 \\
+        \hline
+        GCViT-Base & PyTorch & 89,30 & 13,89 \\
+        \hline
+        Swin-Base & PyTorch & 86,75 & 10,55 \\
+        \hline
     \end{tabular}
     \caption{Lista dos modelos utilizados neste estudo, com a fonte, o número de parâmetros e FLOPs estimados.}
     \label{tab:model_list}

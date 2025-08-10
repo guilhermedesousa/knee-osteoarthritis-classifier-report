@@ -11,7 +11,16 @@ Em 2023, \cite{Tariq2023} apresentaram uma abordagem de classificação ordinal 
     \label{fig:tariq2023}
 \end{figure}
 
-No mesmo ano, \cite{domingues2023} propuseram um modelo de RNC baseado na arquitetura DenseNet-161, treinado com um conjunto de radiografias obtidas do Estudo Longitudinal de Saúde do Adulto Musculoesquelético (ELSA-Brasil Musculoesquelético), para a classificação binária automática da OA de joelhos (\autoref{fig:domingues2023}). Eles aplicaram diversas técnicas de pré-processamento, como rotação, desfoque gaussiano e inversão horizontal, e alcançaram uma AUC de 0,866 (IC 95\%: 0,842-0,882), considerando uma média entre os subconjuntos de treino e teste. O modelo também pode ser calibrado por meio do ajuste de limiares (\textit{threshold-moving}, do inglês) para alcançar uma acurácia máxima de 90,7\% e uma sensibilidade de 93,8\%.
+Ainda em 2023, \cite{Mohammed2023} utilizaram seis modelos pré-treinados de RNC (VGG-16, VGG-19, ResNet-101, MobileNetV2, InceptionResNetV2 e DenseNet-121) para diagnosticar a OA de joelhos, considerando vários cenários de teste, como a classificação binária e o nível de severidade com três e cinco classes (\autoref{fig:mohammed2023}). O destaque do estudo foi a experimentação dos modelos em diferentes cenários, modelando tanto a detecção, quanto a própria classificação da OA, através do agrupamento das radiogragias. O modelo ResNet-101 registrou as acurácias máximas com cinco, duas e três classes, sendo 69\%, 83\% e 89\%, respectivamente.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{figs/mohammed2023.jpg}
+    \caption{Metodologia proposta por \cite{Mohammed2023}.}
+    \label{fig:mohammed2023}
+\end{figure}
+
+Partindo para a introdução de um modelo customizado, os autores brasileiros \cite{domingues2023} propuseram um modelo de RNC baseado na arquitetura DenseNet-161, treinado com um conjunto de radiografias obtidas do Estudo Longitudinal de Saúde do Adulto Musculoesquelético (ELSA-Brasil Musculoesquelético), para a classificação binária automática da OA de joelhos (\autoref{fig:domingues2023}). Eles aplicaram diversas técnicas de pré-processamento, como rotação, desfoque gaussiano e inversão horizontal, e alcançaram uma AUC de 0,866 (IC 95\%: 0,842-0,882), considerando uma média entre os subconjuntos de treino e teste. O modelo também pode ser calibrado por meio do ajuste de limiares (\textit{threshold-moving}, do inglês) para alcançar uma acurácia máxima de 90,7\% e uma sensibilidade de 93,8\%.
 
 \begin{figure}[ht]
     \centering
