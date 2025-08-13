@@ -1,79 +1,73 @@
 \chapter{Fundamentação Teórica}\label{cap:fundamentacao}
 
-Neste capítulo, são apresentados os principais conceitos e definições que fundamentam este trabalho. A Seção \ref{sec:osteoartrite} aborda a osteoartrite de joelho, destacando suas características clínicas. A Seção \ref{sec:rnc} introduz as Redes Neurais Convolucionais (RNCs) e as arquiteturas exploradas neste estudo. Em seguida, a Seção \ref{sec:vision-transformers} apresenta os Vision Transformers (ViTs) e suas respectivas arquiteturas. A Seção \ref{sec:funcoes-perda} descreve as funções de perda utilizadas na comparação entre os modelos. Por fim, a Seção \ref{sec:avaliacao-metricas} detalha as métricas de avaliação adotadas para comparar o desempenho das diferentes abordagens.
+Neste capítulo, são apresentados os principais conceitos e definições que fundamentam este trabalho. A \autoref{sec:osteoartrite} aborda a osteoartrite de joelho, destacando suas características clínicas. A \autoref{sec:rnc} introduz as redes neurais convolucionais (RNCs) e as arquiteturas exploradas neste estudo. Em seguida, a \autoref{sec:vision-transformers} apresenta os vision transformers (ViTs) e as arquiteturas escolhidas. A \autoref{sec:funcoes-perda} descreve as funções de perda utilizadas para a comparação entre os modelos. Por fim, a \autoref{sec:avaliacao-metricas} detalha as métricas de avaliação adotadas para comparar o desempenho das diferentes abordagens.
 
 \section{Osteoartrite de Joelho}\label{sec:osteoartrite}
 
 \subsection{Definição e Características Clínicas}
 
-A osteoartrite (OA) é definida como uma doença heterogênea e degenerativa, que afeta as articulações e estruturas ósseas de pacientes, causando sintomas de dor, deformidade e perda de função \citep{Loeser2012}. Considerando os fenótipos da doença, ou seja, as características clínicas e radiográficas observáveis, a OA é considerada altamente heterogênea, isso significa que pode ser causada por diversos fatores, incluindo:
+A osteoartrite (OA) é definida como uma doença heterogênea e degenerativa, que afeta as articulações e estruturas ósseas de pacientes, causando sintomas de dor, deformidade e perda de função \cite{Loeser2012}. Considerando os fenótipos da doença, ou seja, as características clínicas e radiográficas observáveis, a OA é considerada altamente heterogênea, podendo ser causada por diversos fatores, incluindo:
 
 \begin{itemize}
-    \item \textbf{Idade}: a OA é mais comum em idosos, devido ao desgaste natural e inevitável das articulações ao longo do tempo \citep{ShaneAnderson2010}.
-    \item \textbf{Sexo}: mulheres têm maior risco de desenvolver OA do que homens, especialmente após a menopausa, devido à diminuição dos níveis de estrogênio, que protege a cartilagem articular \citep{Tschon2021}.
-    \item \textbf{Obesidade}: o excesso de peso também é uma condição de risco para a OA, pois aumenta a carga mecânica nas articulações, influenciando o início e a progressão da doença \citep{PACCA2018}.
-    \item \textbf{Predisposição genética}: fatores genéticos também podem influenciar o desenvolvimento da OA, como a presença de mutações em genes relacionados à formação e manutenção da cartilagem articular \citep{Spector2004}.
+    \item \textbf{Idade}: a OA é mais comum em idosos, devido ao desgaste natural e inevitável das articulações ao longo do tempo \cite{ShaneAnderson2010}.
+    \item \textbf{Sexo}: mulheres têm maior risco de desenvolver OA do que homens, especialmente após a menopausa, devido à diminuição dos níveis de estrogênio, que protege a cartilagem articular \cite{Tschon2021}.
+    \item \textbf{Obesidade}: o excesso de peso também é uma condição de risco para a OA, pois aumenta a carga mecânica nas articulações, influenciando o início e a progressão da doença \cite{PACCA2018}.
+    \item \textbf{Predisposição genética}: fatores genéticos também podem influenciar o desenvolvimento da OA, como a presença de mutações em genes relacionados à formação e manutenção da cartilagem articular \cite{Spector2004}.
     \item \textbf{Outros fatores}: lesões articulares, atividade física intensa, doenças metabólicas, entre outros.
 \end{itemize}
 
-A OA pode afetar diversas articulações, como joelhos, quadris, mãos, ombros, entre outras. No entanto, a junção do joelho é a área mais afetada devido ao suporte do peso corporal que está diretamente associados a movimentos essenciais, como caminhar, subir escadas e agachar \citep{Kanamoto2020}. Portanto, tais fatores fazem com que a doença seja uma das princiais causas de dor crônica e incapacidade funcional, levando a uma necessidade de identificar e classificar a OA de forma precisa e precoce, para que o tratamento seja iniciado o mais cedo possível a fim de retardar a progressão da doença e melhorar a qualidade de vida dos pacientes.
+A OA pode afetar diversas articulações, como joelhos, quadris, mãos, ombros, entre outras. No entanto, a junção do joelho é a área mais afetada devido ao suporte do peso corporal que está diretamente associado a movimentos essenciais, como caminhar, subir escadas e agachar \cite{Kanamoto2020}. Portanto, tais fatores fazem com que a doença seja uma das principais causas de dor crônica e incapacidade funcional, levando a uma necessidade de identificar e classificar a OA de forma precisa e precoce, para que o tratamento seja iniciado o mais cedo possível a fim de retardar a progressão da doença e melhorar a qualidade de vida dos pacientes.
 
-\subsection{Mudanças Patológicas da OA de Joelhos}
+\subsection{Mudanças Patológicas da OA de Joelho}
 
 Entre as mudanças patológicas observadas na OA, estão:
 
 \begin{itemize}
-    \item \textbf{Degradação da cartilagem articular}: a cartlagem articular é um tecido que reveste as extremidades ósseas, permitindo movimentos suaves e absorção de impactos. Na OA, ocorre uma perda progressiva da matriz cartilaginosa, onde as células da cartilagem, chamadas de condrócitos, se tornam "ativas" e aumentam a produção de enzimas que degradam a matriz \citep{Goldring2009}.
-    \item \textbf{Inflamação sinovial}: a membrana sinovial é um tecido que reveste as articulações e produz o líquido sinovial, que lubrifica e nutre a cartilagem. Na OA, ocorre a condição chamada sinovite, onde a membrana sinovial se torna inflamada, causando dano e destruição à cartilagem \citep{Pessler2008}.
-    \item \textbf{Degeneração dos ligamentos}: os ligamentos são estruturas que conectam os ossos e estabilizam as articulações. Na OA, os ligamentos podem sofrer rupturas e degeneração, afetando a mecânica articular. Essa degeneração aumenta a predisposição para o desenvolvimento da doença \citep{Loeser2012}.
-    \item \textbf{Degeneração do menisco}: o menisco, estrutura fibrocartilaginosa que na absorção de choques e na estabilidade articular, também é afetado na OA. Sua degeneração leva à perda da função de amortecimento e à piora da sobrecarga nas superfícies articulares \citep{Loeser2012}.
-    \item \textbf{Alterações ósseas}: o osso subcondral, localizado abaixo da cartilagem, também é afetado na OA, como a formação de osteófitos, que são projeções ósseas anormais, e a esclerose subcondral, que é o aumento da densidade óssea. Essas alterações podem causar dor e limitação de movimentos \citep{vanderKraan2007}.
+    \item \textbf{Degradação da cartilagem articular}: a cartilagem articular é um tecido que reveste as extremidades ósseas, permitindo movimentos suaves e absorção de impactos. Na OA, ocorre a perda progressiva da matriz cartilaginosa, onde as células da cartilagem, chamadas de condrócitos, se tornam ``ativas'' e aumentam a produção de enzimas que degradam a matriz \cite{Goldring2009}.
+    \item \textbf{Inflamação sinovial}: a membrana sinovial é um tecido que reveste as articulações e produz o líquido sinovial, que lubrifica e nutre a cartilagem. Na OA, ocorre a condição chamada sinovite, onde a membrana sinovial se torna inflamada, causando dano e destruição à cartilagem \cite{Pessler2008}.
+    \item \textbf{Degeneração dos ligamentos}: os ligamentos são estruturas que conectam os ossos e estabilizam as articulações. Na OA, os ligamentos podem sofrer rupturas e degeneração, afetando a mecânica articular. Essa degeneração aumenta a predisposição para o desenvolvimento da doença \cite{Loeser2012}.
+    \item \textbf{Degeneração do menisco}: o menisco, estrutura fibrocartilaginosa que atua na absorção de choques e na estabilidade articular, também é afetado na OA. Sua degeneração leva à perda da função de amortecimento e à piora da sobrecarga nas superfícies articulares \cite{Loeser2012}.
+    \item \textbf{Alterações ósseas}: o osso subcondral, localizado abaixo da cartilagem, também é afetado na OA, como a formação de osteófitos, que são projeções ósseas anormais, e a esclerose subcondral, que é o aumento da densidade óssea. Essas alterações podem causar dor e limitação de movimentos \cite{vanderKraan2007}.
 \end{itemize}
 
-A Figura \ref{fig:osteoartrite-joelho} ilustra as mudanças patológicas observadas na OA de joelhos a partir de imagens de ressonância magnética.
+A \autoref{fig:osteoartrite-joelho} ilustra as mudanças patológicas observadas na OA de joelho a partir de imagens de ressonância magnética.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=\linewidth]{figs/mud-patologicas-oa.jpg}
-    \caption{Imagens de recuperação por inversão sagital (A–C) e eco de spin rápido coronal (D–F) ilustrando os achados da ressonância magnética na osteoartrite. (A) Sinovite reativa (seta branca espessa), (B) Formação de cistos subcondrais (seta branca), (C) Edema da medula óssea (setas brancas finas), (D) Desgaste parcial da cartilagem (seta preta espessa), (E–F) Desgaste total da cartilagem (setas pretas finas), esclerose subcondral (cabeça de seta) e formação de osteófitos marginais (seta dupla). Imagem cortesia dos Drs. Hollis Potter e Catherine Hayter, Hospital for Special Surgery, Nova York, NY. Fonte: \cite{Loeser2012}.}
+    \caption{Imagens de recuperação por inversão sagital (A–C) e eco de spin rápido coronal (D–F) ilustrando os achados da ressonância magnética na osteoartrite. (A) Sinovite reativa (seta branca espessa), (B) Formação de cistos subcondrais (seta branca), (C) Edema da medula óssea (setas brancas finas), (D) Desgaste parcial da cartilagem (seta preta espessa), (E–F) Desgaste total da cartilagem (setas pretas finas), esclerose subcondral (cabeça de seta) e formação de osteófitos marginais (seta dupla). Fonte: \citeonline{Loeser2012}.}
     \label{fig:osteoartrite-joelho}
 \end{figure}
 
 \subsection{Impacto da OA na Qualidade de Vida}
 
-De acordo com o World Health Organization (WHO), "qualidade de vida" é definida como a percepção do indivíduo sobre sua posição de vida no contexto da cultura e sistema de valores que ele vive e em relação aos seus objetivos, expectativas, padrões e preocupações \citep{who2012}.
+De acordo com o \textit{World Health Organization} (WHO), a expressão ``qualidade de vida'' é definida como sendo a percepção do indivíduo sobre sua posição de vida no contexto da cultura e sistema de valores que ele vive e em relação aos seus objetivos, expectativas, padrões e preocupações \cite{who2012}.
 
-Existe um grande esforço de pesquisadores e especialistas para avaliar o grau de incapacidade física causado pela doença, além de avaliar os efeitos de diferentes tratamentos em aspectos como dor, função física e mobilidade. No entanto, tais manifestações físicas afetam diretamente outras áreas na vida dos pacientes, como interações sociais, saúde mental e qualidade do sono \citep{Ferrel1992}. Além disso, comparado com outras doenças crônicas, pacientes com doenças muscoesqueléticas, como a OA, são os mais afetados em termos de qualidade de vida. A OA de joelho, especificamente, tende a declinar progressivamente a qualidade de vida conforme a progressão da doença \citep{Hoogeboom2013}.
+Existe um grande esforço de pesquisadores e especialistas para avaliar o grau de incapacidade física causado pela doença, além de avaliar os efeitos de diferentes tratamentos em aspectos como dor, função física e mobilidade. No entanto, tais manifestações físicas afetam diretamente outras áreas na vida dos pacientes, como interações sociais, saúde mental e qualidade do sono \cite{Ferrel1992}. Em comparação com outras doenças crônicas, pacientes com doenças muscoesqueléticas, como a OA, são os mais afetados em termos de qualidade de vida. A OA de joelho, especificamente, tende a declinar progressivamente a qualidade de vida conforme a progressão da doença \cite{Hoogeboom2013}.
 
-\cite{Desmeules2009} realizaram um estudo com 197 pacientes com cirurgia agendada para substituição total do joelho (TKA) e avaliaram, através da escala de qualidade de vida SF-36 \citep{Ware1992}, a relação entre a OA de joelho e a qualidade de vida. Os resultados mostraram que a pontuação média da qualidade de vida dos pacientes era significativamente menor do que a população geral no Canadá (p < 0,05). Outros estudos também mostraram resultados similares em pacientes esperando por TKA \citep{Snider2005,Kapetanakis2011}. É razoável, portanto, que pacientes com OA de joelho severa tenham baixos níveis de qualidade de vida comparado com a população geral.
+\citeonline{Desmeules2009} realizaram um estudo com 197 pacientes com cirurgia agendada para substituição total do joelho (\textit{Total Knee Arthroplasty} - TKA) e avaliaram, através da escala de qualidade de vida SF-36 \cite{Ware1992}, a relação entre a OA de joelho e a qualidade de vida. Os resultados mostraram que a pontuação média da qualidade de vida dos pacientes era significativamente menor do que a população geral no Canadá ($p < 0,05$). Outros estudos também mostraram resultados similares em pacientes esperando por TKA \cite{Snider2005,Kapetanakis2011}. É razoável, portanto, que pacientes com OA de joelho severa tenham baixos níveis de qualidade de vida comparado com a população geral.
 
-\cite{Sutbeyaz2007} fizeram um estudo com 28 pacientes obesos com OA de joelho e avaliaram a qualidade de vida através da escala de qualidade de vida SF-36. Os resultados mostraram que os pacientes obesos tiveram pontuações muito mais baixas em todos os domínios da escala SF-36, em comparação com o grupo de controle (p < 0,001). Além disso, a obesidade foi associada a uma pior qualidade de vida em pacientes com OA de joelho, o que sugere que a perda de peso pode ser benéfica para melhorar a qualidade de vida desses pacientes.
+\citeonline{Sutbeyaz2007} fizeram um estudo com 28 pacientes obesos com OA de joelho e também avaliaram a qualidade de vida através da escala SF-36. Os resultados mostraram que os pacientes obesos tiveram pontuações muito mais baixas em todos os domínios da escala SF-36, em comparação com o grupo de controle ($p < 0,001$). Com isso, a obesidade foi associada a uma pior qualidade de vida em pacientes com OA de joelho, o que sugere que a perda de peso pode ser benéfica para melhorar o panorama desses pacientes.
 
-Complementarmente, \cite{Kawano2015} mostraram que existe uma relação do nível de escolaridade com a capacidade funcional e dor em pacientes com OA de joelho. O estudo foi conduzido com 93 pacientes tratados no Serviço de Ortopedia e Traumatologia do Hospital Santa Izabel e Santa Casa da Misericórdia da Bahia, em Salvador, Brasil. A avaliação da qualidade de vida foi feita através do questionário SF-36 e mostrou que pacientes com níveis mais baixos de escolaridade tiveram pontuações mais baixas nos domínios de capacidade funcional (p < 0,001), limitação funcional (p = 0,009) e dor (p = 0,01), em comparação com pacientes com níveis mais altos de escolaridade (p < 0,05). Além disso, a escolaridade foi associada a uma melhor qualidade de vida em pacientes com OA de joelho, o que sugere que a educação pode ser um fator importante para melhorar a qualidade de vida desses pacientes.
+Complementarmente, \citeonline{Kawano2015} mostraram que existe uma relação do nível de escolaridade com a capacidade funcional e dor em pacientes com OA de joelho. O estudo foi conduzido com 93 pacientes tratados no Serviço de Ortopedia e Traumatologia do Hospital Santa Izabel e Santa Casa da Misericórdia da Bahia, em Salvador, Brasil. A avaliação da qualidade de vida foi feita através do questionário SF-36 e mostrou que pacientes com níveis mais baixos de escolaridade tiveram pontuações mais baixas nos domínios de capacidade funcional ($p < 0,001$), limitação funcional ($p = 0,009$) e dor ($p = 0,01$), em comparação com pacientes com níveis mais altos de escolaridade ($p < 0,05$). Com isso, a escolaridade foi associada a uma melhor qualidade de vida em pacientes com OA de joelho, o que sugere que a educação também pode ser um fator importante nesse cenário.
 
 \subsection{Prevalência da OA}
 
-Dados recentes do Global Burden of Disease (GBD) - o estudo epidemiológico observacional mais abrangente do mundo - revelaram que a prevalência da OA cresceu 132\% entre 1990 e 2020, com projeções de crescimento de 60 a 100\% até 2050, alcançando a marca de 1 bilhão de pessoas. Com uma prevalência de 7,6\% da população global em 2020, o que equivale a aproximadamente 595 milhões de pessoas, a OA é mais comum em países desenvolvidos, devido à correlação com o status socieconômico, e contribui significativamente para os chamados "anos vividos com incapacidade" (YLDs em inglês). Além disso, o estudo também aponta que a OA é mais comum em mulheres do que em homens, com prevalência de 8,0\% e 5,8\%, respectivamente, além de atingir principalmente idosos, especialmente aqueles acima de 70 anos, onde a OA assume a 7ª posição entre as principais causas de incapacidade, primeiramente afetando a articulação do joelho \citep{COURTIES20241397}.
+Dados recentes do \textit{Global Burden of Disease} (GBD) — o estudo epidemiológico observacional mais abrangente do mundo — revelaram que a prevalência da OA cresceu 132\% entre 1990 e 2020, com projeções de crescimento de 60 a 100\% até 2050, alcançando a marca de 1 bilhão de pessoas. Com uma prevalência de 7,6\% da população global em 2020, o que equivale a aproximadamente 595 milhões de pessoas, a OA é mais comum em países desenvolvidos, devido à correlação com o status socieconômico, e contribui significativamente para os chamados ``anos vividos com incapacidade'' (\textit{Years Lived with Disability} - YLD). Além disso, o estudo também aponta que a OA é mais comum em mulheres do que em homens, com prevalência de 8,0\% e 5,8\%, respectivamente, além de atingir principalmente idosos, especialmente aqueles acima de 70 anos, onde a OA assume a 7ª posição entre as principais causas de incapacidade, primeiramente afetando a articulação do joelho \cite{COURTIES20241397}.
 
-No Brasil, \cite{RodriguesSenna2004} realizaram um estudo com mais 3 mil pessoas e identificaram cerca de 7,2\% com doenças reumáticas, sendo a OA a mais comum, com prevalência de 4,14\%. Essa prevalência tende a aumentar visto que, além de existir uma correlação entre a OA e a obesidade, estima-se que o Brasil tenha uma taxa de sobrepeso e obesidade combinados de 68,1\% em 2030 \citep{fiocruz2024}.
-
-% \subsection{Custos associados ao tratamento da OA}
-% https://www.scielo.br/j/csp/a/RTcZ4yrgQW3YjpzsF453prQ/?format=pdf&lang=pt
-% https://www.scielo.br/j/rbcf/a/9TRjg6CfTgYB9qxSCPgD6Sd/?format=pdf&lang=pt
-% https://pmc.ncbi.nlm.nih.gov/articles/PMC8153072/
-% https://pmc.ncbi.nlm.nih.gov/articles/PMC4422214/pdf/nihms685605.pdf
+No Brasil, \citeonline{RodriguesSenna2004} realizaram um estudo com mais de 3 mil pessoas e identificaram cerca de 7,2\% com doenças reumáticas, sendo a OA a mais comum, com prevalência de 4,14\%. Essa prevalência tende a aumentar visto que, além de existir uma correlação entre a OA e a obesidade, estima-se que o Brasil tenha uma taxa de sobrepeso e obesidade combinados de 68,1\% em 2030 \cite{fiocruz2024}.
 
 \subsection{Diagnóstico e Métodos de Avaliação da OA}
 
-O diagnóstico da OA normalmente é feito com base em exames clínicos, como a avaliação dos sintomas do paciente, exames de imagem, como radiografias e ressonâncias magnéticas, e exames laboratoriais, como a análise do líquido sinovial \citep{Kraus2015}. Exames de raio-x tem sido o método mais comum para diagnosticar a OA, pois é uma abordagem acessível e permite visualizar o espaço articular e alterações ósseas e cartilaginosas nas articulações, como a formação de osteófitos.
+O diagnóstico da OA normalmente é feito com base em exames clínicos, como a avaliação dos sintomas do paciente, exames de imagem, como radiografias e ressonâncias magnéticas, e exames laboratoriais, como a análise do líquido sinovial \cite{Kraus2015}. Exames de raio-x têm sido o método mais comum para diagnosticar a OA, pois é uma abordagem acessível que permite visualizar o espaço articular, além de alterações ósseas e cartilaginosas nas articulações, como a formação de osteófitos.
 
-Essa avaliação é tipicamente feita por radiologistas a partir de radiografias do joelho extendido ou flexionado, dependendo da necessidade de visualização intra-articular \citep{Braun2012}. A partir dessas imagens, é possível fazer a classificação da severidade da OA e, em caso de diagnótico, recomendar tratamentos farmacêuticos e não farmacêuticos, como exercícios de fortalecimento muscular e fisioterapia.
+Essa avaliação é tipicamente feita por radiologistas a partir de radiografias do joelho extendido ou flexionado, dependendo da necessidade de visualização intra-articular \cite{Braun2012}. A partir dessas imagens, é possível fazer a classificação da severidade da OA e, em caso de diagnóstico, recomendar tratamentos farmacêuticos e não farmacêuticos, como exercícios de fortalecimento muscular e fisioterapia.
 
-\subsection{Classificação da OA de Joelhos}
+\subsection{Classificação da OA}
 
-\cite{KELLGREN1957} propuseram uma escala de classificação da OA baseada em radiografias e considerando fatores como a formação de osteófitos, estreitamento da cartilagem articular e esclerose subcondral. A escala de Kellgren/Lawrence (KL) classifica a OA em cinco estágios de progressão: 0 (nenhum), 1 (duvidoso), 2 (mínimo), 3 (moderado) e 4 (grave) (\autoref{tabela-kl}). Como a classificação é comumente feita por radiologistas, estes avaliam as radiografias e atribuem um grau de acordo com a experiência e cuidado médico na interpretação das imagens.
+\citeonline{KELLGREN1957} propuseram uma escala de classificação da OA baseada em radiografias e considerando fatores como a formação de osteófitos, estreitamento da cartilagem articular e esclerose subcondral. A escala de Kellgren/Lawrence (KL) classifica a OA em cinco estágios de progressão: 0 (saudável), 1 (duvidoso), 2 (mínimo), 3 (moderado) e 4 (grave) (\autoref{tabela-kl}). Como a classificação é comumente feita por radiologistas, estes avaliam as radiografias e atribuem um grau de acordo com a experiência e o julgamento clínico na interpretação das imagens.
 
-No entanto, a classificação manual pode ser subjetiva e suscetível a erros, assim como foi observado pelos autores, o que pode levar a diagnósticos tardios ou incorretos num cenário onde a detecção precoce é crucial para retardar a progressão da doença, uma vez que não existem medicamentos capazes de retardar o seu desenvolvimento .
+No entanto, a classificação manual pode ser subjetiva e suscetível a erros, assim como foi observado pelos autores, o que pode levar a diagnósticos tardios ou incorretos em um cenário onde a detecção precoce é crucial para retardar a progressão da doença .
 
 \begin{table}[h]
     \centering
@@ -90,45 +84,45 @@ No entanto, a classificação manual pode ser subjetiva e suscetível a erros, a
 
 \section{Rede Neural Convolucional (RNC)}\label{sec:rnc}
 
-Uma rede neural artificial é um modelo computacional inspirado no cérebro humano \citep{McCulloch1943}, onde neurônios artificiais recebem um conjunto de entradas ponderadas, realizam uma soma dessas entradas e aplicam uma função de ativação para produzir uma saída. Essa estrutura permite que as redes neurais aprendam padrões complexos a partir de dados, tornando-as adequadas para tarefas de processamento de linguagem natural, visão computacional, entre outras aplicações.
+Uma rede neural artificial é um modelo computacional inspirado no cérebro humano \cite{McCulloch1943}, onde neurônios artificiais recebem um conjunto de entradas ponderadas, realizam uma soma dessas entradas e aplicam uma função de ativação para produzir uma saída. Essa estrutura permite que as redes neurais aprendam padrões complexos a partir de dados, tornando-as adequadas para tarefas de processamento de linguagem natural, visão computacional, entre outras aplicações.
 
-Em 2006, \cite{Hinton2006} propuseram o uso de redes neurais artificiais com múltiplas camadas com o objetivo de melhorar a capacidade dos modelos, o que levou a um renascimento do interesse nessas redes e ao desenvolvimento de novas arquiteturas, como é o caso da rede neural convolucional (RNC).
+Em 2006, \citeonline{Hinton2006} propuseram o uso de redes neurais artificiais com múltiplas camadas com o objetivo de melhorar a capacidade dos modelos, o que levou a um renascimento do interesse nessas redes e ao desenvolvimento de novas arquiteturas, como é o caso da rede neural convolucional (RNC).
 
 As RNCs são modelos de aprendizado profundo projetados para processar dados com estrutura de grade, como imagens. Inspiradas na organização do córtex visual, RNCs são amplamente utilizadas em tarefas de visão computacional, como classificação de imagens, detecção de objetos e segmentação semântica.
 
-A camada de convolução é o componente central das RNCs, responsável por extrair características locais dos dados de entrada. Essa camada utiliza filtros (ou \textit{kernels}), que são pequenas matrizes de pesos (por exemplo, 3x3 ou 5x5) aplicadas em toda a imagem de entrada para gerar um mapa de características (ou \textit{feature maps}), representando a presença dessas características em diferentes regiões da imagem.
+A camada de convolução é o componente central das RNCs, responsável por extrair características locais dos dados de entrada. Essa camada utiliza filtros (ou \textit{kernels}, do inglês), que são pequenas matrizes de pesos (por exemplo, 3×3 ou 5×5) aplicadas em toda a imagem de entrada para gerar um mapa de características, representando a presença dessas características em diferentes regiões da imagem.
 
-Esses filtros são ajustados durante o treinamento da rede, permitindo que a RNC aprenda a detectar padrões relevantes, como bordas, texturas e formas. Conforme a rede avança pelas camadas, os filtros se tornam mais complexos e capazes de capturar características de alto nível, como objetos inteiros. Após as convoluções, é comum utilizar a função de ativação ReLU (\textit{Rectified Linear Unit}), que substitui valores negativos por zero e introduz não linearidades no modelo, permitindo que ele aprenda representações complexas.
+Esses filtros são ajustados durante o treinamento da rede, permitindo que a RNC aprenda a detectar padrões relevantes, como bordas, texturas e formas. Conforme a rede avança pelas camadas, os filtros se tornam mais complexos e capazes de capturar características de alto nível, como objetos inteiros. Após as convoluções, é comum utilizar a função de ativação \textit{Rectified Linear Unit} (ReLU), que substitui valores negativos por zero e introduz não linearidades no modelo, permitindo que ele aprenda representações complexas.
 
-Após as camadas de convolução, as RNCs geralmente incluem camadas de \textit{pooling} para reduzir a dimensionalidade dos \textit{feature maps}, enquanto preservam as características mais relevantes. O \textit{pooling} pode ser feito de várias maneiras, como \textit{max pooling} (onde o valor máximo de uma região é mantido) ou \textit{average pooling} (onde a média dos valores é calculada). Esse processo contribui para:
+Após as camadas de convolução, as RNCs geralmente incluem camadas de \textit{pooling} para reduzir a dimensionalidade dos mapas de características, enquanto preservam as características mais relevantes. O \textit{pooling} pode ser feito de várias maneiras, como \textit{max pooling} (onde o valor máximo de uma região é mantido) ou \textit{average pooling} (onde a média dos valores é calculada). Esse processo contribui para:
 
 \begin{itemize}
-    \item reduzir a quantidade de parâmetros e o custo computacional da rede.
-    \item tornar a rede mais robusta a pequenas variações nos dados de entrada.
+    \item Reduzir a quantidade de parâmetros e o custo computacional da rede.
+    \item Tornar a rede mais robusta a pequenas variações nos dados de entrada.
 \end{itemize}
 
-Após diversas camadas de convolução e \textit{pooling}, uma ou mais camadas totalmente conectadas (\textit{fully connected}) são adicionadas ao final da rede para combinar as características extraídas de camadas anteriores e realizar a tarefa de classificação. Cada neurônio dessas camadas está conectado a todos os valores da camada anterior, permitindo decisões baseadas em combinações globais das informações aprendidas. Em tarefas de classificação, a última camada totalmente conectada geralmente utiliza a função de ativação \textit{softmax}, que transforma as saídas em probabilidades.
+Após diversas camadas de convolução e \textit{pooling}, uma ou mais camadas totalmente conectadas (ou \textit{fully connected}, do inglês) são adicionadas ao final da rede para combinar as características extraídas de camadas anteriores e realizar a tarefa de classificação. Cada neurônio dessas camadas está conectado a todos os neurônios da camada anterior, permitindo decisões baseadas em combinações globais das informações aprendidas. Em tarefas de classificação, essa camada geralmente utiliza a função de ativação \textit{softmax}, que transforma as saídas em probabilidades.
 
-Durante o treinamento, a RNC ajusta os pesos dos filtros por meio do algoritmo de retropropagação (\textit{backpropagation}), em que o erro de saída é retropropagado pela rede para atualizar os pesos e minimizar a função de perda. Esse processo é repetido por várias épocas, permitindo que a rede aprenda a reconhecer padrões complexos nos dados de entrada.
+Durante o treinamento, a RNC ajusta os pesos dos filtros por meio do algoritmo de retropropagação (ou \textit{backpropagation}, do inglês), em que o erro de saída é retropropagado pela rede para atualizar os pesos e minimizar a função de perda. Esse processo é repetido por várias épocas, permitindo que a rede aprenda a reconhecer padrões complexos nos dados de entrada.
 
-A \autoref{fig:cnn} ilustra uma rede neural convolucional composta por cinco camadas. O número de camadas, a disposição dessas camadas, o número e tamanho dos filtros, a forma de conexão entre as camadas, entre outros fatores, podem variar dependendo da arquitetura escolhida. Em seguida, serão aprensentadas algumas das arquiteturas populares de RNC que foram utilizadas neste trabalho.
+A \autoref{fig:cnn} ilustra uma rede neural convolucional composta por cinco camadas. O número de camadas, a disposição dessas camadas, o número e tamanho dos filtros, a forma de conexão entre as camadas, entre outros fatores, podem variar dependendo da arquitetura escolhida. Em seguida, serão apresentadas algumas das arquiteturas populares de RNC que foram utilizadas neste trabalho.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=0.7\linewidth]{figs/convolution-neural-network.png}
-    \caption{Uma rede neural convolucional simples, composta por apenas cinco camadas. Fonte: \cite{Saxena2022}.}
+    \caption{Uma rede neural convolucional simples, composta por apenas cinco camadas. Fonte: \citeonline{Saxena2022}.}
     \label{fig:cnn}
 \end{figure}
 
-\subsection{VGG (Visual Geometry Group Network)}
+\subsection{Visual Geometry Group Network (VGG)}
 
-Os modelos VGG foram introduzidos pelo \textit{Visual Geometry Group} da Universidade de Oxford por \cite{Simonyan2015}, que depois serviu como base para a competição do \textit{ImageNet} em 2014, quando conquistaram o primeiro e segundo lugar na época. A arquitetura VGG é conhecida por sua simplicidade e profundidade, utilizando filtros convolucionais pequenos (3×3) empilhados em camadas profundas, variando de 11 a 19 camadas. O objetivo dos autores era explorar o impacto da profundidade na performance do modelo, e eles descobriram que redes neurais mais profundas superavam redes mais rasas, desde que treinadas adequadamente.
+Os modelos VGG foram introduzidos pelo \textit{Visual Geometry Group} da Universidade de Oxford por \citeonline{Simonyan2015}, que depois serviu como base para a competição do ImageNet em 2014, quando conquistaram o primeiro e segundo lugar na época. A arquitetura VGG é conhecida por sua simplicidade e profundidade, utilizando filtros convolucionais pequenos (3×3) empilhados em camadas profundas, variando de 11 a 19 camadas. O objetivo dos autores era explorar o impacto da profundidade na performance do modelo, e eles descobriram que redes neurais mais profundas superavam redes mais rasas, desde que treinadas adequadamente.
 
-A arquitetura VGG processa imagens RGB de 224×224 pixels, utilizando uma série de camadas convolucionais seguidas por camadas de \textit{pooling}, onde cada camada contém um número crescente de filtros 3×3. O \textit{stride} é fixo em 1 pixel, e o \textit{padding} é utilizado para manter a dimensão da imagem. Após as camadas convolucionais, são aplicadas camadas de \textit{max-pooling} com um tamanho de 2×2 e \textit{stride} de 2, reduzindo a dimensão da imagem pela metade. Por fim, são adicionadas três camadas totalmente conectadas (ou \textit{fully connected} do inglês), seguidas por uma camada de saída com ativação \textit{softmax} para classificação. Além disso, as camadas escondidas são ativadas por funções ReLU, reponsáveis por introduzir a não-linearidade no modelo.
+A arquitetura VGG processa imagens RGB de 224×224 pixels, utilizando uma série de camadas convolucionais seguidas por camadas de \textit{pooling}, onde cada camada contém um número crescente de filtros 3×3. O \textit{stride} é fixo em 1 pixel, e o \textit{padding} é utilizado para manter a dimensão da imagem. Após as camadas convolucionais, são aplicadas camadas de \textit{max-pooling} com um tamanho de 2×2 e \textit{stride} de 2, reduzindo a dimensão da imagem pela metade. Por fim, são adicionadas três camadas totalmente conectadas, seguidas por uma camada de saída com ativação \textit{softmax} para classificação. Além disso, as camadas ocultas são ativadas por funções ReLU, responsáveis por introduzir a não-linearidade no modelo.
 
-A \autoref{tab:vgg-arch} apresenta a configuração das arquiteturas VGG-16 e VGG-19, com um total de 16 e 19 camadas, respectivamente. Ambas se destacaram na competição do \textit{ImageNet} e são amplamente utilizadas devido à sua performance em tarefas de classificação, incluindo o diagnóstico a partir de imagens médicas \citep{Saini2023, Sitaula2021}.
+A \autoref{tab:vgg-arch} apresenta a configuração das arquiteturas VGG-16 e VGG-19, com um total de 16 e 19 camadas, respectivamente. Ambas se destacaram na competição do ImageNet e são amplamente utilizadas devido à sua performance em tarefas de classificação, incluindo o diagnóstico a partir de imagens médicas \cite{Saini2023, Sitaula2021}.
 
-\begin{table}[ht]
+\begin{table}[!htbp]
     \centering
     \footnotesize
     \begin{tabular}{|c|c|}
@@ -179,28 +173,28 @@ A \autoref{tab:vgg-arch} apresenta a configuração das arquiteturas VGG-16 e VG
         \multicolumn{2}{|c|}{softmax} \\
         \hline
     \end{tabular}
-    \caption{Configuração dos modelos VGG-16 e VGG-19. Os parâmetros de cada camada convolucional são denotados por "conv<tamanho do campo receptivo>-<número de canais>". A função de ativação ReLU não é exibida por motivos de simplicidade.}
+    \caption{Configuração dos modelos VGG-16 e VGG-19. Fonte: \citeonline{Simonyan2015}.}
     \label{tab:vgg-arch}
 \end{table}
 
-\subsection{ResNet (Residual Network)}
+\subsection{Residual Network (ResNet)}
 
-\cite{He2016} venceram a competição ILSVRC 2015 com a arquitetura \textit{Residual Network} (\textit{ResNet}), que introduziu a ideia de blocos residuais e alcançou uma taxa de erro de 3,57\% no conjunto de validação do \textit{ImageNet} com um \textit{ensemble} de seus modelos. Os autores abordaram o problema da degradação de desempenho: conforme a profundidade da rede aumentava, a acurácia saturava e começava a diminuir. Para resolver, eles introduziram a ideia de conexões de atalho (\textit{skip connections}) entre as camadas, onde o sinal de entrada de uma camada é somado ao sinal de saída de uma camada subsequente (\autoref{fig:residual-learning}).
+\citeonline{He2016} venceram a competição ILSVRC 2015 com a arquitetura ResNet, que introduziu a ideia de blocos residuais e alcançou uma taxa de erro de 3,57\% no conjunto de validação do ImageNet com um \textit{ensemble} de seus modelos. Os autores abordaram o problema da degradação de desempenho: conforme a profundidade da rede aumentava, a acurácia saturava e começava a diminuir. Para resolver, eles introduziram a ideia de conexões de atalho (ou \textit{skip connections}, do inglês) entre as camadas, onde o sinal de entrada de uma camada é somado ao sinal de saída de uma camada subsequente (\autoref{fig:residual-learning}).
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=0.5\linewidth]{figs/residual-connection.png}
-    \caption{Aprendizado residual}
+    \caption{Aprendizado residual introduzido pela arquitetura ResNet.}
     \label{fig:residual-learning}
 \end{figure}
 
 Formalmente, considerando que o objetivo de uma rede neural é aprender uma função \( H(x) \), onde \( x \) é a entrada, a ResNet propõe que a rede aprenda uma função residual \( F(x) = H(x) - x \), onde a entrada \( x \) é adicionada à saída \( H(x) \), reformulando a função de aprendizado como \( H(x) = F(x) + x \). Essa abordagem permite que a rede aprenda funções de identidade mais facilmente, facilitando o treinamento de redes mais profundas sem adicionar complexidade.
 
-A arquitetura ResNet é composta por pilhas de blocos residuais que consistem em duas camadas convolucionais, com um \textit{Batch Normalization} e uma função de ativação ReLU entre elas. As camadas convolucionais utilizam filtros de tamanho 3×3, com um \textit{stride} de 1 e \textit{padding} de 1, para manter a dimensão da imagem. A saída do bloco residual é então somada à entrada original, permitindo que o modelo aprenda a função residual. A rede termina com uma camada de \textit{average pooling} global e uma camada totalmente conectada (ou \textit{fully connected} do inglês) com ativação \textit{softmax} para classificação.
+A arquitetura ResNet é composta por pilhas de blocos residuais que consistem em duas camadas convolucionais, com uma normalização em lote e uma função de ativação ReLU entre elas. As camadas convolucionais utilizam filtros de tamanho 3×3, com um \textit{stride} de 1 e \textit{padding} de 1, para manter a dimensão da imagem. A saída do bloco residual é então somada à entrada original, permitindo que o modelo aprenda a função residual. A rede termina com uma camada de \textit{average pooling} global e uma camada totalmente conectada com ativação \textit{softmax} para classificação.
 
-A \autoref{resnet-arch} apresenta a configuração das arquiteturas ResNet-34, ResNet-50 e ResNet-101, que são variantes da ResNet com diferentes profundidades. Essas arquiteturas foram escolhidas devido à sua popularidade e eficácia em tarefas de classificação de imagens, especialmente em radiografias. \cite{Leung2020} utilizaram a arquitetura ResNet-34 para diagnosticar a OA de joelhos em pacientes submetidos à artroplastia total do joelho (TKA) e obtiveram resultados que superaram modelos de resultados binários.
+A \autoref{resnet-arch} apresenta a configuração das arquiteturas ResNet-34, ResNet-50 e ResNet-101, que são variantes da ResNet com diferentes profundidades. Essas arquiteturas são amplamente utilizadas devido à sua eficácia em tarefas de classificação de imagens, especialmente em radiografias. Como exemplo, \citeonline{Leung2020} utilizaram a arquitetura ResNet-34 para diagnosticar a OA de joelho em pacientes submetidos à TKA e obtiveram resultados que superaram modelos de resultados binários.
 
-\begin{table}[ht]
+\begin{table}[!htbp]
     \centering
     \footnotesize
     \begin{tabular}{|c|c|c|c|c|}
@@ -280,35 +274,35 @@ A \autoref{resnet-arch} apresenta a configuração das arquiteturas ResNet-34, R
         \multicolumn{2}{|c|}{FLOPs} & 3.6×10\textsuperscript{9} & 3.8×10\textsuperscript{9} & 7.6×10\textsuperscript{9} \\
         \hline
     \end{tabular}
-    \caption{Configuração das arquiteturas ResNet-34, ResNet-50 e ResNet-101.}
+    \caption{Configuração dos modelos ResNet-34, ResNet-50 e ResNet-101. Fonte: \citeonline{He2016}.}
     \label{resnet-arch}
 \end{table}
 
-\subsection{DenseNet (Densely Connected Convolutional Networks)}
+\subsection{Densely Connected Convolutional Networks (DenseNet)}
 
-A arquitetura DenseNet introduziu uma nova abordagem para lidar com redes profundas e aliviar o problema de \textit{vanishing gradients}, melhorando a propagação e reuso da informação, além de diminuir o número de parâmetros. A ideia principal foi conectar cada camada a todas as camadas anteriores, formando conexões densas entre elas. Isso significa que cada camada recebe como entrada não apenas a saída da camada anterior, mas também as saídas de todas as camadas anteriores (\autoref{dense-network}). Essa abordagem permite que o modelo aprenda representações mais ricas e complexas, facilitando a extração de características relevantes para a tarefa de classificação \citep{Huang2017}.
+A arquitetura DenseNet introduziu uma nova abordagem para lidar com redes profundas e aliviar o problema de \textit{vanishing gradients}, melhorando a propagação e reuso da informação, além de diminuir o número de parâmetros. A ideia principal foi conectar cada camada a todas as camadas anteriores, formando conexões densas entre elas. Isso significa que cada camada recebe como entrada não apenas a saída da camada anterior, mas também as saídas de todas as camadas anteriores (\autoref{fig:dense-network}). Essa abordagem permite que o modelo aprenda representações mais ricas e complexas, facilitando a extração de características relevantes para a tarefa de classificação \cite{Huang2017}.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
-    \includegraphics[width=0.5\linewidth]{figs/dense-network.png}
-    \caption{Um bloco de 5 camadas de uma DenseNet. Cada camada recebe como entrada a saída de todas as camadas anteriores. Fonte: \cite{Huang2017}}
-    \label{dense-network}
+    \includegraphics[width=0.7\linewidth]{figs/dense-network.png}
+    \caption{Um bloco de cinco camadas de uma DenseNet. Cada camada recebe como entrada a saída de todas as camadas anteriores. Fonte: \citeonline{Huang2017}}
+    \label{fig:dense-network}
 \end{figure}
 
-O componente fundamental da DenseNet é o bloco denso (ou \textit{dense block} em inglês), que consiste em várias camadas convolucionais conectadas densamente. Cada camada dentro do bloco denso aplica três operações consecutivas: \textit{batch normalization} (BN), seguido de uma função de ativação ReLU e, por fim, uma convolução 3×3. Após a aplicação do bloco denso, uma transição (ou \textit{transition} em inglês) é realizada para reduzir a dimensão dos \textit{feature maps} usando uma camada de convolução 1×1, seguida por uma camada de \textit{average pooling} 2×2.
+O componente fundamental da DenseNet é o bloco denso (ou \textit{dense block}, do inglês), que consiste em várias camadas convolucionais conectadas densamente. Cada camada dentro do bloco denso aplica três operações consecutivas: normalização em lote, seguida de uma função de ativação ReLU e, por fim, uma convolução 3×3. Após a aplicação do bloco denso, uma transição é realizada para reduzir a dimensão dos mapas de características usando uma camada de convolução 1×1, seguida por uma camada de \textit{average pooling} 2×2.
 
-Portanto, a arquitetura DenseNet é composta por quatro blocos densos, cada um seguido por camadas de transição. A saída final (classificador) é obtida através de uma camada de \textit{global average pooling} e uma camada totalmente conectada com ativação \textit{softmax} para classificação. A \autoref{densenet-arch} apresenta a configuração das arquiteturas DenseNet-121 e DenseNet-169, que são variantes da DenseNet com diferentes profundidades e que foram utilizadas neste trabalho, pois fornecem um bom equilíbrio entre complexidade e desempenho comparado com outras arquiteturas mais profundas.
+Dessa forma, a arquitetura DenseNet é composta por quatro blocos densos, cada um seguido por camadas de transição. A saída final (classificador) é obtida através de uma camada de \textit{global average pooling} e uma camada totalmente conectada com ativação \textit{softmax} para classificação. A \autoref{tab:densenet-arch} apresenta a configuração dos modelos DenseNet-121 e DenseNet-169, que são variantes da DenseNet com diferentes profundidades e que fornecem um bom equilíbrio entre complexidade e desempenho em comparação com outras arquiteturas mais profundas.
 
-Nos últimos anos, as arquiteturas DenseNet têm sido amplamente utilizadas em diversas tarefas de classificação de imagens, incluindo diagnósticos médicos. Por exemplo, \citep{Rajpurkar2017} propuseram um modelo chamado CheXNet baseado na arquitetura DenseNet-121 para detectar pneumonia a partir de radiografias torácicas, superando o desempenho médio de radiologistas na métrica F1-score.
+Nos últimos anos, a arquitetura DenseNet tem sido amplamente utilizada em diversas tarefas de classificação de imagens, incluindo diagnósticos médicos. Por exemplo, \cite{Rajpurkar2017} propuseram um modelo chamado CheXNet baseado na arquitetura DenseNet-121 para detectar pneumonia a partir de radiografias torácicas, superando o desempenho médio de radiologistas na métrica F1-score.
 
-\begin{table}[h]
+\begin{table}[!htbp]
     \centering
     \footnotesize
     \begin{tabular}{|c|c|c|c|}
         \hline
         \textbf{Camadas} & \textbf{Tamanho da saída} & \textbf{DenseNet-121} & \textbf{DenseNet-169} \\
         \hline
-        Convolução & 112×112 & \multicolumn{2}{c|}{7×7 conv, stride 2} \\
+        Convolution & 112×112 & \multicolumn{2}{c|}{7×7 conv, stride 2} \\
         \hline
         Pooling & 56×56 & \multicolumn{2}{c|}{3×3 max pool, stride 2} \\
         \hline
@@ -369,40 +363,40 @@ Nos últimos anos, as arquiteturas DenseNet têm sido amplamente utilizadas em d
         &  & \multicolumn{2}{c|}{1000D fully-connected, softmax} \\
         \hline
     \end{tabular}
-    \caption{Configuração das arquiteturas DenseNet-121 e DenseNet-169.}
-    \label{densenet-arch}
+    \caption{Configuração dos modelos DenseNet-121 e DenseNet-169. Fonte: \citeonline{Huang2017}.}
+    \label{tab:densenet-arch}
 \end{table}
 
 \subsection{Inception-v3}
 
-A arquitetura Inception, introduzida por \cite{Szegedy2015} no contexto do desafio ILSVRC 2014, representou um avanço significativo na evolução das redes neurais convolucionais. Seu principal diferencial está na proposta de uma estrutura modular - o módulo Inception - que combina convoluções de diferentes tamanhos (1×1, 3×3, 5×5) e operações de \textit{pooling} em paralelo, promovendo o processamento de informações em múltiplas escalas (\autoref{inception-module}).
+A arquitetura Inception, introduzida por \citeonline{Szegedy2015} no contexto do desafio ILSVRC 2014, representou um avanço significativo na evolução das redes neurais convolucionais. Seu principal diferencial está na proposta de uma estrutura modular — o módulo Inception — que combina convoluções de diferentes tamanhos (1×1, 3×3, 5×5) e operações de \textit{pooling} em paralelo, promovendo o processamento de informações em múltiplas escalas (\autoref{inception-module}).
 
-O modelo GoogLeNet, uma instância da arquitetura Inception com 22 camadas profundas, obteve o primeiro lugar no ILSVRC 2014 \citep{Russakovsky2015}, alcançando um notável desempenho em tarefas de classificação e detecção, mesmo utilizando significativamente menos parâmetros que modelos anteriores, como o VGG.
+O modelo GoogLeNet, uma instância da arquitetura Inception com 22 camadas profundas, obteve a primeira colocação no ILSVRC 2014 \cite{Russakovsky2015}, alcançando um notável desempenho em tarefas de classificação e detecção, mesmo utilizando significativamente menos parâmetros que modelos anteriores, como o VGG.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
-    \includegraphics[width=0.5\linewidth]{figs/inception-module.png}
-    \caption{Um módulo Inception. Fonte: \cite{Szegedy2015}}
+    \includegraphics[width=0.7\linewidth]{figs/inception-module.png}
+    \caption{Um módulo Inception. Fonte: \citeonline{Szegedy2015}}
     \label{inception-module}
 \end{figure}
 
-A arquitetura Inception-v3 \citep{Szegedy2016} representa uma evolução significativa em relação ao modelo original Inception (GoogLeNet), incorporando diversas inovações voltadas à melhoria da eficiência computacional e da acurácia. Entre as principais contribuições estão a fatoração de convoluções em operações menores e assimétricas (\autoref{inception-module-v3}), o uso mais sistemático da normalização em lote (\textit{batch normalization}) e a adoção da técnica de \textit{label smoothing} como forma de regularização. Tais aprimoramentos resultaram em um modelo mais profundo e preciso, mantendo um custo computacional viável para aplicações práticas.
+A arquitetura Inception-v3 \cite{Szegedy2016} representa uma evolução significativa em relação ao modelo original Inception (GoogLeNet), incorporando diversas inovações voltadas à melhoria da eficiência computacional e da acurácia. Entre as principais contribuições estão a fatoração de convoluções em operações menores e assimétricas (\autoref{inception-module-v3}), o uso mais sistemático da normalização em lote e a adoção da técnica de \textit{label smoothing} como forma de regularização. Tais aprimoramentos resultaram em um modelo mais profundo e preciso, mantendo um custo computacional viável para aplicações práticas.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=0.5\linewidth]{figs/inception-module-v3.png}
-    \caption{Um módulo Inception com fatoração de convoluções. Fonte: \cite{Szegedy2015}}
+    \caption{Um módulo Inception com fatoração de convoluções. Fonte: \citeonline{Szegedy2015}}
     \label{inception-module-v3}
 \end{figure}
 
-A \autoref{inception-v3-arch} apresenta a configuração da arquitetura Inception-v3, com um total de 42 camadas, que inclui a fatoração de convoluções tradicionais 7×7 em convoluções 3×3. A arquitetura substitui o otimizador padrão do SGD por um otimizador mais avançado, o RMSProp, favorecendo a convergência do modelo durante o treinamento, além de utilizar classificadores auxiliares com normalização em lote nas camadas intermediárias, melhorando a propagação do sinal do gradiente e, por consequência, a eficiência do treinamento.
+A \autoref{inception-v3-arch} apresenta a configuração da arquitetura Inception-v3, com um total de 42 camadas, que inclui a fatoração de convoluções tradicionais 7×7 em convoluções 3×3. A arquitetura substitui o otimizador padrão do \textit{Stochastic Gradient Descent} (SGD) por um otimizador mais avançado, o \textit{Root Mean Square Propagation} (RMSProp), favorecendo a convergência do modelo durante o treinamento, além de utilizar classificadores auxiliares com normalização em lote nas camadas intermediárias, melhorando a propagação do sinal do gradiente e, por consequência, a eficiência do treinamento.
 
-\begin{table}[h]
+\begin{table}[!htbp]
     \centering
     \footnotesize
-    \begin{tabular}{|l|c|c|c|c|}
+    \begin{tabular}{|c|c|c|c|c|}
         \hline
-        \textbf{type} & \textbf{patch size/stride} & \textbf{input size} \\
+        \textbf{Tipo} & \textbf{Tamanho do patch/stride} & \textbf{Tamanho da entrada} \\
         \hline
         conv & $3\times3$/2 & $299\times299\times3$ \\
         \hline
@@ -418,11 +412,11 @@ A \autoref{inception-v3-arch} apresenta a configuração da arquitetura Inceptio
         \hline
         conv & $3\times3$/1 & $35\times35\times192$ \\
         \hline
-        $3\times$Inception &  & $35\times35\times288$ \\
+        $3\times$Inception & - & $35\times35\times288$ \\
         \hline
-        $5\times$Inception &  & $17\times17\times768$ \\
+        $5\times$Inception & - & $17\times17\times768$ \\
         \hline
-        $2\times$Inception &  & $8\times8\times1280$ \\
+        $2\times$Inception & - & $8\times8\times1280$ \\
         \hline
         pool & $8\times8$ & $8\times8\times2048$ \\
         \hline
@@ -431,81 +425,81 @@ A \autoref{inception-v3-arch} apresenta a configuração da arquitetura Inceptio
         softmax & classifier & $1\times1\times1000$ \\
         \hline
     \end{tabular}
-    \caption{Configuração da arquitetura Inception-v3.}
+    \caption{Configuração do modelo Inception-v3. Fonte \citeonline{Szegedy2016}.}
     \label{inception-v3-arch}
 \end{table}
 
-Além de seu excelente desempenho na tarefa de classificação de imagens do ILSVRC 2012 \citep{Russakovsky2015}, a arquitetura Inception-v3 tem sido utilizada em outras aplicações, incluindo o diagnóstico médico. Por exemplo, \cite{Mujahid2022} adotaram a arquitetura Inception-v3 para a tarefa de classificação de pneumonia em radiografias e obtiveram resultados promissores, alcançando uma acurácia de 99,29\% com um ensemble, superando outros modelos, como VGG-16 e ResNet-50.
+Além de seu excelente desempenho na tarefa de classificação de imagens do ILSVRC 2012 \cite{Russakovsky2015}, a arquitetura Inception-v3 tem sido utilizada em outras aplicações, incluindo o diagnóstico médico. Por exemplo, \citeonline{Mujahid2022} adotaram a arquitetura Inception-v3 para a tarefa de classificação de pneumonia em radiografias e obtiveram resultados promissores, alcançando uma acurácia de 99,29\% com um modelo \textit{ensemble}, superando outros modelos, como VGG-16 e ResNet-50.
 
 \subsection{Aprendizado por Transferência}
 
-O aprendizado por transferência \citep{Zhuang2021} é uma técnica de aprendizado de máquina no qual o conhecimento adquirido por um modelo treinado em uma tarefa é reutilizado para solucionar outra tarefa relacionada, mas diferente. Essa abordagem é especialmente útil para evitar o treinamento de modelos do zero, economizando tempo e recursos computacionais, além de melhorar o desempenho em tarefas com poucos dados disponíveis.
+O aprendizado por transferência \cite{Zhuang2021} é uma técnica de aprendizado de máquina na qual o conhecimento adquirido por um modelo treinado em uma tarefa é reutilizado para solucionar outra tarefa relacionada, mas diferente. Essa abordagem é especialmente útil para evitar o treinamento de modelos do zero, economizando tempo e recursos computacionais, além de melhorar o desempenho em tarefas com poucos dados disponíveis.
 
-Em redes neurais, o aprendizado por transferência é frequentemente realizado reutilizando pesos de um modelo pré-treinado, cujos estágios iniciais da rede geralmente capturam características genéricas das entradas, como bordas ou texturas, que podem ser úteis para resolver novos problemas. Por exemplo, redes neurais treinadas em grandes conjuntos de dados, como o ImageNet \citep{Russakovsky2015}, podem ser reaproveitadas para resolver tarefas específicas, como a classificação de imagens médicas.
+Em redes neurais, o aprendizado por transferência é frequentemente realizado reutilizando pesos de um modelo pré-treinado, cujos estágios iniciais da rede geralmente capturam características genéricas das entradas, como bordas ou texturas, que podem ser úteis para resolver novos problemas. Por exemplo, redes neurais treinadas em grandes conjuntos de dados, como o ImageNet \cite{Russakovsky2015}, podem ser reaproveitadas para resolver tarefas específicas, como a classificação de imagens médicas.
 
-Essa estratégia é realizada através do ajuste fino (\textit{fine-tuning} do inglês) do modelo pré-treinado em duas etapas principais. Na primeira, caso seja necessário, as camadas finais do modelo são substituídas por novas camadas adaptadas à tarefa-alvo, como uma camada totalmente conectada com o número de classes correspondente. Na segunda etapa, parte ou toda a rede é treinada com os novos dados. As camadas iniciais geralmente são mantidas inalteradas, enquanto as camadas finais são ajustadas para aprender as características específicas da nova tarefa.
+Essa estratégia é realizada através do ajuste fino (ou \textit{fine-tuning}, do inglês) do modelo pré-treinado em duas etapas principais. Na primeira, caso seja necessário, as camadas finais do modelo são substituídas por novas camadas adaptadas à tarefa-alvo, como uma camada totalmente conectada com o número de classes correspondente. Na segunda etapa, parte ou toda a rede é treinada com os novos dados. As camadas iniciais geralmente são mantidas inalteradas, enquanto as camadas finais são ajustadas para aprender as características específicas da nova tarefa.
 
 Aplicações de visão computacional e processamento de linguagem natural têm se beneficiado da transferência de aprendizado. Ao reduzir a necessidade de grandes volumes de dados e de poder computacional, essa técnica torna-se uma alternativa viável e eficiente para o desenvolvimento de soluções baseadas em redes neurais profundas.
 
 \section{Vision Transformer (ViT)}\label{sec:vision-transformers}
 
-O \textit{Vision Transformer} (ViT) é uma abordagem inovadora de aprendizado profundo que aplica a arquitetura Transformer \citep{vaswani2023attentionneed}, originalmente desenvolvida para tarefas de PLN, ao domínio da visão computacional. Introduzido por \cite{Dosovitskiy2021} no artigo ``An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale'', o ViT demonstrou que os Transformers podem ser eficazes para tarefas de classificação de imagens ao obter excelentes resultados quando treinada em grandes conjuntos de dados (14M-300M de imagens), superando modelos tradicionais baseados em RNCs, como o ResNet.
+O vision transformer (ViT) é uma abordagem inovadora de aprendizado profundo que aplica a arquitetura transformer \cite{vaswani2023attentionneed}, originalmente desenvolvida para tarefas de Processamento de Linguagem Natural (PLN), ao domínio da visão computacional. Introduzido por \citeonline{Dosovitskiy2021} no artigo ``An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale'', o ViT demonstrou que os transformers podem ser eficazes para tarefas de classificação de imagens ao obter excelentes resultados quando treinados em grandes conjuntos de dados (14M-300M de imagens), superando modelos tradicionais baseados em RNCs, como o ResNet.
 
-A ideia principal do ViT, ilustrada na \autoref{fig:vision-transformer}, é tratar imagens como sequências de blocos com tamanho fixo (por exemplo, 16×16 pixels), semelhantes aos tokens em uma sequência de texto. Cada bloco é linearmente projetado em um vetor de dimensão fixa, e esses vetores resultantes são combinados em sequência junto com vetores de posição e de classe, para preservar a informação espacial e representar a classe da tarefa de classificação, respectivamente. Esses vetores são então alimentados em um modelo \textit{encoder}, onde a sequência é processada por camadas de \textit{multi-head self-attention} e \textit{feedforward}, como no transformer tradicional. O mecanismo de \textit{self-attention} permite que o modelo aprenda relações de longo alcance entre diferentes regiões da imagem, sem a necessidade de convoluções locais, oferecendo maior flexibilidade na captura de dependências espaciais. Ao final do processamento, o token de classificação é utilizado para realizar a predição da tarefa-alvo, como prever o nível de severidade de uma doença.
+A ideia principal do ViT, ilustrada na \autoref{fig:vision-transformer}, é tratar imagens como sequências de blocos com tamanho fixo (por exemplo, 16×16 pixels), semelhantes aos tokens em uma sequência de texto. Cada bloco é linearmente projetado em um vetor de dimensão fixa, e esses vetores resultantes são combinados em sequência junto com vetores de posição e de classe, para preservar a informação espacial e representar a classe da tarefa de classificação, respectivamente. Esses vetores são então alimentados em um modelo \textit{encoder}, onde a sequência é processada por camadas de \textit{multi-head self-attention} e \textit{feedforward}, como no transformer tradicional. O mecanismo de auto-atenção permite que o modelo aprenda relações de longo alcance entre diferentes regiões da imagem, sem a necessidade de convoluções locais, oferecendo maior flexibilidade na captura de dependências espaciais. Ao final do processamento, o token de classificação é utilizado para realizar a predição da tarefa-alvo, como prever o nível de severidade de uma doença.
 
-Em cenários com poucos dados, as RNCs tendem a apresentar melhor desempenho, enquanto os ViTs se destacam no cenário oposto. Isso ocorre porque os transformers não possuem os vieses indutivos herdados pelas redes convolucionais, como a hierarquia espacial, a localidade e a translação equivariante, que são fundamentais para a generalização dos modelos. No entanto, modelos de ViT podem ser adaptados para funcionarem bem com conjuntos de dados reduzidos através do uso de técnicas de pré-treinamento e ajuste fino (\textit{fine-tuning} do inglês).
+Em cenários com poucos dados, as RNCs tendem a apresentar melhor desempenho, enquanto os ViTs se destacam no cenário oposto. Isso ocorre porque os transformers não possuem os vieses indutivos herdados pelas redes convolucionais, como a hierarquia espacial, a localidade e a translação equivariante, que são fundamentais para a generalização dos modelos. No entanto, modelos de ViT podem ser adaptados para funcionarem bem com conjuntos de dados reduzidos através do uso de técnicas de pré-treinamento e ajuste fino.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=1.0\linewidth]{figs/vision-transformer.png}
-    \caption{Arquitetura do Vision Transformer. Fonte: \cite{Dosovitskiy2021}.}
+    \caption{Arquitetura do vision transformer. Fonte: \citeonline{Dosovitskiy2021}.}
     \label{fig:vision-transformer}
 \end{figure}
 
-Todas as variantes de ViT compartilham a mesma estrutura básica, que consiste na divisão da imagem em \textit{patches} de tamanho fixo, a projeção linear desses \textit{patches} em vetores de dimensão fixa, a inclusão de vetores de posição e um token de classe, e o processamento desses vetores em um \textit{encoder} de transformer. O ViT-B/16 \citep{Dosovitskiy2021} é uma das primeiras variantes da arquitetura, onde ``B'' representa o modelo base e ``16'' refere-se ao tamanho do \textit{patch} em que a imagem é dividida (16x16 pixels). Os modelos que surgiram posteriormente introduziram melhorias e adaptações buscando aumentar a eficiência e/ou reduzir a necessidade de grandes volumes de dados para treinamento. A seguir, são aprensentadas as variantes que foram utilizadas nesta pesquisa.
+Todas as variantes de ViT compartilham a mesma estrutura básica, que consiste na divisão da imagem em \textit{patches} de tamanho fixo, a projeção linear desses \textit{patches} em vetores de dimensão fixa, a inclusão de vetores de posição e um token de classe, e o processamento desses vetores em um \textit{encoder} de transformer. O ViT-B/16 \cite{Dosovitskiy2021} é uma das primeiras variantes da arquitetura, onde ``B'' representa o modelo base e ``16'' refere-se ao tamanho do \textit{patch} em que a imagem é dividida (16×16 pixels). Os modelos que surgiram posteriormente introduziram melhorias e adaptações buscando aumentar a eficiência e/ou reduzir a necessidade de grandes volumes de dados para treinamento. A seguir, são apresentadas as variantes que foram utilizadas nesta pesquisa.
 
 \subsection{Data-efficient image Transformer (DeiT)}
 
-A arquitetura \textit{Data-efficient image Transformer} (DeiT), introduzida por pesquisadores do \textit{Facebook} em 2021 \citep{Touvron2021}, representa uma avanço significativo na adaptação de transformers. Além de ser uma abordagem livre de convoluções, ela se destaca por não necessitar de grandes volumes de dados e infraestrutura computacional para alcançar resultados competitivos, ao contrário do que se pressupõe de arquiteturas ViT \citep{Dosovitskiy2021}.
+A arquitetura DeiT, introduzida por pesquisadores do \textit{Facebook} em 2021 \cite{Touvron2021}, representa um avanço significativo na adaptação de transformers. Além de ser uma abordagem livre de convoluções, ela se destaca por não necessitar de grandes volumes de dados e infraestrutura computacional para alcançar resultados competitivos, ao contrário do que se pressupõe de arquiteturas ViT \cite{Dosovitskiy2021}.
 
-O diferencial do DeiT reside na introdução de uma nova estratégia de distilação de conhecimento, adaptada especificamente para a arquitetura transformer. Como ilustrado na \autoref{fig:distillation-procedure}, um token de distilação é incorporado diretamente à entrada do transformer e atua de maneira similar ao token de classificação: interage com os demais tokens da rede através das camadas de \textit{self-attention} e sua saída é observada após a última camada. Este token é treinado com o objetivo de replicar a predição de um ``modelo professor'', estratégia conhecida como \textit{hard-label distillation}:
+O diferencial do DeiT reside na introdução de uma nova estratégia de distilação de conhecimento, adaptada especificamente para a arquitetura transformer. Como ilustrado na \autoref{fig:distillation-procedure}, um token de distilação é incorporado diretamente à entrada do transformer e atua de maneira similar ao token de classificação: interage com os demais tokens da rede através das camadas de auto-atenção e sua saída é observada após a última camada. Este token é treinado com o objetivo de replicar a predição de um ``modelo professor'', estratégia conhecida como \textit{hard-label distillation}:
 
 \begin{equation}
     L_{\text{global}}^{\text{hardDistill}} = \frac{1}{2} \, L_{CE}\left( \psi(Z_s), y \right) + \frac{1}{2} \, L_{CE}\left( \psi(Z_s), y_t \right) \text{,}
 \end{equation}
 
-onde $Z_s$ são os \textit{logits} do ``modelo aluno'', $L_{CE}$ é a entropia cruzada sobre os rótulos corretos ($y$) e os rótulos preditos pelo ``modelo professor'' ($y_t = \text{argmax}_c Z_t(c)$), sendo $Z_t$ os seus \textit{logits}, e $\psi$ é a função softmax. Como resultado, ambos os tokens compartilham informação ao longo das camadas e gradualmente convergem para vetores similares, porém ainda distintos. Por fim, seus valores são associados com classificadores lineares para produzir o rótulo da imagem.
+onde $Z_s$ são os \textit{logits} do ``modelo aluno'', $L_{CE}$ é a entropia cruzada sobre os rótulos corretos ($y$) e os rótulos preditos pelo ``modelo professor'' ($y_t = \text{argmax}_c Z_t(c)$), sendo $Z_t$ os seus \textit{logits}, e $\psi$ é a função \textit{softmax}. Como resultado, ambos os tokens compartilham informação ao longo das camadas e gradualmente convergem para vetores similares, porém ainda distintos. Por fim, seus valores são associados com classificadores lineares para produzir o rótulo da imagem.
 
-Entre suas variantes, o modelo DeiT-B com a estratégia de distilação, que possui arquitetura semelhante ao ViT-B, é o maior modelo em termos de número de parâmetros (87 milhões). Em experimentos com o ImageNet-1K, tal modelo atingiu uma acurácia top-1 de 83,4\% (com entrada 224), superando arquiteturas de redes convolucionais e inclusive variantes do ViT pré-treinadas com conjuntos de dados significativamente maiores. Adicionalmente, avaliações em tarefas de \textit{transfer learning} em diversos \textit{benchmarks} (CIFAR-10, CIFAR-100, Flowers) demonstram a capacidade de generalização do modelo, onde o DeiT ficou no mesmo nível que redes convolucionais competitivas e superou modelos ViT tradicionais.
+Entre suas variantes, o modelo DeiT-B com a estratégia de distilação, que possui arquitetura semelhante ao ViT-B, é o maior modelo em termos de número de parâmetros (87 milhões). Em experimentos com o ImageNet-1K, tal modelo atingiu uma acurácia top-1 de 83,4\% (com entrada de 224×224 pixels), superando arquiteturas de RNC e inclusive variantes do ViT pré-treinadas com conjuntos de dados significativamente maiores. Adicionalmente, avaliações em tarefas de \textit{transfer learning} em diversos \textit{benchmarks} (CIFAR-10, CIFAR-100, Flowers) demonstram a capacidade de generalização do modelo, onde o DeiT ficou no mesmo nível que RNCs competitivas e superou modelos ViT tradicionais.
 
-Diante desses resultados, o DeiT se mostra como uma alternativa promissora e eficiente aos modelos convolucionais e ViT clássicos para diversas tarefas, incluindo análise de imagens médicas. \cite{alotaibi2022} propuseram um modelo \textit{ensemble} com ViT e DeiT (ViT-DeiT) para classificar imagens histopatológicas do câncer de mama em oito classes (benignas e malignas), obtendo um resultado de 98,17\% de acurácia. Este trabalho utilizou a arquitetura do DeiT-B com sua estratégia de distilação para classificar o nível de severidade de OA de joelhos.
+Diante desses resultados, o DeiT se mostra como uma alternativa promissora e eficiente aos modelos convolucionais e ViT clássicos para diversas tarefas, incluindo análise de imagens médicas. Por exemplo, \citeonline{alotaibi2022} propuseram um modelo \textit{ensemble} com ViT e DeiT (ViT-DeiT) para classificar imagens histopatológicas do câncer de mama em oito classes (benignas e malignas), obtendo um resultado de 98,17\% de acurácia.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=0.5\linewidth]{figs/distillation-procedure-deit.png}
-    \caption{Estratégia de distilação em transformers através da introdução de um token de distilação. Fonte: \cite{Touvron2021}.}
+    \caption{Estratégia de distilação em transformers através da introdução de um token de distilação. Fonte: \citeonline{Touvron2021}.}
     \label{fig:distillation-procedure}
 \end{figure}
 
 \subsection{Swin Transformer}
 
-A adaptação de arquiteturas transformer para tarefas de visão computacional apresenta desafios únicos, como a grande variação de escala das entidades visuais e a alta resolução das imagens. Em resposta a esses desafios, \cite{Liu2021} propuseram o Swin Transformer, uma nova arquitetura de ViT que serve como uma espinha dorsal (\textit{backbone} do inglês) de propósito geral para a área. O modelo introduz uma abordagem hierárquica e um mecanismo de auto-atenção baseado em janelas deslocadas, o que lhe confere eficiência e flexibilidade para modelar em múltiplas escalas com complexidade computacional linear em relação ao tamanho da imagem.
+A adaptação de arquiteturas transformer para tarefas de visão computacional apresenta desafios únicos, como a grande variação de escala das entidades visuais e a alta resolução das imagens. Em resposta a esses desafios, \citeonline{Liu2021} propuseram o Swin Transformer, uma nova arquitetura de ViT que serve como uma espinha dorsal de propósito geral para a área. O modelo introduz uma abordagem hierárquica e um mecanismo de auto-atenção baseado em janelas deslocadas, o que lhe confere eficiência e flexibilidade para modelar em múltiplas escalas com complexidade computacional linear em relação ao tamanho da imagem.
 
-A representação hierárquica do Swin Transformer, começando com pequenos \textit{patches} e aumentando gradualmente a resolução (\autoref{fig:swin-t-vs-vit}), e o esquema de janelas deslocadas diferencia o Swin Transformer de outras arquiteturas ViT, limitando o cálculo da auto-atenção a janelas locais e não sobrepostas, ao mesmo tempo que permite conexões cruzadas entre essas janelas em camadas consecutivas. Essa estratégia aumenta significativamente o poder de modelagem sem sacrificar a eficiência.
+A representação hierárquica do Swin Transformer, começando com pequenos \textit{patches} e aumentando gradualmente a resolução (\autoref{fig:swin-t-vs-vit}), e o esquema de janelas deslocadas são os principais diferenciais do Swin Transformer em relação a outras arquiteturas ViT, limitando o cálculo da auto-atenção a janelas locais e não sobrepostas, ao mesmo tempo que permite conexões cruzadas entre essas janelas em camadas consecutivas. Essa estratégia aumenta significativamente o poder de modelagem sem sacrificar a eficiência.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=0.7\linewidth]{figs/swin_t_vs_vit.png}
-    \caption{(a) Mapa de características hierárquico do Swin Transformer. (b) Em contraste, o formato de resolução única dos mapas de características do ViT. Fonte: \cite{Liu2021}.}
+    \caption{(a) Mapa de características hierárquico do Swin Transformer. (b) Em contraste, o formato de resolução única dos mapas de características do ViT. Fonte: \citeonline{Liu2021}.}
     \label{fig:swin-t-vs-vit}
 \end{figure}
 
-A arquitetura do Swin Transformer, ilustrada na \autoref{fig:swin-t-arch}, representa a versão tiny (Swin-T) do modelo, que é a menor variante do modelo. Inicialmente, a imagem é dividida em \textit{patches} (tokens), e um conjunto de blocos Swin Transformer é aplicado sobre esses tokens. Para criar a hierarquia, camadas de fusão de \textit{patches} reduzem a resolução espacial (por um fator de 2x) e aumentam a dimensão dos canais (por 2x) à medida que a rede se aprofunda. Isso permite que o modelo gere mapas de características em múltiplas escalas (por exemplo, 4x, 8x, 16x e 32x), tornando-o compatível com tarefas de predição densa como detecção de objetos e segmentação.
+A arquitetura do Swin Transformer, ilustrada na \autoref{fig:swin-t-arch}, representa a versão \textit{tiny} do modelo (Swin-T), que é a menor variante. Inicialmente, a imagem é dividida em \textit{patches} (tokens), e um conjunto de blocos Swin Transformer é aplicado sobre esses tokens. Para criar a hierarquia, camadas de fusão de \textit{patches} reduzem a resolução espacial (por um fator de 2x) e aumentam a dimensão dos canais (por 2x) à medida que a rede se aprofunda. Isso permite que o modelo gere mapas de características em múltiplas escalas (por exemplo, 4x, 8x, 16x e 32x), tornando-o compatível com tarefas de predição densa, como a detecção de objetos e a segmentação.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=\linewidth]{figs/swin_t-arch.png}
-    \caption{(a) A arquitetura do Swin Transformer (Swin-T); (b) Dois blocos Swin Transformer sucessivos. Fonte: \cite{Liu2021}.}
+    \caption{(a) A arquitetura do Swin Transformer (Swin-T); (b) Dois blocos Swin Transformer sucessivos. Fonte: \citeonline{Liu2021}.}
     \label{fig:swin-t-arch}
 \end{figure}
 
@@ -526,18 +520,18 @@ Em camadas consecutivas, os blocos Swin Transformer alternam entre duas configur
 
 onde $\hat{z}$ e $z$ denotam as saídas dos módulos de atenção e da MLP para um bloco $l$, respectivamente. A atenção é sempre calculada com um viés de posição relativa, o que se mostrou crucial para o desempenho do modelo.
 
-O Swin Transformer possui quatro configurações principais: Swin-T, Swin-S, Swin-B e Swin-L, que variam em capacidade. A versão base, Swin-B, possui 88 milhões de parâmetros e alcançou uma acurácia top-1 de 83,5\% no ImageNet-1K (com entrada 224), superando modelos ViT-B/16 (77,91\%) e DeiT-B com distilação (83,4\%) \citep{Dosovitskiy2021, Touvron2021}. Com isso, o Swin-B foi a variante utilizada neste trabalho, pois apresenta um bom equilíbrio entre complexidade e desempenho, além de possibilitar um bom \textit{benchmark} para comparação com as demais arquiteturas.
+O Swin Transformer possui quatro configurações principais: Swin-T, Swin-S, Swin-B e Swin-L, que variam em capacidade. A versão base (Swin-B), possui 88 milhões de parâmetros e alcançou uma acurácia top-1 de 83,5\% no ImageNet-1K (com entrada de 224×224 pixels), superando os modelos ViT-B/16 (77,91\%) e DeiT-B com distilação (83,4\%) \cite{Dosovitskiy2021, Touvron2021}.
 
 \subsection{Dual Attention Vision Transformers (DaViT)}
 
-Com o avanço das arquiteturas de ViT, diversos métodos têm buscado o equilíbrio entre a capacidade de capturar contexto global e a eficiência computacional necessária para lidar com imagens de alta resolução. Nesse contexto, \cite{ding2022davitdualattentionvision} propuseram uma nova arquitetura de ViT que introduz um mecanismo de atenção dual, combinando janelas espaciais de atenção e grupos de canais de atenção, de forma a integrar representações locais e globais de maneira eficiente e complementar.
+Com o avanço das arquiteturas de ViT, diversos métodos têm buscado o equilíbrio entre a capacidade de capturar contexto global e a eficiência computacional necessária para lidar com imagens de alta resolução. Nesse contexto, \citeonline{ding2022davitdualattentionvision} propuseram uma nova arquitetura de ViT que introduz um mecanismo de atenção dual, combinando janelas espaciais de atenção e grupos de canais de atenção, de forma a integrar representações locais e globais de maneira eficiente e complementar.
 
-O principal diferencial do DaViT está na aplicação do mecanismo de atenção no domínio dos canais. Após transpor o vetor de características gerado pelo mecanismo de \textit{self-attention} em blocos locais, cada canal passa a representar uma visão abstrata global da imagem. A atenção é então aplicada entre os grupos de canais, o que permite o modelo capturar interações globais com complexidade linear. A \autoref{fig:spatial-and-channel-window-self-attention} ilustra a perspectiva ortogonal do DaViT.
+O principal diferencial do DaViT está na aplicação do mecanismo de atenção no domínio dos canais. Após transpor o vetor de características gerado pelo mecanismo de auto-atenção em blocos locais, cada canal passa a representar uma visão abstrata global da imagem. A atenção é então aplicada entre os grupos de canais, o que permite o modelo capturar interações globais com complexidade linear. A \autoref{fig:spatial-and-channel-window-self-attention} ilustra a perspectiva ortogonal do DaViT.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=\linewidth]{figs/spatial-and-channel-window-self-attention.png}
-    \caption{(a) \textit{Spatial window multihead self-attention} divide a dimensão espacial em janelas locais, onde cada janela contém múltiplos tokens espaciais. (b) \textit{Channel group single-head self-attention} agrupa tokens de canal em múltiplos grupos. Fonte: \cite{ding2022davitdualattentionvision}.}
+    \caption{(a) \textit{Spatial window multihead self-attention} divide a dimensão espacial em janelas locais, onde cada janela contém múltiplos tokens espaciais. (b) \textit{Channel group single-head self-attention} agrupa tokens de canal em múltiplos grupos. Fonte: \citeonline{ding2022davitdualattentionvision}.}
     \label{fig:spatial-and-channel-window-self-attention}
 \end{figure}
 
@@ -549,14 +543,14 @@ O mecanismo de atenção local, aplicado em janelas espaciais, está ilustrado n
 
 onde $Q_i$, $K_i$ e $V_i$ são os vetores de consulta, chave e valor correspondentes a cada janela. Isso reduz significativamente o custo computacional, visto que a complexidade é linear com tamanho espacial $P$, embora isso limite a capacidade do modelo de capturar relações de longo alcance.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=\linewidth]{figs/davit-arch.png}
-    \caption{Arquitetura DaViT do bloco \textit{dual attention}. Fonte: \cite{ding2022davitdualattentionvision}.}
+    \caption{Arquitetura DaViT do bloco \textit{dual attention}. Fonte: \citeonline{ding2022davitdualattentionvision}.}
     \label{fig:davit-arch}
 \end{figure}
 
-Já o mecanismo de atenção global, aplicado em grupos de canais, é ilustrado na \autoref{fig:davit-arch}(c). Ao invés de atuar sobre \textit{patches} espaciais, esta abordagem transpõe o vetor de características e aplica a atenção em tokens de canal. Cada token de canal representa uma visão abstrata global da imagem, pois abrange todos os locais espaciais. Ao computar a atenção entre esses tokens, o modelo consegue naturalmente capturar interações globais com complexidade linear. Formalmente, seja $N_g$ o número de grupos e $C_g$ o número de canais em cada grupo, tem-se $C=N_g * C_g$. Assim:
+Já o mecanismo de atenção global, aplicado em grupos de canais, é ilustrado na \autoref{fig:davit-arch}(c). Ao invés de atuar sobre \textit{patches} espaciais, esta abordagem transpõe o vetor de características e aplica a atenção em tokens de canal. Cada token de canal representa uma visão abstrata global da imagem, pois abrange todos os locais espaciais. Ao computar a atenção entre esses tokens, o modelo consegue naturalmente capturar interações globais com complexidade linear. Formalmente, seja $N_g$ o número de grupos e $C_g$ o número de canais em cada grupo, tem-se que $C=N_g * C_g$. Assim:
 
 \begin{equation}
     \text{A}_{\text{channel}}(Q, K, V) = \lbrace \text{A}_{\text{group}}(Q_i,K_i,V_i)^T \rbrace^{N_g}_{i=0}
@@ -568,106 +562,67 @@ Já o mecanismo de atenção global, aplicado em grupos de canais, é ilustrado 
 
 onde $Q_i$, $K_i$, $V_i$ $\in \mathbb{R}^{P \times C_g}$ são os vetores de consulta, chave e valor correspondentes a cada grupo de canais.
 
-Existem três configurações diferentes da arquitetura DaViT para classificação de imagens, detecção de objetos e segmentação, que diferem na quantidade de camadas, tamanho do \textit{patch}, número de grupos em cada canal e número de cabeças de atenção. O modelo DaViT-B, que foi utilizado neste trabalho, é a maior configuração, com quase 88 milhões de parâmetros, e obteve acurácia top-1 de 84,6\% no ImageNet-1K (com entrada 224), superando modelos como o DeiT-B com distilação (83,4\%) e o Swin-B (83,5\%) \citep{Touvron2021, Liu2021}.
+Existem três configurações diferentes da arquitetura DaViT para classificação de imagens, detecção de objetos e segmentação, que diferem na quantidade de camadas, tamanho do \textit{patch}, número de grupos em cada canal e número de cabeças de atenção. O modelo DaViT-B é a maior configuração, com quase 88 milhões de parâmetros, e obteve acurácia top-1 de 84,6\% no ImageNet-1K (com entrada de 224×224 pixels), superando modelos como o DeiT-B com distilação (83,4\%) e o Swin-B (83,5\%) \cite{Touvron2021, Liu2021}.
 
 \subsection{Multi-Axis Vision Transformer (MaxViT)}
 
-A escalabilidade da auto-atenção em Transformers para imagens de alta resolução tem sido um desafio significativo, limitando sua aplicação em arquiteturas de visão de ponta. Para superar essa barreira, \cite{maxvit2022} propuseram o MaxViT, uma arquitetura que introduz um modelo de atenção eficiente e escalável, denominado auto-atenção multi-eixo (Max-SA), ou \textit{multi-axis self-attention} do inglês. Essa abordagem combina convoluções e um novo módulo de atenção que efetivamente captura interações espaciais locais e globais com complexidade apenas linear, permitindo que o modelo ``veja'' globalmente em todas as etapas da rede.
+A escalabilidade da auto-atenção em transformers para imagens de alta resolução tem sido um desafio significativo, limitando sua aplicação em arquiteturas de visão de ponta. Para superar essa barreira, \citeonline{maxvit2022} propuseram o MaxViT, uma arquitetura que introduz um modelo de atenção eficiente e escalável, denominado auto-atenção multi-eixo (\textit{multi-axis self-attention} - Max-SA). Essa abordagem combina convoluções e um novo módulo de atenção que efetivamente captura interações espaciais locais e globais com complexidade apenas linear, permitindo que o modelo ``veja'' globalmente em todas as etapas da rede.
 
-A \autoref{fig:max-sa} ilustra o conceito fundamental do Max-SA. O mecanismo de atenção em bloco (\textit{block-attention} do inglês) é responsável pelas interações locais. Seja $X \in \mathbb{R}^{H \times W \times C}$ a entrada de um mapa de características, a ideia é dividi-lo em um vetor na forma $(\frac{H}{P} \times \frac{W}{P} \text{, } P \times P \times C)$, representando a partição da imagem em janelas não sobrepostas de tamanho $P \times P$. A atenção é então aplicada dentro dessas janelas, permitindo que o modelo capture relações locais.
+A \autoref{fig:max-sa} ilustra o conceito fundamental do Max-SA. O mecanismo de atenção em bloco é responsável pelas interações locais. Seja $X \in \mathbb{R}^{H \times W \times C}$ a entrada de um mapa de características, a ideia é dividi-lo em um vetor na forma $(\frac{H}{P} \times \frac{W}{P} \text{, } P \times P \times C)$, representando a partição da imagem em janelas não sobrepostas de tamanho $P \times P$. A atenção é então aplicada dentro dessas janelas, permitindo que o modelo capture relações locais.
 
-O módulo de atenção em grade (\textit{grid-attention} do inglês), por outro lado, é responsável pelas interações globais do espaço 2D. Em vez de usar janelas de tamanho fixo, ela divide o mapa de características em uma grade uniforme na forma ($G \times G \text{, } \frac{H}{G} \times \frac{W}{G} \text{, } C$) usando um tamanho de grade fixo $G \times G$. Isso cria janelas de tamanho adaptativo, e a auto-atenção é aplicada entre os pixels que caem na mesma posição relativa dentro de cada célula da grade. Esse processo corresponde a uma mistura espacial dilatada e global dos tokens, permitindo um campo receptivo global com complexidade também linear.
+O módulo de atenção em grade, por outro lado, é responsável pelas interações globais do espaço 2D. Em vez de usar janelas de tamanho fixo, ela divide o mapa de características em uma grade uniforme na forma ($G \times G \text{, } \frac{H}{G} \times \frac{W}{G} \text{, } C$) usando um tamanho de grade fixo $G \times G$. Isso cria janelas de tamanho adaptativo, e a auto-atenção é aplicada entre os pixels que caem na mesma posição relativa dentro de cada célula da grade. Esse processo corresponde a uma mistura espacial dilatada e global dos tokens, permitindo um campo receptivo global com complexidade também linear.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=\linewidth]{figs/max-sa.png}
-    \caption{Módulo de atenção multi-eixo do MaxViT (Max-SA). O módulo \textit{block-attention} aplica atenção dentro das janelas, enquanto o módulo \textit{grid-attention} atua globalmente no espaço 2D. Fonte: \cite{maxvit2022}.}
+    \caption{Módulo de atenção multi-eixo do MaxViT (Max-SA). O módulo \textit{block-attention} aplica atenção dentro das janelas, enquanto o módulo \textit{grid-attention} atua globalmente no espaço 2D. Fonte: \citeonline{maxvit2022}.}
     \label{fig:max-sa}
 \end{figure}
 
-Esses dois mecanismos de atenção são combinados com uma camada de convolução MBConv para formar o bloco MaxViT, a unidade fundamental da arquitetura, conforme ilustrado na \autoref{fig:maxvit-arch}. Esses blocos são empilhados para formar a arquitetura MaxViT, que por sua vez possui algumas variantes, como MaxViT-T, MaxViT-B e MaxViT-L, que aumentam em número de blocos e canais em cada estágio para escalar a capacidade do modelo. O modelo MaxViT-L, por exemplo, estabeleceu um novo estado da arte na classificação do ImageNet-1K, alcançando uma acurácia top-1 de 85,17\% (com entrada 224), seguido pelo MaxViT-B com 84,95\%, superando também modelos anteriores como o DeiT-B, Swin-B e DaViT-B.
+Esses dois mecanismos de atenção são combinados com uma camada de convolução MBConv para formar o bloco MaxViT, a unidade fundamental da arquitetura, conforme ilustrado na \autoref{fig:maxvit-arch}. Esses blocos são empilhados para formar a arquitetura MaxViT, que por sua vez possui algumas variantes, como MaxViT-T, MaxViT-B e MaxViT-L, que aumentam em número de blocos e canais em cada estágio para escalar a capacidade do modelo. O modelo MaxViT-L, por exemplo, estabeleceu um novo estado da arte na classificação do ImageNet-1K, alcançando uma acurácia top-1 de 85,17\% (com entrada de 224×224 pixels), seguido pelo MaxViT-B com 84,95\%, superando também modelos anteriores como o DeiT-B (83,4\%), Swin-B (83,5\%) e DaViT-B (84,6\%).
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=\linewidth]{figs/maxvit-arch.png}
-    \caption{Arquitetura MaxViT. Fonte: \cite{maxvit2022}.}
+    \caption{Arquitetura MaxViT. Fonte: \citeonline{maxvit2022}.}
     \label{fig:maxvit-arch}
 \end{figure}
 
-\subsection{Global Context Vision Transformer (GC ViT)}
+\subsection{Global Context Vision Transformer (GCViT)}
 
-Em 2022, \cite{gcvit2022} introduziram o Global Context Vision Transformer (GC ViT), uma nova arquitetura que aumenta a eficiência de cômputo e parâmetros ao integrar módulos de auto-atenção de contexto global com a atenção local tradicional, modelando de forma eficaz as interações espaciais de curta e longa distância. Além disso, os autores propuseram o uso de blocos residuais Fused-MBConv modificados, que incorporam o viés indutivo convolucional na arquitetura.
+Em 2022, \citeonline{gcvit2022} introduziram o GCViT, uma nova arquitetura que aumenta a eficiência de cômputo e parâmetros ao integrar módulos de auto-atenção de contexto global com a atenção local tradicional, modelando de forma eficaz as interações espaciais de curta e longa distância. Além disso, os autores propuseram o uso de blocos residuais Fused-MBConv modificados, que incorporam o viés indutivo convolucional na arquitetura.
 
-O GC ViT surgiu para resolver as limitações dos modelos ViT anteriores, que apesar do progresso, o campo receptivo limitado das janelas locais restringia a capacidade de capturar informações de longo alcance, e esquemas de deslocamento de janelas apenas cubriam uma pequena fração do contexto global.
+O GCViT surgiu para resolver as limitações dos modelos ViT anteriores, que apesar do progresso, o campo receptivo limitado das janelas locais restringia a capacidade de capturar informações de longo alcance, e esquemas de deslocamento de janelas apenas cobriam uma pequena fração do contexto global.
 
-O diferencial do GC ViT é a sua capacidade de capturar informações globais sem a necessidade de operações custosas, como o deslocamento de janelas. Para isso, a cada estágio da sua arquitetura hierárquica, o modelo utiliza um gerador de consultas para extrair ``tokens de query globais''. Esses tokens globais, que contêm informações contextuais de diferentes regiões da imagem, são então compartilhados entre todos os módulos de atenção global para interagir com as representações locais de chave e valor. A \autoref{fig:gcvit-attention} ilustra a diferença entre a atenção local e a atenção global com queries globais.
+O diferencial do GCViT é a sua capacidade de capturar informações globais sem a necessidade de operações custosas, como o deslocamento de janelas. Para isso, a cada estágio da sua arquitetura hierárquica, o modelo utiliza um gerador de consultas para extrair ``tokens de consulta globais''. Esses tokens globais, que contêm informações contextuais de diferentes regiões da imagem, são então compartilhados entre todos os módulos de atenção global para interagir com as representações locais de chave e valor. A \autoref{fig:gcvit-attention} ilustra a diferença entre a atenção local e a atenção global com consultas globais.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=\linewidth]{figs/gcvit-attention.png}
-    \caption{Formulação da atenção no GC ViT. A atenção local (esquerda) é restrita a uma janela local. Na atenção global (direita), um gerador de queries extrai características de toda a imagem para formar tokens de query globais, que então interagem com os tokens de chave e valor locais, permitindo a captura de informações de longo alcance. Fonte: \cite{gcvit2022}.}
+    \caption{Formulação da atenção no GCViT. A atenção local (esquerda) é restrita a uma janela local. Na atenção global (direita), um gerador de consultas extrai características de toda a imagem para formar tokens de consulta globais, que então interagem com os tokens de chave e valor locais, permitindo a captura de informações de longo alcance. Fonte: \citeonline{gcvit2022}.}
     \label{fig:gcvit-attention}
 \end{figure}
 
-A arquitetura geral do GC ViT é apresentada na \autoref{fig:gcvit-arch}. A cada estágio, blocos de atenção local e global são aplicados de forma alternada. Enquanto a atenção local modela as informações de curto alcance, a atenção global utiliza os queries pré-calculados pelo gerador de queries para interagir com as representações locais de chave e valor dentro de cada janela. A atenção global é formulada como:
+A arquitetura geral do GCViT é apresentada na \autoref{fig:gcvit-arch}. A cada estágio, blocos de atenção local e global são aplicados de forma alternada. Enquanto a atenção local modela as informações de curto alcance, a atenção global utiliza os consultas pré-calculados pelo gerador de consultas para interagir com as representações locais de chave e valor dentro de cada janela. A atenção global é formulada como:
 
 \begin{equation}
     \text{Attention}(q_g, k, v) = \text{Softmax}\left(\frac{q_g k}{\sqrt{d}} + b\right)v \text{ ,}
 \end{equation}
 
-onde $q_g$ são os queries globais, $k$ e $v$ são as chaves e valores locais, $d$ é um fator de escala e $b$ é um viés de posição relativa aprendido. Adicionalmente, o GC ViT incorpora blocos Fused-MBConv modificados, tanto no gerador de queries quanto nos módulos de \textit{downsampling}, para introduzir um viés indutivo convolucional e modelar dependências entre canais.
+onde $q_g$ são os consultas globais, $k$ e $v$ são as chaves e valores locais, $d$ é um fator de escala e $b$ é um viés de posição relativa aprendido. Adicionalmente, o GCViT incorpora blocos Fused-MBConv modificados, tanto no gerador de consultas quanto nos módulos de \textit{downsampling}, para introduzir um viés indutivo convolucional e modelar dependências entre canais.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=\linewidth]{figs/gcvit-arch.png}
-    \caption{Arquitetura do GC ViT. A cada estágio, um gerador de tokens extrai queries globais que interagem com as representações locais de chave e valor para capturar contexto de longo alcance. Fonte: \cite{gcvit2022}.}
+    \caption{Arquitetura do GCViT. A cada estágio, um gerador de tokens extrai consultas globais que interagem com as representações locais de chave e valor para capturar contexto de longo alcance. Fonte: \citeonline{gcvit2022}.}
     \label{fig:gcvit-arch}
 \end{figure}
 
-O GC ViT é apresentado em diversas configurações, que variam em capacidade. Na classificação no ImageNet-1K, as variantes GC ViT-S (51 milhões de parâmetros) e GC ViT-B (90 milhões de parâmetros) atingiram acurácias top-1 de 84,3\% e 85,0\%, respectivamente, com resolução de 224×224 e sem pré-treinamento. Esses resultados superam modelos de tamanho comparável, como o Swin-B (83,3\%) e o MaxViT-B (84,9\%).
-
-% \section{Visão Computacional}\label{sec:visao-computacional}
-
-% A visão computacional é um campo da inteligência artificial (IA) e da ciência da computação (\autoref{definicao-cv}) que estuda como as máquinas podem adquirir, processar, analisar e compreender imagens e vídeos do mundo real, com o objetivo de produzir representações visuais ou descrever o conteúdo visual de forma automática \cite{huggingface2024}.
-
-% \begin{figure}[h]
-%     \centering
-%     \includegraphics[width=\linewidth]{figs/CV_in_defintiion.png}
-%     \caption{Definição de visão computacional. Fonte: \cite{huggingface2024}.}
-%     \label{definicao-cv}
-% \end{figure}
-
-% Essa tecnologia tem se beneficiado de avanços significativos das últimas décadas, incluindo o desenvolvimento e aperfeiçoamento de algoritmos de aprendizado profundo, que permitem a extração de características complexas e abstratas de imagens e vídeos, o aumento da capacidade computacional com o uso de GPUs (Graphics Processing Units), e o desenvolvimento de grandes conjuntos de dados, como o ImageNet, que contém milhões de imagens rotuladas em centenas de categorias \cite{Esteva2021}.
-
-% O aprendizado profundo revolucionou a forma como sistemas computacionais processam dados brutos. Tradicionalmente, a construção de modelos exigia conhecimento especializado para extrair manualmente características relevantes dos dados, como bordas, texturas e formas. Enquanto isso, o aprendizado profundo permite que redes neurais descubram automaticamente essas representações em vários níveis de abstração. Esse avanço tem levado a conquistas notáveis em diversas áreas, como reconhecimento de fala, processamento de linguagem natural (PLN) e visão computacional [https://www.cs.toronto.edu/~hinton/absps/NatureDeepReview.pdf].
-
-% Em 1963, Larry Roberts, um dos pioneiros da visão computacional, propôs métodos capazes de compreender objetos em 3D a partir de imagens 2D, representando o marco inicial da área [Machine Perception of Thre Dimensional Solids]. Na próxima década, nos anos 1970 e 1980, pesquisadores desenvolveram algoritmos para detectar bordas e cantos em imagens, modelagem poliédrica e não poliédrica, representação de objetos como interconexões de estruturas menores, fluxo óptico e estimativa de movimento [computer vision: algorithms and applications]. Além disso, a década de 1980 foi marcada pela publicação do artigo "Learning representations by back-propagating errors" de David Rumelhart, Geoffrey Hinton e Ronald Williams, que introduziu o algoritmo de retropropagação, que é amplamente utilizado em modelos de aprendizado profundo até hoje [NatureDeepReview, Learning representations by back-propagating errors].
-
-% No entanto, foi apenas na decada de 2010 que o aprendizado profundo se tornou popular, com o desenvolvimento de arquiteturas de redes neurais profundas, como as redes neurais convolucionais (CNNs) e as redes neurais recorrentes (RNNs), amplamente adotadas pela comunidade de visão computacional [https://www.cs.toronto.edu/~hinton/absps/NatureDeepReview.pdf]. Em 2012, a equipe de Geoffrey Hinton, chamada de Super Vision, venceu a competição ImageNet Large Scale Visual Recognition Challenge (ILSVRC) com a rede neural convolucional AlexNet, que alcançou resultados significativamente melhores do que os métodos tradicionais de visão computacional em tarefas de classificação e detecção de objetos em imagens [https://arxiv.org/pdf/1409.0575]. Esse avanço marcou a início da era do aprendizado profundo na visão computacional, permitindo a crição de modelos mais sofisticados e precisos, capazes de superar a capacidade humana em tarefas visuais.
-
-% Paralelamente, houve uma evolução significativa em hardware computacional, com o desenvolvimento de GPUs, que permitiu treinar modelos de aprendizado profundo em grandes conjuntos de dados de forma mais rápida e eficiente. As GPUs, inicialmente projetadas para renderização de gráficos em jogos e aplicações de design, foram adaptadas para acelerar cálculos matriciais e aplicações computacionalmente intensivas, incluindo o treinamento de redes neurais profundas, devido à sua capacidade de processar informação em paralelo [High performance convolutional neural networks for document processing, Forecasting GPU Performance for Deep Learning Training and Inference]. Em 2009, a equipe de Andrew Ng, da Universidade de Stanford, demonstrou que o uso de GPUs acelerou o treinamento de redes neurais profundas em 70 vezes em comparação com CPUs multi-core, o que permitiu a criação de modelos mais complexos em menos tempo [Large-scale Deep Unsupervised Learning using Graphics Processors]. A partir de então, GPUs se tornaram uma ferramenta essencial para pesquisadores e instituições que trabalham com aprendizado profundo, trazendo mais agilidade e eficiência para o treinamento de modelos.
-
-% Apesar dos avanços em algoritmos de aprendizado profundo e hardware computacional, a visão computacional ainda enfrentava desafios quanto à falta de grandes conjuntos de dados rotulados para treinar os modelos de visão computacional. No entanto, em 2009 foi introduzido o ImageNet, um conjunto de dados com milhões de imagens em centenas de categorias, construído sobre a base de dados WordNet, que contém sinônimos e relações semânticas entre palavras. Com isso, o ImageNet se tornou o maior e mais diverso conjunto de dados de imagens disponível na época [ImageNet: A Large-Scale Hierarchical Image Database]. Mais tarde, em 2012, o ImageNet serviu como base para o ImageNet Large Scale Visual Recognition Challenge (ILSVRC), uma competição anual que avalia algoritmos de classificação e detecção de objetos em larga escala. O desafio foi marcado pela vitória da equipe de Geoffrey Hinton, onde propuseram a rede neural convolucional profunda chamada AlexNet capaz de alcançar altas taxas de acurácia e redução significativa na taxa de erro, marcando assim o início da era do aprendizado profundo e solidificando o papel do ImageNet como catalisador para inovações subsequentes na área [ImageNet Large Scale Visual Recognition Challenge].
-
-% [tecnicas da visao computacional]
-
-% [aplicacoes gerais]
-
-% \section{Visão Computacional na Saúde}\label{sec:visao-computacional-saude}
-
-% No setor da saúde, a visão computacional tem desempenhado um papel crucial na automação de tarefas clínicas, diagnóstico de doenças, monitoramento de pacientes e tratamentos médicos. A análise de imagens médicas, como radiografias, tomografias, ressonâncias magnéticas e ultrassonografias, é uma das principais aplicações da visão computacional na saúde. A partir dessas imagens, é possível detectar e classificar patologias, monitorar o progresso de doenças, avaliar a eficácia de tratamentos e até mesmo recomendar tratamentos personalizados para pacientes. Além disso, a visão computacional também tem sido utilizada para automatizar tarefas clínicas, como a identificação de pacientes, a análise de exames laboratoriais e a triagem de pacientes em hospitais e clínicas \cite{JAVAID2024792}.
-
-% Na área da saúde, a visão computacional tem sido muito utilizada para melhorar a acurácia de diagnósticos, automatização de tarefas clínicas e tratamentos médicos. Ao analisar imagens médicas, como radiografias, tomografias, ressonâncias magnéticas e ultrassonografias, a máquina pode detectar e classificar patologias com maior precisão e rapidez do que um médico humano. Além disso, a visão computacional pode ser utilizada para monitorar o progresso de doenças, monitorar a eficácia de tratamentos e até mesmo recomendar tratamentos personalizados para pacientes \cite{JAVAID2024792}.
-
-% \section{Aprendizado Profundo}\label{sec:aprendizado-profundo}
-
-% O uso de modelos de aprendizado profundo baseados em redes neurais convolucionais (RNCs) tem ganhado espaço em tarefas de visão computacional. Aprendizado por transferência também é amplamente utilizado para reduzir o uso de recursos computacionais para tarefas que já são executadas por modelos existentes, como as redes residuais (ResNet), Visual Geometry Group (VGG) e as redes densamente conectadas (DenseNet) \cite{Tariq2023}. Enquanto o uso de RNCs tem se mostrado útil em soluções de detecção em imagens médicas, a operação de convolução limita o relacionamento entre pixels distantes numa imagem. Para tanto, a habilidade de codificar dependências de longo alcance tem sido possível graças às arquiteturas de aprendizado profundas baseadas em atenção, como o Vision Transformer (ViT). Tais modelos de ViT têm sido empregados para várias tarefas, incluindo classificação e detecção de objetos \cite{Shamshad2023}.
-
-% \section{Transferência de Aprendizado e Ajuste Fino}\label{sec:ajuste-fino}
+O GCViT é apresentado em diversas configurações, que variam em capacidade. Na classificação no ImageNet-1K, as variantes GCViT-S (51 milhões de parâmetros) e GCViT-B (90 milhões de parâmetros) atingiram acurácias top-1 de 84,3\% e 85,0\%, respectivamente, com resolução de 224×224 pixels e sem pré-treinamento. Esses resultados superam modelos de tamanho comparável, como o Swin-B (83,5\%) e o MaxViT-B (84,9\%).
 
 \section{Funções de Perda} \label{sec:funcoes-perda}
 
-A função de perda é um componente essencial no treinamento de modelos, pois orienta a processo de ajuste dos pesos da rede neural ao quantificar o erro entre as previsões do modelo e os rótulos verdadeiros. Neste trabalho, foram utilizadas duas funções de perda com o objetivo de compará-las: a entropia cruzada (\textit{cross-entropy loss}) e a CORN (\textit{Conditional Ordinal Regression for Neural Networks}).
+A função de perda é um componente essencial no treinamento de modelos, pois guia o ajuste dos pesos da rede neural ao quantificar a diferença entre as previsões e os rótulos reais. Neste trabalho, foram utilizadas duas funções de perda com o objetivo de compará-las: a entropia cruzada (ou \textit{cross-entropy}, do inglês) e a \textit{Conditional Ordinal Regression for Neural Networks} (CORN).
 
 \subsection{Entropia Cruzada}
 
@@ -679,13 +634,13 @@ A entropia cruzada é uma opção comum para problemas de classificação, pois 
 
 onde $y_{k}^{(i)}$ é a probabilidade real da classe $k$ para o exemplo $i$.
 
-Ao penalizar mais fortemente casos em que o modelo está pouco confiante para a classe correta, a entropia cruzada de modo geral ajuda a melhorar a precisão do modelo para tarefas de classificação. No entanto, ela não leva em consideração a natureza ordinal das classes, o que se torna uma limitação em problemas onde a ordem das classes é relevante, como no problema abordado neste trabalho.
+Ao penalizar mais fortemente casos em que o modelo apresenta baixa confiança na classe correta, a entropia cruzada, de modo geral, contribui para aumentar a precisão do modelo para tarefas de classificação. No entanto, ela não leva em consideração a natureza ordinal das classes, o que constitui uma limitação em problemas onde a ordem das classes é relevante, como no problema abordado neste trabalho.
 
-\subsection{CORN (Conditional Ordinal Regression for Neural Networks)}
+\subsection{Conditional Ordinal Regression for Neural Networks (CORN)}
 
-\cite{Shi_2023} propuseram um framework de regressão ordinal para redes neurais profundas, chamado CORN, que é projetado para lidar com tarefas de classificação ordinal, mantendo a consistência ordinal entre as classes.
+\citeonline{Shi_2023} propuseram um framework de regressão ordinal para redes neurais profundas, chamado CORN, que é projetado para lidar com tarefas de classificação ordinal, mantendo a consistência ordinal entre as classes.
 
-Dado um problema de classificação com $K$ classes e conjunto de treino $D = \{(x^{[i]}, y^{[i]})\}_{i=1}^{N}$, onde $x^{[i]}$ é a entrada e $y^{[i]}$ é o rótulo ordinal, o CORN divide o problema de classificação ordinal em $K-1$ tarefas de classificação binária associadas com classes $r_1$, $r_2$, $...$, $r_K$, onde $y_{k}^{[i]} \in \lbrace 0 \text{,} 1 \rbrace$ indica se o exemplo $y^{[i]}$ excede a classe $r_k$ ou não (\autoref{fig:corn-nn}).
+Dado um problema de classificação com $K$ classes e um conjunto de treino $D = \{(x^{[i]}, y^{[i]})\}_{i=1}^{N}$, onde $x^{[i]}$ é a entrada e $y^{[i]}$ é o rótulo ordinal, o CORN divide o problema de classificação ordinal em $K-1$ tarefas de classificação binária associadas às classes $r_1$, $r_2$, $...$, $r_K$, onde $y_{k}^{[i]} \in \lbrace 0 \text{,} 1 \rbrace$ indica se o exemplo $y^{[i]}$ excede a classe $r_k$ ou não (\autoref{fig:corn-nn}).
 
 A saída da $k$-ésima tarefa binária $f_k (x^{[i]})$ representa a probabilidade condicional de que o exemplo $x^{[i]}$ exceda a classe $r_k$, e é calculada como:
 
@@ -695,10 +650,10 @@ A saída da $k$-ésima tarefa binária $f_k (x^{[i]})$ representa a probabilidad
 
 onde os eventos estão aninhados: $\lbrace y^{[i]} > r_k \rbrace \subseteq \lbrace y^{[i]} > r_{k-1} \rbrace$.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=\linewidth]{figs/corn-nn.png}
-    \caption{Arquitetura do CORN. Fonte: \cite{Shi_2023}.}
+    \caption{Arquitetura do framework CORN. Fonte: \citeonline{Shi_2023}.}
     \label{fig:corn-nn}
 \end{figure}
 
@@ -734,7 +689,7 @@ onde a classe predita será $r_{q^{[i]}}$.
 
 \section{Avaliação e métricas de desempenho} \label{sec:avaliacao-metricas}
 
-Para avaliar o desempenho dos modelos na tarefa de classificação da severidade da OA de joelho, foram empregadas as métricas mais comuns, como acurácia, precisão, revocação, F1-score e \textit{Quadratic Weighted Kappa} (QWK). A matriz de confusão foi utilizada para visualizar a distribuição das previsões corretas e incorretas entre as diferentes classes. Além disso, para o cenário de classificação binária, foi utilizada a métrica AUC-ROC (Área Sob a Curva da Característica de Operação do Receptor), que avalia a capacidade do modelo em distinguir entre duas classes. Essas métricas são amplamente utilizadas em problemas de classificação e fornecem uma visão abrangente do desempenho dos modelos. Para o cálculo dessas métricas, foram adotados os seguintes acrônimos nas respectivas fórmulas:
+Para avaliar o desempenho dos modelos na tarefa de classificação da severidade da OA de joelho, foram empregadas métricas amplamente utilizadas, como acurácia, precisão, revocação, F1-score e \textit{Quadratic Weighted Kappa} (QWK). A matriz de confusão foi utilizada para visualizar a distribuição das previsões corretas e incorretas entre as diferentes classes, enquanto a métrica AUC-ROC (Área Sob a Curva da Característica de Operação do Receptor) avaliou a capacidade do modelo de distinguir uma classe em relação às demais. Essas métricas fornecem uma visão abrangente do desempenho dos modelos. Para o cálculo delas, foram adotados os seguintes acrônimos nas respectivas fórmulas:
 
 \begin{itemize}
     \item $TP$ é o número de verdadeiros positivos,
@@ -758,7 +713,7 @@ A precisão indica a proporção de exemplos classificados como positivos que re
 \end{equation}
 
 \subsection{Revocação}
-A revocação (ou \textit{recall} do inglês) mede a capacidade do modelo de identificar corretamente todos os exemplos positivos. É definido como:
+A revocação (ou \textit{recall}, do inglês) mede a capacidade do modelo de identificar corretamente todos os exemplos positivos. É definida como:
 
 \begin{equation}
     \text{Revocação} = \frac{TP}{TP + FN}
@@ -768,7 +723,7 @@ A revocação (ou \textit{recall} do inglês) mede a capacidade do modelo de ide
 O F1-score é a média harmônica entre a precisão e a revocação, e é uma métrica útil quando busca-se um equilíbrio entre os dois. A fórmula do F1-score é:
 
 \begin{equation}
-    F1 = 2 \cdot \frac{\text{Precisão} \cdot \text{Recall}}{\text{Precisão} + \text{Recall}}
+    F1 = 2 \cdot \frac{\text{Precisão} \cdot \text{Revocação}}{\text{Precisão} + \text{Revocação}}
 \end{equation}
 
 \subsection{Quadratic Weighted Kappa (QWK)}
@@ -796,7 +751,7 @@ A matriz de confusão é uma ferramenta para visualizar o desempenho do modelo d
 \]
 
 \subsection{AUC-ROC}
-Para tarefas de classificação binária, a métrica AUC-ROC (Área Sob a Curva da Característica de Operação do Receptor) é bastante útil, pois mede a capacidade do modelo de separar as classes positivas e negativas. A curva ROC é um gráfico que exibe a taxa de verdadeiros positivos (sensibilidade) em função da taxa de falsos positivos. A AUC, por sua vez, quantifica a área sob essa curva, variando de 0 a 1, onde 0,5 representa um modelo aleatório e 1 representa um modelo perfeito. A AUC-ROC é calculada pela seguinte integral:
+A métrica AUC-ROC (Área Sob a Curva da Característica de Operação do Receptor) é bastante útil, pois mede a capacidade do modelo de separar as classes positivas e negativas. A curva ROC é um gráfico que exibe a taxa de verdadeiros positivos (sensibilidade) em função da taxa de falsos positivos. A AUC, por sua vez, quantifica a área sob essa curva, variando de 0 a 1, onde 0,5 representa um modelo aleatório e 1 representa um modelo perfeito. A AUC-ROC é calculada pela seguinte integral:
 
 \begin{equation}
     \text{AUC-ROC} = \int_{0}^{1} \text{TPR}(FPR) \text{ d}FPR \text{,}
@@ -808,19 +763,17 @@ onde $TPR$ é a taxa de verdadeiros positivos e $FPR$ é a taxa de falsos positi
 
 Além da performance em termos de métricas relacionadas à classificação, a eficiência computacional constitui um aspecto fundamental na avaliação de modelos de aprendizado profundo, especialmente em contextos com restrições de tempo ou recursos computacionais. Essa métrica torna-se ainda mais relevante quando se considera a aplicabilidade clínica dos modelos, onde a rapidez na inferência pode ser crucial para a tomada de decisão em tempo real.
 
-Para mensurar a eficiência computacional, foram considerados dois aspectos principais: o tempo de treinamento e a quantidade de operações computacionais realizadas por cada modelo. O tempo de treinamento, medido em minutos, foi calculado por meio da diferença entre os instantes de término e início do processo de treinamento:
+Para mensurar a eficiência computacional, foram considerados três aspectos principais: o tempo de treinamento, o tempo de inferência e a quantidade de operações computacionais realizadas por cada modelo. Os tempos de treinamento e inferência foram calculados por meio da diferença entre os instantes de término e início de cada processo:
 
 \begin{equation}
-    \text{Tempo de Treinamento} = \text{Tempo Final} - \text{Tempo Inicial} \text{.}
+    \text{Tempo Total} = \text{Tempo Final} - \text{Tempo Inicial} \text{.}
 \end{equation}
 
-A segunda métrica adotada foi a quantidade estimada de operações de ponto flutuante, conhecida como FLOPs (\textit{Floating Point Operations} do inglês), uma medida amplamente utilizada para quantificar o custo computacional associado à execução de modelos de redes neurais. A quantidade de FLOPs está diretamente relacionada à complexidade arquitetural do modelo, abrangendo as operações realizadas durante as fases de \textit{forward} e \textit{backward}, bem como o número de amostras e épocas de treinamento \citep{Lohn2022}.
-
-Neste trabalho, a estimativa de FLOPs foi realizada com o auxílio da biblioteca \textit{FLOPs Counter PyTorch} \citep{ptflops}, que permite a análise do custo computacional por meio da instrumentação do modelo em PyTorch. Essa análise visa fornecer uma perspectiva complementar à avaliação de desempenho, destacando modelos que, além de eficazes, também são eficientes em termos de recursos computacionais, o que é especialmente relevante para implementação em ambientes com capacidade limitada, como dispositivos embarcados ou sistemas hospitalares com restrições de hardware.
+A terceira métrica adotada foi a quantidade estimada de operações de ponto flutuante, conhecida como \textit{Floating Point Operations} (FLOPs), uma medida amplamente utilizada para quantificar o custo computacional associado à execução de modelos de redes neurais. A quantidade de FLOPs está diretamente relacionada à complexidade arquitetural do modelo, abrangendo as operações realizadas durante as fases de \textit{forward} e \textit{backward}, bem como o número de amostras e épocas de treinamento \cite{Lohn2022}.
 
 \subsection{Predição Conformal} \label{sec:conformal-prediction}
 
-A predição conformal é uma técnica estatística que fornece intervalos de confiança às previsões de qualquer modelo de aprendizado de máquina. Dada uma probabilidade de erro $\epsilon$, o método gera, para cada nova entrada, um conjunto de possíveis rótulos que inclui a predição $\hat{y}$ do modelo, com garantia teórica de que o rótulo verdadeiro estará nesse conjunto com probabilidade de ao menos $1 - \epsilon$ \citep{angelopoulos2021gentle}.
+A predição conformal é uma técnica estatística que fornece intervalos de confiança às previsões de qualquer modelo de aprendizado de máquina. Dada uma probabilidade de erro $\epsilon$, o método gera, para cada nova entrada, um conjunto de possíveis rótulos que inclui a predição $\hat{y}$ do modelo, com garantia teórica de que o rótulo verdadeiro estará nesse conjunto com probabilidade de ao menos $1 - \epsilon$ \cite{angelopoulos2021gentle}.
 
 Considere um modelo classificador $\hat{f}$ e um conjunto de imagens classificadas em uma das $K$ classes possíveis. Para cada imagem $x$, o modelo atribui uma distribuição de probabilidades $\hat{f}(x) \in [0,1]^K$ sobre as classes, geralmente obtida por meio da função \textit{softmax}. Com base nessas probabilidades, utiliza-se um conjunto de calibração para então encontrar o conjunto de predição. Em resumo, a predição conformal é realizada da seguinte forma:
 
@@ -838,7 +791,7 @@ Considere um modelo classificador $\hat{f}$ e um conjunto de imagens classificad
     \end{equation}
 \end{enumerate}
 
-A predição conformal tem sido aplicada em diversas áreas, incluindo ciência forense, biometria e medicina, onde o objetivo é fornecer previsões mais confiáveis sobre a saída do modelo \citep{Fontana2023}. Por exemplo, \cite{Pereira2020} utilizaram a predição conformal para prever o intervalo de confiança da probabilidade de que pacientes com comprometimento cognitivo leve evoluam para demência.
+A predição conformal tem sido aplicada em diversas áreas, incluindo ciência forense, biometria e medicina, onde o objetivo é fornecer previsões mais confiáveis sobre a saída do modelo \cite{Fontana2023}. Por exemplo, \citeonline{Pereira2020} utilizaram a predição conformal para prever o intervalo de confiança da probabilidade de que pacientes com comprometimento cognitivo leve evoluam para demência.
 
 \subsubsection{Verificação de corretude}
 
@@ -846,7 +799,7 @@ A verificação de corretude é uma técnica para testar se a predição conform
 
 \begin{theorem}
 \label{theorem:conformal-prediction}
-    (Garantia de cobertura conformal; \cite{Vovk1999}) Suponha $(X_i,Y_i)_{i=1,...,n}$ e $(X_\text{test},Y_\text{test})$ são independentes e identicamente distribuídos ($i.i.d.$) e defina $\hat{q}$ como o quantil ${\lceil (n+1)(1-\epsilon) \rceil}/n$ e $C(X_\text{test}) = \lbrace y : s(X_\text{test},y) \leq \hat{q}$. Então, o segue que:
+    (Garantia de cobertura conformal; \citeonline{Vovk1999}) Suponha $(X_i,Y_i)_{i=1,...,n}$ e $(X_\text{test},Y_\text{test})$ são independentes e identicamente distribuídos ($i.i.d.$) e defina $\hat{q}$ como o quantil ${\lceil (n+1)(1-\epsilon) \rceil}/n$ e $C(X_\text{test}) = \lbrace y : s(X_\text{test},y) \leq \hat{q} \rbrace$. Então, segue que:
 
     \begin{equation}
         P(Y_\text{test} \in C(X_\text{test})) \geq 1 - \epsilon.
@@ -863,17 +816,17 @@ onde $N$ é o número de casos no conjunto de teste e $\mathbb{I}$ é a função
 
 \subsection{Método de visualização}
 
-A visualização é uma técnica importante para avaliar quais foram as regiões da imagens que ajudaram o modelo a fazer determinada previsão. O método de visualização Grad-CAM (\textit{Gradient-weighted Class Activation Mapping}) é uma técnica usada para interpretar e visualizar as decisões feitas por redes neurais convolucionais (RNCs). Em tarefas de classificação, como a avaliação da severidade da OA de joelho, entender quais regiões da radiografia contribuíram para a decisão do modelo é crucial para a validação e a confiança nos resultados do modelo.
+A visualização é uma técnica importante para avaliar quais foram as regiões da imagens que ajudaram o modelo a fazer determinada previsão. O método de visualização \textit{Gradient-weighted Class Activation Mapping} (Grad-CAM) é uma técnica usada para interpretar e visualizar as decisões feitas por RNCs e ViTs. Em tarefas de classificação, como a avaliação da severidade da OA de joelho, entender quais regiões da radiografia contribuíram para a decisão do modelo é crucial para a validação e a confiança nos resultados do modelo.
 
-O Grad-CAM fornece mapas de ativação que mostram quais partes da imagem foram mais influentes para a predição de uma classe específica \citep{Selvaraju2016}. Para isso, essa técnica utiliza os gradientes da saída da camada final da rede em relação às ativações das camadas intermediárias para gerar uma visualização da importância das regiões da imagem.
+O Grad-CAM fornece mapas de ativação que mostram quais partes da imagem foram mais influentes para a predição de uma classe específica \cite{Selvaraju2016}. Para isso, essa técnica utiliza os gradientes da saída da camada final da rede em relação às ativações das camadas intermediárias para gerar uma visualização da importância das regiões da imagem.
 
-Primeiro, é gerado um mapa de localização a partir da RNC para classificar a imagem usando a técnica do \textit{Class Activation Mapping} (CAM). O CAM utiliza mapas de características convolucionais, que são globalmente agrupados usando a técnica de \textit{Global Average Pooling} (GAP) e transformados linearmente para produzir uma pontuação \( y_c \) para cada classe \( c \). Especificamente, se a penúltima camada da RNC produz \( K \) mapas de características \( A_k \in \mathbb{R}^{u \times v} \), esses mapas são agrupados espacialmente e combinados linearmente para gerar a pontuação:
+Primeiro, é gerado um mapa de localização a partir da rede para classificar a imagem usando a técnica do \textit{Class Activation Mapping} (CAM). O CAM utiliza mapas de características convolucionais, que são globalmente agrupados usando a técnica de \textit{Global Average Pooling} (GAP) e transformados linearmente para produzir uma pontuação \( y_c \) para cada classe \( c \). Especificamente, se a penúltima camada da rede produz \( K \) mapas de características \( A_k \in \mathbb{R}^{u \times v} \), esses mapas são agrupados espacialmente e combinados linearmente para gerar a pontuação:
 
 \[
 y_c = \sum_k w_{ck} \frac{1}{Z} \sum_i \sum_j A_{k_{ij}}
 \]
 
-Para produzir o mapa de localização \( L_c^{CAM} \) para a classe \( c \), CAM calcula a combinação linear dos mapas de características finais usando os pesos aprendidos da camada final:
+Para produzir o mapa de localização \( L_c^{CAM} \) para a classe \( c \), a CAM calcula a combinação linear dos mapas de características finais usando os pesos aprendidos da camada final:
 
 \[
 L_c^{CAM} = \sum_k w_{ck} A_k
@@ -894,5 +847,3 @@ A fórmula para o Grad-CAM pode ser expressa como:
 \[
 \text{Grad-CAM} = \text{ReLU} \left( \sum_{k} \alpha_{k}^{c} A^{k} \right)
 \]
-
-Para esta pesquisa, a utilização do Grad-CAM permitiu a visualização das regiões das radiografias que o modelo considera mais relevantes para suas decisões de classificação. Isso não só facilita a interpretação dos resultados do modelo, mas também ajuda na validação de sua eficácia ao garantir que o modelo está focando nas áreas corretas da imagem, como o espaço articular do joelho.

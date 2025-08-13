@@ -40,7 +40,6 @@
 \usepackage{microtype} 			% Melhorias de justificação
 % ---------------------
 
-\usepackage{graphicx}
 \usepackage{array}
 
 % ---------------------
@@ -48,7 +47,7 @@
 % ---------------------
 \usepackage{lipsum}						% Geração de dummy text
 \usepackage{amsmath,amssymb,mathrsfs}	% Comandos matemáticos avançados 
-% \usepackage{setspace}  					% Para permitir espaçamento simples, 1 1/2 e duplo
+\usepackage{setspace}  					% Para permitir espaçamento simples, 1 1/2 e duplo
 \usepackage{verbatim}					% Para poder usar o ambiente "comment"
 \usepackage{tabularx} 					% Para poder ter tabelas com colunas de largura auto-ajustável
 \usepackage{afterpage} 					% Para executar um comando depois do fim da página corrente
@@ -60,11 +59,12 @@
 % Pacotes de CITAÇÕES
 % ---------------------
 \usepackage[brazilian,hyperpageref]{backref}	% Paginas com as citações na bibl
-% \usepackage[alf]{abntex2cite}				% Citações padrão ABNT (alfa)
+\usepackage[alf]{abntex2cite}				% Citações padrão ABNT (alfa)
 % \usepackage[num]{abntex2cite}				% Citações padrão ABNT (numericas)
 % \usepackage[style=authoryear]{biblatex} % Citações padrão ABNT (numericas)
-\usepackage[authoryear,round]{natbib}
-\bibliographystyle{plainnat}
+% \usepackage[authoryear,round]{natbib}
+% \bibliographystyle{plainnat}
+\bibliographystyle{abntex2-alf} % Para citações no estilo autor-data
 % ---------------------
 
 \usepackage{rotating}
@@ -107,6 +107,8 @@
 \renewcommand{\ABNTEXsectionfont}{\rmfamily\bfseries\small}
 % \renewcommand{\ABNTEXchapterfont}{\rmfamily\bfseries\small}
 
+\usepackage{hyperref}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%  INICIO DO DOCUMENTO  %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -130,13 +132,13 @@
 % \include{pretextual/catalografica}
 
 % Inserir Folha de Aprovação
-% \include{pretextual/assinaturas}
+\include{pretextual/assinaturas}
 
 % Dedicatória
-% \include{pretextual/dedicatoria}
+\include{pretextual/dedicatoria}
 
 % Agradecimentos
-% \include{pretextual/agradecimentos}
+\include{pretextual/agradecimentos}
 
 % Epígrafe
 % \include{pretextual/epigrafe}
@@ -208,7 +210,7 @@
 % PARTE
 % \part{Parte Final}
 \include{capitulos/resultados}
-% \include{capitulos/conclusao}
+\include{capitulos/conclusao}
 
 % ----------------------------------------------------------
 % ELEMENTOS PÓS-TEXTUAIS (Referências, Glossário, Apêndices)

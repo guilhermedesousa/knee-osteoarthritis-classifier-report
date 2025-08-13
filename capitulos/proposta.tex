@@ -11,7 +11,7 @@ Esta seção descreve a metodologia desenvolvida para comparar um conjunto de mo
 
 \section{Coleta de dados}
 
-A base para qualquer modelo de aprendizado profundo é um conjunto de dados de alta qualidade. Para este estudo, foi utilizado o \textit{dataset} de radiografias de joelho da Osteoarthritis Initiative (OAI), obtido através da plataforma Kaggle \citep{dataset-kaggle}. Este conjunto de dados é amplamente utilizado na literatura científica \citep{Tariq2023, Mohammed2023} e consiste em 9.786 radiografias classificadas por especialistas segundo a escala de Kellgren-Lawrence (KL), cuja distribuição é detalhada na \autoref{dataset-summary}. A sua vasta dimensão e anotações confiáveis fornecem uma base sólida para o treinamento e a validação dos modelos.
+A base para qualquer modelo de aprendizado profundo é um conjunto de dados de alta qualidade. Para este estudo, foi utilizado o \textit{dataset} de radiografias de joelho da Osteoarthritis Initiative (OAI), obtido através da plataforma Kaggle \cite{dataset-kaggle}. Este conjunto de dados é amplamente utilizado na literatura científica \cite{Tariq2023, Mohammed2023} e consiste em 9.786 radiografias classificadas por especialistas segundo a escala de Kellgren-Lawrence (KL), cuja distribuição é detalhada na \autoref{dataset-summary}. A sua vasta dimensão e anotações confiáveis fornecem uma base sólida para o treinamento e a validação dos modelos.
 
 \begin{table}[ht]
     \centering
@@ -51,7 +51,7 @@ Neste estudo, o pré-processamento das radiografias foi estruturado em duas etap
 
 Para padronizar o contraste entre radiografias que podem ter sido obtidas com diferentes equipamentos e configurações, a equalização de histograma foi aplicada. Essa técnica redistribui a intensidade dos pixels, realçando detalhes sutis nas estruturas ósseas e no espaço articular, que são cruciais para a identificação de características da OA.
 
-A implementação foi realizada com a biblioteca OpenCV \citep{opencv} do Python. A \autoref{fig:histogram-equalization}(a) ilustra uma radiografia original do joelho, enquanto a \autoref{fig:histogram-equalization}(b) mostra a mesma radiografia após a equalização de histograma. É possível observar que a equalização melhorou o contraste da imagem, tornando as estruturas ósseas mais visíveis. As respectivas distribuições de intensidade dos pixels antes e depois da equalização são apresentadas na \autoref{fig:histogram-equalization-histogram}.
+A implementação foi realizada com a biblioteca OpenCV \cite{opencv} do Python. A \autoref{fig:histogram-equalization}(a) ilustra uma radiografia original do joelho, enquanto a \autoref{fig:histogram-equalization}(b) mostra a mesma radiografia após a equalização de histograma. É possível observar que a equalização melhorou o contraste da imagem, tornando as estruturas ósseas mais visíveis. As respectivas distribuições de intensidade dos pixels antes e depois da equalização são apresentadas na \autoref{fig:histogram-equalization-histogram}.
 
 \begin{figure}[ht]
     \centering
@@ -87,7 +87,7 @@ A implementação foi realizada com a biblioteca OpenCV \citep{opencv} do Python
 
 A normalização dos valores dos pixels é um passo crítico para a eficácia do \textit{transfer learning}. Os valores de cada canal de cor foram padronizados para uma média de 0 e desvio padrão de 1.
 
-Neste estudo, a normalização foi implementada em todos os subconjuntos de dados com a função \texttt{transforms.Normalize} da biblioteca PyTorch \citep{pytorch}, que aplica a normalização em cada canal (RGB), subtraindo a média e dividindo pelo desvio padrão. Para modelos RNC, como ResNet e VGG, utilizaram-se os valores convencionais para manter a compatibilidade com o pré-treinamento no ImageNet:
+Neste estudo, a normalização foi implementada em todos os subconjuntos de dados com a função \texttt{transforms.Normalize} da biblioteca PyTorch \cite{pytorch}, que aplica a normalização em cada canal (RGB), subtraindo a média e dividindo pelo desvio padrão. Para modelos RNC, como ResNet e VGG, utilizaram-se os valores convencionais para manter a compatibilidade com o pré-treinamento no ImageNet:
 
 \begin{itemize}
     \item Média: 0.485, 0.456 e 0.406
@@ -110,7 +110,7 @@ A técnica foi aplicada apenas no conjunto de treinamento, de modo a não compro
 
 \section{Treinamento dos modelos}
 
-A estratégia central de treinamento foi o uso de \textit{transfer learning} a partir de modelos pré-treinados no \textit{dataset} ImageNet-1K \citep{Russakovsky2015}. As arquiteturas, obtidas de repositórios como PyTorch e Hugging Face (\autoref{tab:model_list}), tiveram sua camada final de classificação substituída e adaptada ao número de classes esperado. A natureza do problema consiste em $K=5$ classes, correspondendo às categorias de severidade da OA de joelho, mas para a função de perda CORN o número de classes considerado foi $K-1$. Além disso, adotou-se a abordagem de ajuste fino (\textit{fine-tuning}), na qual todos os pesos da rede foram liberados para treinamento, permitindo que o modelo se adaptasse completamente às especificidades das imagens radiográficas.
+A estratégia central de treinamento foi o uso de \textit{transfer learning} a partir de modelos pré-treinados no \textit{dataset} ImageNet-1K \cite{Russakovsky2015}. As arquiteturas, obtidas de repositórios como PyTorch e Hugging Face (\autoref{tab:model_list}), tiveram sua camada final de classificação substituída e adaptada ao número de classes esperado. A natureza do problema consiste em $K=5$ classes, correspondendo às categorias de severidade da OA de joelho, mas para a função de perda CORN o número de classes considerado foi $K-1$. Além disso, adotou-se a abordagem de ajuste fino (\textit{fine-tuning}), na qual todos os pesos da rede foram liberados para treinamento, permitindo que o modelo se adaptasse completamente às especificidades das imagens radiográficas.
 
 \begin{table}[ht]
     \centering
@@ -149,13 +149,15 @@ A estratégia central de treinamento foi o uso de \textit{transfer learning} a p
     \label{tab:model_list}
 \end{table}
 
+A estimativa de FLOPs foi realizada com o auxílio da biblioteca \textit{FLOPs Counter PyTorch} \cite{ptflops}, que permite a análise do custo computacional por meio da instrumentação do modelo em PyTorch. Essa análise visa fornecer uma perspectiva complementar à avaliação de desempenho, destacando modelos que, além de eficazes, também são eficientes em termos de recursos computacionais, o que é especialmente relevante para implementação em ambientes com capacidade limitada, como dispositivos embarcados ou sistemas hospitalares com restrições de hardware.
+
 \subsection{Hiperparâmetros}
 
 O treinamento foi realizado com os seguintes hiperparâmetros: otimizador Adam com taxa de aprendizado inicial de $1 \times 10^{-4}$, \textit{batch size} de 28 imagens, e um total de 60 épocas. Um agendador (\textit{scheduler}) reduziu a taxa de aprendizado por um fator de 10 a cada 5 épocas para refinar o ajuste dos pesos. Para evitar o \textit{overfitting}, foi implementado um mecanismo de parada antecipada (\textit{early stopping}) que monitorava a perda no conjunto de validação, com uma paciência de 5 épocas.
 
 Reconhecendo a natureza inerentemente ordinal da escala KL, uma limitação frequentemente negligenciada em estudos de classificação, este trabalho adotou não apenas a função de perda \textit{cross-entropy} como linha de base, mas também a função CORN. Esta última reformula o problema de $K$ classes em $K-1$ tarefas de classificação binária (por exemplo, "a classe é maior do que 0?", "a classe é maior do que 1?", etc.), penalizando erros de forma proporcional à sua distância ordinal, o que é conceitualmente mais adequado para a classificação de severidade. Essa escolha metodológica permite uma avaliação mais justa e clinicamente relevante do erro do modelo.
 
-O modelo com a melhor acurácia de validação foi salvo para a avaliação final. Por sua vez, ela foi conduzida no conjunto de teste, produzindo o relatório de métricas de classificação descrita na \autoref{sec:avaliacao-metricas}, além de gerar as matrizes de confusão e as curvas AUC-ROC para cada modelo. A complexidade computacional de cada arquitetura, em termos de FLOPs e quantidade de parâmetros, foi estimada com auxílio da bibliteca \textit{ptflops} \citep{ptflops}. Todos os resultados, incluindo métricas, tempos de execução e medidas de complexidade, foram armazenados em formato JSON para análise posterior.
+O modelo com a melhor acurácia de validação foi salvo para a avaliação final. Por sua vez, ela foi conduzida no conjunto de teste, produzindo o relatório de métricas de classificação descrita na \autoref{sec:avaliacao-metricas}, além de gerar as matrizes de confusão e as curvas AUC-ROC para cada modelo. A complexidade computacional de cada arquitetura, em termos de FLOPs e quantidade de parâmetros, foi estimada com auxílio da bibliteca \textit{ptflops} \cite{ptflops}. Todos os resultados, incluindo métricas, tempos de execução e medidas de complexidade, foram armazenados em formato JSON para análise posterior.
 
 \subsection{Ambiente de execução}
 
@@ -188,7 +190,7 @@ A viabilidade de um modelo em um ambiente clínico depende não só da sua acur�
 
 Para promover a transparência e a confiança nos modelos, a técnica de visualização Grad-CAM foi utilizada. Ela gera mapas de calor que sobrepõem a radiografia, indicando quais regiões foram mais importantes para a decisão do modelo. Essas visualizações foram geradas para todos os modelos para permitir uma análise qualitativa, verificando se as arquiteturas estavam focando em áreas clinicamente relevantes (como o espaço articular) e comparando as diferenças entre os modelos RNC e ViT.
 
-A implementação foi realizada com a biblioteca \textit{pytorch-grad-cam} \citep{jacobgilpytorchcam}, que facilita a aplicação do Grad-CAM em modelos treinados com PyTorch. As camadas escolhidas para a geração dos mapas de calor variou de acordo com a arquitetura do modelo, sendo as últimas camadas convolucionais para os RNCs e a última camada de atenção para os ViTs. A \autoref{tab:grad_cam_chosen_layers} resume as camadas selecionadas para cada arquitetura.
+A implementação foi realizada com a biblioteca \textit{pytorch-grad-cam} \cite{jacobgilpytorchcam}, que facilita a aplicação do Grad-CAM em modelos treinados com PyTorch. As camadas escolhidas para a geração dos mapas de calor variou de acordo com a arquitetura do modelo, sendo as últimas camadas convolucionais para os RNCs e a última camada de atenção para os ViTs. A \autoref{tab:grad_cam_chosen_layers} resume as camadas selecionadas para cada arquitetura.
 
 \begin{table}[ht]
     \centering

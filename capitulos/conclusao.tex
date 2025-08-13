@@ -1,12 +1,15 @@
-\chapter*{Conclusões e Trabalhos Futuros}\label{cap:conclusao}
-\addcontentsline{toc}{chapter}{Conclusão e Trabalhos Futuros}
+\chapter{Conclusões e Trabalhos Futuros}\label{cap:conclusao}
 
-\lipsum[81]
+Este trabalho se propôs a realizar uma análise comparativa abrangente entre arquiteturas de Redes Neurais Convolucionais (RNCs) e Vision Transformers (ViTs) para a tarefa de classificação da severidade da osteoartrite (OA) de joelho, utilizando a escala de Kellgren-Lawrence. Diante da subjetividade e do tempo demandado pelo diagnóstico manual, o objetivo central foi identificar os modelos mais robustos, eficientes e confiáveis, empregando uma avaliação com diferentes variáveis que incluiu desempenho preditivo, custo computacional, quantificação de incerteza e interpretabilidade.
 
-\section*{Conclusões}
+A investigação sistemática das treze arquiteturas revelou conclusões claras e significativas. Os modelos da família DenseNet se destacaram como os de melhor desempenho geral. O DenseNet-169 alcançou a maior acurácia (78,85\%), enquanto o DenseNet-121 obteve o maior QWK (0,8878), demonstrando a melhor performance preditiva na tarefa de classificação ordinal.
 
-\lipsum[82-84]
+A comparação entre as funções de perda de entropia cruzada e CORN evidenciou uma compensação fundamental. Enquanto a entropia cruzada maximizou a acurácia, a função CORN consistentemente melhorou o QWK, minimizando a gravidade dos erros de classificação. Adicionalmente, a análise com a predição conformal mostrou que a abordagem com CORN gera conjuntos de predição drasticamente mais informativos e úteis para a prática clínica.
 
-\section*{Trabalhos Futuros}
+A análise da eficiência computacional apresentou uma expressiva vantagem de eficiência das RNCs sobre os ViTs. Modelos como DenseNet-121 e ResNet-50 foram de quatro a cinco vezes mais rápidos em inferência do que os ViTs de alto desempenho, como DaViT-B e Swin-B. Esse resultado sublinha um desafio prático para a implantação de ViTs em ambientes clínicos que demandam baixo custo e alta velocidade.
 
-\lipsum[85] 
+A análise com Grad-CAM confirmou que os modelos de melhor desempenho basearam suas decisões em marcadores patológicos clinicamente relevantes, como o espaço articular e osteófitos. Também foram identificadas ``estratégias visuais'' distintas, com as RNCs produzindo ativações mais focadas e os ViTs, mais contextuais.
+
+Apesar do rigor metodológico, este trabalho possui algumas limitações que devem ser reconhecidas. O estudo foi conduzido num único conjunto de dados público com um desbalanceamento claro. Além disso, a anaĺise se baseou apenas em imagens estáticas, sem qualquer informação extra sobre os pacientes. Trabalhos futuros podem explorar outros conjuntos de dados para garantir a generalização dos resultados, integrar com um estudo longitudinal que acompanhasse a progressão da OA ao longo do tempo, além de otimizar as arquiteturas com estratégias de \textit{grid-searching} e \textit{ensemble}, combinando a saída dos melhores modelos para determinar a classe KL.
+
+Este trabalho demonstrou com sucesso que modelos de aprendizado profundo, em particular as RNCs e ViTs, são capazes de classificar a severidade da OA de joelho com alta acurácia e confiabilidade. Mais importante, o estudo evidenciou que uma avaliação completa deve ir além da acurácia, considerando a relevância clínica do erro, a eficiência computacional e a interpretabilidade. Assim, o estudo fornece um \textit{benchmark} sólido para o desenvolvimento de futuras ferramentas de IA que possam auxiliar profissionais da saúde no diagnóstico e manejo da OA de joelho.

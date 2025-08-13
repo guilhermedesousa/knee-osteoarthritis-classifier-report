@@ -4,7 +4,7 @@ Este capítulo apresenta os resultados obtidos e discute as implicações do est
 
 \section{Métricas Gerais de Desempenho}
 
-Os resultados das métricas gerais de desempenho dos modelos de RNC e ViT são apresentados na \autoref{tab:overall_metrics_all_models}. A acurácia geral variou de 0,6894 (DeiT-Distilled-B) a 0,7885 (DenseNet-169), com o modelo DenseNet-169 alcançando a maior acurácia com uso da entropia cruzada. No entanto, considerando a característica ordinal da classificação, a métrica QWK oferece uma visão mais precisa do desempenho dos modelos. O modelo DenseNet-121 obteve o melhor QWK de 0,8878, seguido pelo GCViT-B com QWK de 0,8832, ambos com uso da entropia cruzada. No geral, esses resultados sugerem que os modelos da família DenseNet foram particularmente úteis para capturar as características visuais da OA de joelho, principalmente devido à sua arquitetura densa que permite que as camadas mais profundas acessem diretamente as características de baixo nível, sem precisar reaprendê-las \citep{Huang2017}.
+Os resultados das métricas gerais de desempenho dos modelos de RNC e ViT são apresentados na \autoref{tab:overall_metrics_all_models}. A acurácia geral variou de 0,6894 (DeiT-Distilled-B) a 0,7885 (DenseNet-169), com o modelo DenseNet-169 alcançando a maior acurácia com uso da entropia cruzada. No entanto, considerando a característica ordinal da classificação, a métrica QWK oferece uma visão mais precisa do desempenho dos modelos. O modelo DenseNet-121 obteve o melhor QWK de 0,8878, seguido pelo GCViT-B com QWK de 0,8832, ambos com uso da entropia cruzada. No geral, esses resultados sugerem que os modelos da família DenseNet foram particularmente úteis para capturar as características visuais da OA de joelho, principalmente devido à sua arquitetura densa que permite que as camadas mais profundas acessem diretamente as características de baixo nível, sem precisar reaprendê-las \citeonline{Huang2017}.
 
 \begin{table}[!htbp]
     \centering
@@ -159,7 +159,7 @@ A análise detalhada dos F1-scores por classe, apresentada na \autoref{tab:f1_sc
     \label{tab:f1_scores_all_models}
 \end{sidewaystable}
 
-A tabela revela a observação central onde o desempenho dos modelos é consistentemente baixo na classe KL-1 (duvidoso). Nenhum modelo, independentemente da arquitetura ou da função de perda, consegui superar um F1-score de 0,6000 para esta classe, com o melhor sendo o DenseNet-169 (0,5970) e o pior sendo o VGG-19 (0,3750). Esse resultado sugere que a classe KL-1 é inerentemente ambígua e inconsistente, assim como diz \cite{Spector1993}. Ela representa um estágio da OA onde os achados radiológicos, como um possível estreitamento do espaço articular ou a formação de osteófitos, são muito sutis. Como consequência, essa classe sofre com a sobreposição de características entre as classes adjacentes, tornando a classificação pelos modelos mais desafiadora. Esse padrão é visualmente confirmado nas matrizes de confusão apresentadas na \autoref{tab:matrizes_confusao}, onde observa-se um número elevado de classificações incorretas entre as classes KL-1 e as classes adjacentes KL-0 e KL-2.
+A tabela revela a observação central onde o desempenho dos modelos é consistentemente baixo na classe KL-1 (duvidoso). Nenhum modelo, independentemente da arquitetura ou da função de perda, consegui superar um F1-score de 0,6000 para esta classe, com o melhor sendo o DenseNet-169 (0,5970) e o pior sendo o VGG-19 (0,3750). Esse resultado sugere que a classe KL-1 é inerentemente ambígua e inconsistente, assim como diz \citeonline{Spector1993}. Ela representa um estágio da OA onde os achados radiológicos, como um possível estreitamento do espaço articular ou a formação de osteófitos, são muito sutis. Como consequência, essa classe sofre com a sobreposição de características entre as classes adjacentes, tornando a classificação pelos modelos mais desafiadora. Esse padrão é visualmente confirmado nas matrizes de confusão apresentadas na \autoref{tab:matrizes_confusao}, onde observa-se um número elevado de classificações incorretas entre as classes KL-1 e as classes adjacentes KL-0 e KL-2.
 
 \begin{table}[!htbp]
     \centering
@@ -192,21 +192,21 @@ O desempenho do melhor modelo deste estudo (DenseNet-169) foi comparado com trab
         \hline
         \textbf{Referência} & \textbf{Número de Classes} & \textbf{Acurácia} & \textbf{QWK} & \textbf{F1-score} & \textbf{AUC} \\
         \hline
-        \cite{Tariq2023} & 5 & \makecell{98,00\%} & \makecell{0,990} & \makecell{0,980} & \makecell{0,970} \\
+        \citeonline{Tariq2023} & 5 & \makecell{98,00\%} & \makecell{0,990} & \makecell{0,980} & \makecell{0,970} \\
         \hline
-        \cite{Mohammed2023} & 5 & \makecell{69,00\%} & \makecell{-} & \makecell{0,670} & \makecell{-} \\
+        \citeonline{Mohammed2023} & 5 & \makecell{69,00\%} & \makecell{-} & \makecell{0,670} & \makecell{-} \\
         \hline
-        \cite{domingues2023} & 2 & \makecell{90,70\%} & \makecell{-} & \makecell{0,553} & \makecell{0,866} \\
+        \citeonline{domingues2023} & 2 & \makecell{90,70\%} & \makecell{-} & \makecell{0,553} & \makecell{0,866} \\
         \hline
-        \cite{Cueva2022} & 5 & \makecell{61,71\%} & \makecell{-} & \makecell{-} & \makecell{-} \\
+        \citeonline{Cueva2022} & 5 & \makecell{61,71\%} & \makecell{-} & \makecell{-} & \makecell{-} \\
         \hline
-        \cite{yeoh2023} & 2 & \makecell{87,50\%} & \makecell{-} & \makecell{0,871} & \makecell{0,945} \\
+        \citeonline{yeoh2023} & 2 & \makecell{87,50\%} & \makecell{-} & \makecell{0,871} & \makecell{0,945} \\
         \hline
-        \cite{sekhri2023} & 5 & \makecell{70,17\%} & \makecell{-} & \makecell{0,671} & \makecell{-} \\
+        \citeonline{sekhri2023} & 5 & \makecell{70,17\%} & \makecell{-} & \makecell{0,671} & \makecell{-} \\
         \hline
-        \cite{Wang_2024} & 2 & \makecell{89,90\%} & \makecell{-} & \makecell{0,877} & \makecell{-} \\
+        \citeonline{Wang_2024} & 2 & \makecell{89,90\%} & \makecell{-} & \makecell{0,877} & \makecell{-} \\
         \hline
-        \cite{apon2024} & 5 & \makecell{66,14\%} & \makecell{-} & \makecell{0,618} & \makecell{0,860} \\
+        \citeonline{apon2024} & 5 & \makecell{66,14\%} & \makecell{-} & \makecell{0,618} & \makecell{0,860} \\
         \hline
         Este estudo & 5 & \makecell{78,85\%} & \makecell{0,888} & \makecell{0,806} & \makecell{0,938} \\
         \hline
@@ -215,9 +215,9 @@ O desempenho do melhor modelo deste estudo (DenseNet-169) foi comparado com trab
     \label{tab:study_comparisons}
 \end{table}
 
-Ao analisar os trabalhos que consideram as cinco classes KL, observa-se que o presente estudo, com 78,85\% de acurácia, supera significativamente os resultados de \cite{Mohammed2023} (69,00\%), \cite{Cueva2022} (61,71\%), \cite{sekhri2023} (70,17\%) e \cite{apon2024} (66,14\%). A superioridade é particularmente evidente no F1-score (0,806), que indica um melhor equilíbrio entre precisão e revocação entre todas as cinco classes em comparação com os valores reportados por \cite{Mohammed2023} (0,670) e \cite{apon2024} (0,618). O trabalho de \cite{Tariq2023} apresenta resultados excepcionalmente elevados (98,00\% de acurácia), que foram obtidos a partir de um modelo \textit{ensemble}, além desse resultado ser atribuído a um subconjunto de dados menos desafiador ou protocolos de validação que podem não garantir uma separação estrita entre treino e teste.
+Ao analisar os trabalhos que consideram as cinco classes KL, observa-se que o presente estudo, com 78,85\% de acurácia, supera significativamente os resultados de \citeonline{Mohammed2023} (69,00\%), \citeonline{Cueva2022} (61,71\%), \citeonline{sekhri2023} (70,17\%) e \citeonline{apon2024} (66,14\%). A superioridade é particularmente evidente no F1-score (0,806), que indica um melhor equilíbrio entre precisão e revocação entre todas as cinco classes em comparação com os valores reportados por \citeonline{Mohammed2023} (0,670) e \citeonline{apon2024} (0,618). O trabalho de \citeonline{Tariq2023} apresenta resultados excepcionalmente elevados (98,00\% de acurácia), que foram obtidos a partir de um modelo \textit{ensemble}, além desse resultado ser atribuído a um subconjunto de dados menos desafiador ou protocolos de validação que podem não garantir uma separação estrita entre treino e teste.
 
-Um diferencial significativo deste estudo é a avaliação através de métricas mais alinhadas à natureza do problema. O QWK de 0,888 demonstra não apenas que o modelo é acurado, mas que seus erros são, em sua maioria, clinicamente menos graves (próximos da classe real), uma análise de robustez que está ausente na maioria dos trabalhos comparados. Da mesma forma, o valor de AUC de 0,938 indica uma excelente capacidade de separação entre as classes, superando os valores reportados por \cite{domingues2023} (0,866) e \cite{apon2024} (0,860).
+Um diferencial significativo deste estudo é a avaliação através de métricas mais alinhadas à natureza do problema. O QWK de 0,888 demonstra não apenas que o modelo é acurado, mas que seus erros são, em sua maioria, clinicamente menos graves (próximos da classe real), uma análise de robustez que está ausente na maioria dos trabalhos comparados. Da mesma forma, o valor de AUC de 0,938 indica uma excelente capacidade de separação entre as classes, superando os valores reportados por \citeonline{domingues2023} (0,866) e \citeonline{apon2024} (0,860).
 
 Portanto, embora alguns estudos possam apresentar valores de acurácia isoladamente mais altos, os resultados aqui obtidos demonstram um desempenho mais robusto, equilibrado e rigorosamente avaliado. O modelo deste estudo não apenas supera a maioria dos trabalhos em métricas padrão, mas também se destaca em métricas ordinais e de separabilidade de classes, estabelecendo um \textit{benchmark} sólido e confiável para a classificação da OA de joelho em cinco classes.
 
@@ -227,7 +227,7 @@ A análise dos tempos de treinamento e inferência, apresentada na \autoref{tab:
 
 O tempo de inferência por imagem é uma métrica crítica para a aplicação clínica, e as RNCs demonstram uma vantagem sobre os ViTs. Modelos como ResNet-34 (1,55 ms/imagem), ResNet-50 (2,87 ms/imagem) e DenseNet/121 (3,11 ms/imagem) são os mais rápidos, estabelecendo uma linha de base de alta eficiência. Suas arquiteturas são bem otimizadas para o hardware de GPU, o que permite um processamento rápido.
 
-Em contraste, os ViTs apresentaram tempos de inferência significativamente mais altos. O mais rápido entre eles, MaxViT-T (6,92 ms/imagem), já é mais de duas vezes mais lento do que as RNCs eficientes. Essa disparidade pode ser justificada pela natureza das operações. Embora ViTs tenham alcançado complexidade computacional linear em relação ao tamanho de imagem, como citam \cite{ding2022davitdualattentionvision} e \cite{maxvit2022}, seus blocos de atenção ainda envolvem operações de multiplicação de matrizes em larga escala que são mais custosas do que as operações de convolução. Isso também pode ser visualizado na \autoref{tab:model_list}, na coluna de FLOPs (GMac).
+Em contraste, os ViTs apresentaram tempos de inferência significativamente mais altos. O mais rápido entre eles, MaxViT-T (6,92 ms/imagem), já é mais de duas vezes mais lento do que as RNCs eficientes. Essa disparidade pode ser justificada pela natureza das operações. Embora ViTs tenham alcançado complexidade computacional linear em relação ao tamanho de imagem, como citam \citeonline{ding2022davitdualattentionvision} e \citeonline{maxvit2022}, seus blocos de atenção ainda envolvem operações de multiplicação de matrizes em larga escala que são mais custosas do que as operações de convolução. Isso também pode ser visualizado na \autoref{tab:model_list}, na coluna de FLOPs (GMac).
 
 A literatura sobre modelos como MaxViT e DaViT foca em tornar a atenção global mais eficiente e de fato tornam, mas os resultados práticos da \autoref{tab:computational_performance} demonstram que, na GPU utilizada, a sobrecarga computacional da auto-atenção ainda é um obstáculo significativo para a inferência quando comparada às RNCs.
 
@@ -390,7 +390,7 @@ Portanto, para uma ferramenta de suporte à decisão clínica, a abordagem basea
 
 \section{Interpretabilidade dos Modelos}
 
-Para garantir que o desempenho quantitativo dos modelos seja acompanhado de um processo de decisão clinicamente relevante, foi realizada uma análise qualitativa utilizando a técnica de Grad-CAM. A análise revelou padrões consistentes e distintos entre as arquiteturas, reforçando a confiabilidade dos modelos de melhor desempenho. A \autoref{tab:gradcams_top5_models} ilustra as Grad-CAMs para os modelos que tiveram o melhor desempenho preditivo.
+Para garantir que o desempenho quantitativo dos modelos seja acompanhado de um processo de decisão clinicamente relevante, foi realizada uma análise qualitativa utilizando a técnica de Grad-CAM. A análise revelou padrões consistentes e distintos entre as arquiteturas, reforçando a confiabilidade dos modelos de melhor desempenho. A \ref{tab:gradcams_top5_models} ilustra as Grad-CAMs para os modelos que tiveram o melhor desempenho preditivo.
 
 Uma observação fundamental foi que os modelos de modo geral focaram sua atenção em regiões cruciais para o diagnóstico da OA, como o espaço articular. Por exemplo, como ilustrado na \autoref{tab:gradcams_top5_models}, para uma classificação correta de KL-3 (moderado), o mapa de calor evidencia uma forte ativação sobre o espaço articular com o menor estreitamento (lado esquerdo da radiografia). Esse comportamento foi observado na grande maioria das predições corretas, indicando que os modelos não apenas acertaram a classe, mas o fizeram com base nos mesmos indicadores visuais que um radiologista utilizaria, aumentando a confiança em sua validade clínica.
 
