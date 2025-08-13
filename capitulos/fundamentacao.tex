@@ -90,7 +90,7 @@ Em 2006, \citeonline{Hinton2006} propuseram o uso de redes neurais artificiais c
 
 As RNCs são modelos de aprendizado profundo projetados para processar dados com estrutura de grade, como imagens. Inspiradas na organização do córtex visual, RNCs são amplamente utilizadas em tarefas de visão computacional, como classificação de imagens, detecção de objetos e segmentação semântica.
 
-A camada de convolução é o componente central das RNCs, responsável por extrair características locais dos dados de entrada. Essa camada utiliza filtros (ou \textit{kernels}, do inglês), que são pequenas matrizes de pesos (por exemplo, 3×3 ou 5×5) aplicadas em toda a imagem de entrada para gerar um mapa de características, representando a presença dessas características em diferentes regiões da imagem.
+A camada de convolução é o componente central das RNCs, responsável por extrair características locais dos dados de entrada. Essa camada utiliza filtros, que são pequenas matrizes de pesos (por exemplo, 3×3 ou 5×5) aplicadas em toda a imagem de entrada para gerar um mapa de características, representando a presença dessas características em diferentes regiões da imagem.
 
 Esses filtros são ajustados durante o treinamento da rede, permitindo que a RNC aprenda a detectar padrões relevantes, como bordas, texturas e formas. Conforme a rede avança pelas camadas, os filtros se tornam mais complexos e capazes de capturar características de alto nível, como objetos inteiros. Após as convoluções, é comum utilizar a função de ativação \textit{Rectified Linear Unit} (ReLU), que substitui valores negativos por zero e introduz não linearidades no modelo, permitindo que ele aprenda representações complexas.
 
@@ -101,9 +101,9 @@ Após as camadas de convolução, as RNCs geralmente incluem camadas de \textit{
     \item Tornar a rede mais robusta a pequenas variações nos dados de entrada.
 \end{itemize}
 
-Após diversas camadas de convolução e \textit{pooling}, uma ou mais camadas totalmente conectadas (ou \textit{fully connected}, do inglês) são adicionadas ao final da rede para combinar as características extraídas de camadas anteriores e realizar a tarefa de classificação. Cada neurônio dessas camadas está conectado a todos os neurônios da camada anterior, permitindo decisões baseadas em combinações globais das informações aprendidas. Em tarefas de classificação, essa camada geralmente utiliza a função de ativação \textit{softmax}, que transforma as saídas em probabilidades.
+Após diversas camadas de convolução e \textit{pooling}, uma ou mais camadas totalmente conectadas são adicionadas ao final da rede para combinar as características extraídas de camadas anteriores e realizar a tarefa de classificação. Cada neurônio dessas camadas está conectado a todos os neurônios da camada anterior, permitindo decisões baseadas em combinações globais das informações aprendidas. Em tarefas de classificação, essa camada geralmente utiliza a função de ativação \textit{softmax}, que transforma as saídas em probabilidades.
 
-Durante o treinamento, a RNC ajusta os pesos dos filtros por meio do algoritmo de retropropagação (ou \textit{backpropagation}, do inglês), em que o erro de saída é retropropagado pela rede para atualizar os pesos e minimizar a função de perda. Esse processo é repetido por várias épocas, permitindo que a rede aprenda a reconhecer padrões complexos nos dados de entrada.
+Durante o treinamento, a RNC ajusta os pesos dos filtros por meio do algoritmo de retropropagação, em que o erro de saída é retropropagado pela rede para atualizar os pesos e minimizar a função de perda. Esse processo é repetido por várias épocas, permitindo que a rede aprenda a reconhecer padrões complexos nos dados de entrada.
 
 A \autoref{fig:cnn} ilustra uma rede neural convolucional composta por cinco camadas. O número de camadas, a disposição dessas camadas, o número e tamanho dos filtros, a forma de conexão entre as camadas, entre outros fatores, podem variar dependendo da arquitetura escolhida. Em seguida, serão apresentadas algumas das arquiteturas populares de RNC que foram utilizadas neste trabalho.
 
@@ -179,7 +179,7 @@ A \autoref{tab:vgg-arch} apresenta a configuração das arquiteturas VGG-16 e VG
 
 \subsection{Residual Network (ResNet)}
 
-\citeonline{He2016} venceram a competição ILSVRC 2015 com a arquitetura ResNet, que introduziu a ideia de blocos residuais e alcançou uma taxa de erro de 3,57\% no conjunto de validação do ImageNet com um \textit{ensemble} de seus modelos. Os autores abordaram o problema da degradação de desempenho: conforme a profundidade da rede aumentava, a acurácia saturava e começava a diminuir. Para resolver, eles introduziram a ideia de conexões de atalho (ou \textit{skip connections}, do inglês) entre as camadas, onde o sinal de entrada de uma camada é somado ao sinal de saída de uma camada subsequente (\autoref{fig:residual-learning}).
+\citeonline{He2016} venceram a competição ILSVRC 2015 com a arquitetura ResNet, que introduziu a ideia de blocos residuais e alcançou uma taxa de erro de 3,57\% no conjunto de validação do ImageNet com um \textit{ensemble} de seus modelos. Os autores abordaram o problema da degradação de desempenho: conforme a profundidade da rede aumentava, a acurácia saturava e começava a diminuir. Para resolver, eles introduziram a ideia de conexões de atalho entre as camadas, onde o sinal de entrada de uma camada é somado ao sinal de saída de uma camada subsequente (\autoref{fig:residual-learning}).
 
 \begin{figure}[!htbp]
     \centering
