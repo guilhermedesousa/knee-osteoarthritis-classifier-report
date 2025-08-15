@@ -11,15 +11,108 @@
 \partapendices
 
 % ----------------------------------------------------------
-\chapter{Primeiro Apêncice}
+\chapter{Resultados Suplementares}
 % ----------------------------------------------------------
 
-\lipsum[50] % Texto qualquer. REMOVER!!
+Como complemento à análise principal, foram conduzidos experimentos para avaliar o desempenho dos modelos na tarefa de classificar a OA de joelho em 4, 3 e 2 classes, através da manipulação das imagens do conjunto de dados.
 
-% ----------------------------------------------------------
-\chapter{Segundo apêndice com título tão grande quanto se queira porque ele já faz a quebra de linha da coisa toda}
-% ----------------------------------------------------------
-\lipsum[51-53] % Texto qualquer. REMOVER!!
+\section{Classificação em 4 Classes}
+\label{apendice:resultados_4_classes}
+
+Inicialmente, foi realizado um experimento para a tarefa de classificação em 4 classes, excluindo a classe KL-1 (``duvidoso''). O objetivo foi investigar o impacto da remoção desta classe, identificada como ambígua no desempenho geral das arquiteturas.
+
+A exclusão da classe KL-1 resultou em um aumento substancial e generalizado no desempenho de todos os modelos, validando a hipótese de que a ambiguidade desta classe era um dos principais desafios para a tarefa de classificação. A \autoref{tab:overall_metrics_4_classes} resume as métricas de desempenho para os modelos mais relevantes neste cenário.
+
+O resultado mais notável foi o aumento significativo na performance. O modelo GCViT-B, treinado com a função de perda CORN, alcançou uma acurácia de 90,08\%, um QWK de 0,9311 e um MAE de 0,1635, estabelecendo-se como o modelo de melhor desempenho neste cenário. Outros modelos, como o DaViT-B, também apresentaram resultados expressivos, com 89,28\% de acurácia e 0,9267 de QWK.
+
+Diferentemente do cenário de 5 classes, onde os modelos da família DenseNet se destacaram, a remoção da classe ambígua permitiu que os ViTs, em particular o GCViT-B e o DaViT-B, demonstrassem seu pleno potencial, superando as RNCs em acurácia e QWK.
+
+\begin{table}[!htbp]
+    \centering
+    \begin{tabular}{|l|l|c|c|c|}
+        \hline
+        \textbf{Modelo} & \textbf{Função de perda} & \textbf{Acurácia} & \textbf{QWK} & \textbf{MAE} \\
+        \hline
+        ResNet-50 & \text{CORN} & 87,67\% & 0,9146 & 0,2105 \\
+        \hline
+        DenseNet-121 & \text{CORN} & 88,20\% & 0,9153 & 0,1957 \\
+        \hline
+        DenseNet-169 & \text{CORN} & 88,34\% & 0,9192 & 0,2051 \\
+        \hline
+        Inception-v3 & \text{Entropia Cruzada} & 88,61\% & 0,9225 & 0,1917 \\
+        \hline
+        DaViT-B & \text{Entropia Cruzada} & 89,28\% & 0,9267 & 0,1783 \\
+        \hline
+        GCViT-B & \text{CORN} & \textbf{90,08\%} & \textbf{0,9311} & \textbf{0,1635} \\
+        \hline
+    \end{tabular}
+    \caption{Resumo das métricas gerais de desempenho para modelos selecionados no cenário de 4 classes.}
+    \label{tab:overall_metrics_4_classes}
+\end{table}
+
+\section{Classificação em 3 Classes}
+\label{apendice:resultados_3_classes}
+
+Um segundo experimento foi conduzido para avaliar a capacidade dos modelos em distinguir exclusivamente entre os diferentes estágios de severidade da OA, uma vez que a doença já está estabelecida. Para este fim, as classes KL-0 (saudável) e KL-1 (duvidoso) foram removidas, resultando em um problema de classificação com 3 classes: KL-2 (mínimo), KL-3 (moderado) e KL-4 (severo).
+
+Essa simplificação do problema, focando apenas nos estágios da doença, resultou em um desempenho preditivo alto em todas as arquiteturas avaliadas. A \autoref{tab:overall_metrics_3_classes} resume as métricas de desempenho para os modelos mais relevantes neste cenário. O resultado mais interessante foi a alta acurácia e concordância ordinal alcançadas. O modelo Inception-v3, treinado com a entropia cruzada,, atingiu a maior acurácia de 94,43\% e o maior QWK de 0,9285. Ainda assim, os demais modelos tiveram uma ótima performance.
+
+Estes resultados indicam que os modelos avaliados possuem uma alta capacidade não apenas para detectar a OA, mas também para diferenciar seus estágios de severidade, uma tarefa fundamental para o planejamento de tratamentos e o acompanhamento da progressão da doença.
+
+\begin{table}[!htbp]
+    \centering
+    \begin{tabular}{|l|l|c|c|c|}
+        \hline
+        \textbf{Modelo} & \textbf{Função de perda} & \textbf{Acurácia} & \textbf{QWK} & \textbf{MAE} \\
+        \hline
+        ResNet-101 & \text{Entropia Cruzada} & 92,91\% & 0,9082 & 0,0709 \\
+        \hline
+        DenseNet-121 & \text{CORN} & 93,42\% & 0,9136 & 0,0658 \\
+        \hline
+        DaViT-B & \text{Entropia Cruzada} & 93,92\% & 0,9218 & 0,0608 \\
+        \hline
+        DenseNet-169 & \text{CORN} & 93,92\% & 0,9220 & 0,0608 \\
+        \hline
+        Inception-v3 & \text{Entropia Cruzada} & \textbf{94,43\%} & \textbf{0,9285} &  \textbf{0,0557} \\
+        \hline
+        GCViT-B & \text{Entropia Cruzada} & 93,16\% & 0,9110 & 0,0684 \\
+        \hline
+    \end{tabular}
+    \caption{Resumo das métricas gerais de desempenho para modelos selecionados no cenário de 3 classes.}
+    \label{tab:overall_metrics_3_classes}
+\end{table}
+
+\section{Classificação em 2 Classes}
+\label{apendice:resultados_2_classes}
+
+Finalmente, um terceiro experimento foi realizado para avaliar a capacidade dos modelos em uma tarefa de detecção binária, que possui grande relevância clínica para a triagem inicial de pacientes. Neste cenário, as classes KL-0 e KL-1 foram agrupadas para representar a ``ausência de OA'', enquanto as classes KL-2, KL-3 e KL-4 foram consolidadas para representar a ``presença de OA''.
+
+Os resultados, resumidos na \autoref{tab:overall_metrics_2_classes}, indicam que todos os modelos foram capazes de realizar a detecção binária com um desempenho robusto, alcançando acurácias na faixa de 84\% a 87\%. Nesta formulação do problema, os ViTs demonstraram uma ligeira vantagem. O modelo GCViT-B (entropia cruzada) destacou-se com a maior acurácia, atingindo 87,10\%, além do maior QWK de 0,7374 e MAE de 0,1290, indicando a melhor concordância ajustada ao acaso. Logo em seguida, o MaxViT-T (CORN) também apresentou um excelente resultado, com 86,77\% de acurácia.
+
+As diferenças de desempenho entre as funções de perda foram mínimas e inconsistentes neste cenário, o que é esperado, uma vez que para um problema de duas classes a formulação ordinal do CORN se aproxima da logística binária padrão.
+
+\begin{table}[!htbp]
+    \centering
+    \begin{tabular}{|l|l|c|c|c|}
+        \hline
+        \textbf{Modelo} & \textbf{Função de perda} & \textbf{Acurácia} & \textbf{QWK} & \textbf{MAE} \\
+        \hline
+        ResNet-50 & \text{CORN} & 84,90\% & 0,6956 & 0,1510 \\
+        \hline
+        DenseNet-121 & \text{CORN} & 85,67\% & 0,6861 & 0,1433 \\
+        \hline
+        DenseNet-169 & \text{CORN} & 85,56\% & 0,7055 & 0,1444 \\
+        \hline
+        DaViT-B & \text{CORN} & 86,55\% & 0,7268 & 0,1345 \\
+        \hline
+        MaxViT-T & \text{CORN} & 86,77\% & 0,7300 & 0,1323 \\
+        \hline
+        GCViT-B & \text{Entropia Cruzada} & \textbf{87,10\%} & \textbf{0,7374} & \textbf{0,1290} \\
+        \hline
+    \end{tabular}
+    \caption{Resumo das métricas gerais de desempenho para modelos selecionados no cenário de classificação binária.}
+    \label{tab:overall_metrics_2_classes}
+\end{table}
 
 \end{apendicesenv}
 % ---
