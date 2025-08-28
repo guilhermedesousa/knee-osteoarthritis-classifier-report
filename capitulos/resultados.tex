@@ -4,7 +4,7 @@ Este capítulo apresenta os resultados obtidos e discute as implicações do est
 
 \section{Métricas Gerais de Desempenho}
 
-Os resultados das métricas gerais de desempenho dos modelos de RNC e ViT são apresentados na \autoref{tab:overall_metrics_all_models}. A acurácia geral variou de 0,6894 (DeiT-Distilled-B) a 0,7885 (DenseNet-169), com o modelo DenseNet-169 alcançando a maior acurácia com uso da entropia cruzada. No entanto, considerando a característica ordinal da classificação, a métrica QWK oferece uma visão mais precisa do desempenho dos modelos. O modelo DenseNet-121 obteve o melhor QWK de 0,8878, seguido pelo GCViT-B com QWK de 0,8832, ambos com uso da entropia cruzada. Como esperado, esses resultados sugerem que os modelos da família DenseNet foram particularmente úteis para capturar as características visuais da OA de joelho, principalmente devido à sua arquitetura densa que permite que as camadas mais profundas acessem diretamente as características de baixo nível, sem precisar reaprendê-las \cite{Huang2017}.
+Os resultados das métricas gerais de desempenho dos modelos de RNC e ViT são apresentados na \autoref{tab:overall_metrics_all_models}. Em suporte às hipóteses 1 (desempenho base) e 2 (comparação entre arquiteturas), observa-se que os modelos superaram significativamente o desempenho aleatório, onde a acurácia geral variou de 0,6894 (DeiT-Distilled-B) a 0,7885 (DenseNet-169), com o modelo DenseNet-169 alcançando a maior acurácia com uso da entropia cruzada. No entanto, considerando a característica ordinal da classificação, a métrica QWK oferece uma visão mais precisa do desempenho dos modelos. O modelo DenseNet-121 obteve o melhor QWK de 0,8878, seguido pelo GCViT-B com QWK de 0,8832, ambos com uso da entropia cruzada. Como esperado, esses resultados sugerem que os modelos da família DenseNet foram particularmente úteis para capturar as características visuais da OA de joelho, principalmente devido à sua arquitetura densa que permite que as camadas mais profundas acessem diretamente as características de baixo nível, sem precisar reaprendê-las \cite{Huang2017}.
 
 \begin{table}[!htbp]
     \centering
@@ -69,7 +69,7 @@ Os resultados das métricas gerais de desempenho dos modelos de RNC e ViT são a
     \label{tab:overall_metrics_all_models}
 \end{table}
 
-A avaliação comparativa das funções de perda revelou uma clara compensação entre a acurácia categórica e a correção ordinal. Na maioria dos cenários, os modelos treinados com a entropia cruzada apresentaram um desempenho superior em termos de acurácia, com uma média de 1,58\% a mais em relação aos seus equivalentes treinados com a função CORN. Isso sugere que a entropia cruzada é mais eficaz para maximizar o número de classificações exatamente corretas.
+A avaliação comparativa das funções de perda testou diretamente a hipótese 3 (consistência ordinal) e revelou uma clara compensação entre a acurácia categórica e a correção ordinal. Na maioria dos cenários, os modelos treinados com a entropia cruzada apresentaram um desempenho superior em termos de acurácia, com uma média de 1,58\% a mais em relação aos seus equivalentes treinados com a função CORN. Isso sugere que a entropia cruzada é mais eficaz para maximizar o número de classificações exatamente corretas.
 
 Em contrapartida, a função CORN demonstrou sua superioridade em métricas que avaliam a natureza ordinal do problema. Observou-se um aumento médio de 1,06\% no QWK, como exemplificado pelo modelo Inception-v3, cujo QWK aumentou de 0,8571 para 0,8813. Adicionalmente, houve uma redução de 0,89\% no Erro Absoluto Médio (MAE), confirmando a eficácia do CORN em minimizar a magnitude dos erros de predição.
 
@@ -223,7 +223,7 @@ Portanto, embora alguns estudos possam apresentar valores de acurácia isoladame
 
 \section{Eficiência Computacional}
 
-A análise dos tempos de treinamento e inferência, apresentada na \autoref{tab:computational_performance}, revela distinções cruciais entre os modelos e funções de perda, oferecendo um respaldo da aplicação prática e que complementa as métricas de desempenho preditivo.
+A análise dos tempos de treinamento e inferência, apresentada na \autoref{tab:computational_performance}, revela distinções cruciais entre os modelos e funções de perda, oferecendo um respaldo da aplicação prática, complementando as métricas de desempenho preditivo e validando a hipótese 2 (comparação entre arquiteturas).
 
 O tempo de inferência por imagem é uma métrica crítica para a aplicação clínica, e as RNCs demonstram uma vantagem sobre os ViTs. Modelos como ResNet-34 (1,55 ms/imagem), ResNet-50 (2,87 ms/imagem) e DenseNet/121 (3,11 ms/imagem) são os mais rápidos, estabelecendo uma linha de base de alta eficiência. Suas arquiteturas são bem otimizadas para o hardware de GPU, o que permite um processamento rápido.
 
@@ -398,7 +398,7 @@ Ainda assim, o Grad-CAM revelou estratégias visuais distintas entre as RNCs e o
 
 Por outro lado, os ViTs geraram mapas de calor mais difusos e contextuais. Em vez de focar em um único ponto, a atenção frequentemente se espalhou por uma região mais ampla, como é o caso dos modelos DaViT-B e GCViT-B. Isso também está alinhado com a capacidade dos transformers de modelar relações de longo alcance em uma imagem.
 
-Em síntese, a análise de interpretabilidade com Grad-CAM não só validou que os modelos de alto desempenho aprenderam a identificar características patológicas clinicamente relevantes da OA de joelho, mas também ofereceu uma análise sobre as diferentes estratégias de análise visual das arquiteturas. Tanto RNCs quanto ViTs se mostraram eficazes para a classificação correta com base em características visuais adequadas e podem ser utilizadas como ferramenta de suporte na análise clínica para diagnosticar a severidade da OA de joelho.
+Em síntese, a análise de interpretabilidade com Grad-CAM não só validou a hipótese 4 (interpretabilidade clínica), onde os modelos de alto desempenho aprenderam a identificar características patológicas clinicamente relevantes da OA de joelho, mas também ofereceu uma análise sobre as diferentes estratégias de análise visual das arquiteturas. Tanto RNCs quanto ViTs se mostraram eficazes para a classificação correta com base em características visuais adequadas e podem ser utilizadas como ferramenta de suporte na análise clínica para diagnosticar a severidade da OA de joelho.
 
 \begin{sidewaystable}[!htbp]
     \centering

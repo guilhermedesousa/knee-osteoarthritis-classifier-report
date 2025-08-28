@@ -16,13 +16,25 @@ No campo da reumatologia, a visão computacional também tem sido aplicada à de
 
 Como uma abordagem alternativa, ou até complementar, foram propostas arquiteturas baseadas em transformers, capazes de apresentar um excelente desempenho em tarefas de classificação, como é o caso do vision transformer (ViT) \cite{Dosovitskiy2021}. Essas arquiteturas têm sido aplicadas com sucesso em tarefas relacionadas à medicina, como o diagnóstico de COVID-19 a partir de radiografias, classificação de tumores e doenças de retina, tornando-se o estado da arte nesta área \cite{Shamshad2023}.
 
-Este trabalho propõe, portanto, uma análise comparativa entre o desempenho de modelos de RNC e ViT na tarefa de detecção e classificação da OA de joelho seguindo a escala KL a partir de radiografias. A avaliação considera métricas gerais de desempenho, eficiência computacional, incerteza preditiva e interpretabilidade, com o objetivo de identificar qual abordagem é mais adequada para uso como uma ferramenta auxiliar em diagnósticos clínicos. Para isso, foram utilizadas técnicas de pré-processamento de imagens, seleção dos melhores hiperparâmetros e estratégias de treinamento, bem como a avaliação dos modelos de classificação propostos.
+Apesar dos avanços, persiste uma lacuna na literatura quanto a uma análise comparativa sistemática que avalie não apenas o desempenho preditivo, mas também a eficiência computacional e a interpretabilidade das RNCs em contraposição aos ViTs para a classificação ordinal da OA de joelho. Este trabalho, portanto, busca responder à seguinte questão de pesquisa: ``Qual família de arquiteturas, RNC ou ViT, oferece o melhor balanço entre acurácia, robustez ordinal, eficiência e interpretabilidade para a classificação da severidade da OA de joelho a partir de radiografias?''
+
+Para guiar esta investigação de forma objetiva, o estudo testará as seguintes hipóteses:
+
+\begin{itemize}
+    \item \textbf{Hipótese 1 (desempenho base):} Modelos de RNC e ViT, quando treinados com a técnica de transferência de aprendizado, são capazes de classificar o grau de osteoartrite em radiografias de joelho com desempenho significativamente superior ao acaso, atingindo valores de F1-score macro superiores a 0,70 e de Quadratic Weighted Kappa (QWK) superiores a 0,80.
+
+    \item \textbf{Hipótese 2 (comparação entre arquiteturas):} As RNCs, devido ao seu forte viés indutivo para o processamento de imagens, apresentarão desempenho preditivo (acurácia, QWK e F1-score macro) igual ou superior aos ViTs, com um custo computacional substancialmente menor, refletido em um tempo de inferência inferior a 50\% do observado nos ViTs de capacidade similar.
+    
+    \item \textbf{Hipótese 3 (consistência ordinal):} A utilização de uma função de perda ordinal (CORN), que reconhece a relação de ordem entre os graus de severidade, resultará em modelos com maior consistência clínica em comparação com a abordagem categórica padrão (Entropia Cruzada). Essa melhoria será quantificada por um aumento no QWK e uma redução no \textit{Mean Absolute Error} (MAE), mesmo que a acurácia geral não seja necessariamente superior.
+
+    \item \textbf{Hipótese 4 (interpretabilidade clínica):} Os mapas de ativação (Grad-CAM) gerados pelos modelos de melhor desempenho destacarão predominantemente a região do espaço articular e as margens ósseas, áreas clinicamente relevantes para o diagnóstico da OA, demonstrando que o aprendizado não se baseia em características espúrias.
+\end{itemize}
 
 \section{Objetivos}
 
 \subsection{Objetivo Geral}
 
-O objetivo geral deste trabalho consistiu em realizar uma análise comparativa completa entre modelos de RNC e ViT na tarefa de detectar e classificar a OA de joelho usando radiografias, facilitando assim o diagnóstico da doença por meio de uma ferramenta automatizada.
+O objetivo geral deste trabalho consiste em realizar uma análise comparativa completa entre modelos de RNC e ViT na tarefa de detectar e classificar a OA de joelho usando radiografias, com o intuito de validar as hipóteses propostas e identificar a abordagem mais adequada para uma potencial ferramenta de diagnóstico automatizado.
 
 \subsection{Objetivos Específicos}
 
