@@ -45,6 +45,8 @@ Todas as imagens possuem resolução de 224×224 pixels no formato PNG. Para gar
     \label{dataset-distribuition}
 \end{figure}
 
+É importante ressaltar que o conjunto de dados da OAI é de natureza longitudinal, contendo múltiplas radiografias do mesmo indivíduo. Neste estudo, a divisão dos dados foi realizada no nível da imagem, e não no nível do paciente. Essa abordagem acarreta um risco potencial de vazamento de dados por paciente (ou \textit{data leakage}, do inglês), onde imagens do mesmo indivíduo podem estar presentes em mais de um subconjunto. Tal cenário pode levar a uma superestimação do desempenho dos modelos, uma vez que estes podem aprender características específicas do paciente em vez de marcadores patológicos generalizáveis. Reconhece-se esta como uma limitação metodológica, e a implementação de uma divisão baseada no identificador do paciente é uma recomendação crucial para trabalhos futuros que visem validar clinicamente os resultados aqui apresentados.
+
 \section{Pré-processamento das imagens}
 
 Uma \textit{pipeline} de pré-processamento foi aplicada para padronizar os dados e otimizar o aprendizado dos modelos. As técnicas foram aplicadas sequencialmente, visando aprimorar a qualidade da imagem e a robustez do treinamento.
@@ -167,6 +169,8 @@ O modelo com a melhor acurácia de validação foi salvo para a avaliação fina
 
 Todos os modelos foram executados na plataforma Google Colab, utilizando uma NVIDIA T4 GPU com 16 GB de memória, adequada para a tarefa de ajuste fino em modelos pequenos. A escolha dessa plataforma foi motivada pela sua acessibilidade e capacidade de fornecer recursos computacionais adequados a um custo reduzido.
 
+Visando garantir a total transparência e reprodutibilidade da pesquisa, o código-fonte desenvolvido para o pré-processamento, treinamento e avaliação dos modelos, juntamente com os arquivos de resultados em formato JSON citados ao longo deste trabalho, foram disponibilizados em um repositório público no GitHub \cite{github-repo}.
+
 \section{Avaliação e Análise Complementar}
 
 Para ir além das métricas de desempenho tradicionais e abordar a necessidade crítica de confiança e transparência em sistemas de IA para medicina, a metodologia de avaliação foi enriquecida com três análises complementares: quantificação da incerteza das previsões, avaliação do tempo de inferência e interpretação das decisões dos modelos. Essas análises foram fundamentais para entender não apenas o desempenho preditivo, mas também a aplicabilidade prática em cenários clínicos, diferenciando este estudo de outros trabalhos semelhantes.
@@ -226,7 +230,3 @@ A implementação foi realizada com a biblioteca \textit{pytorch-grad-cam} \cite
     \caption{Lista das camadas escolhidas para a geração dos mapas de calor Grad-CAM.}
     \label{tab:grad_cam_chosen_layers}
 \end{table}
-
-% \subsection{Otimização de Hiperparâmetros com Grid-Searching}
-
-% Após uma rodada inicial de avaliação, os cinco modelos com melhor desempenho foram selecionados para uma fase de otimização de hiperparâmetros. Utilizando a biblioteca Optuna, um \textit{grid-search} foi executado para explorar sistematicamente diferentes combinações de taxa de aprendizado, \textit{batch size} e parâmetros do otimizador. O objetivo desta etapa foi refinar o treinamento dos modelos mais promissores para maximizar seu potencial preditivo.
