@@ -16,9 +16,7 @@ No campo da reumatologia, a visão computacional também tem sido aplicada à de
 
 Como uma abordagem alternativa, ou até complementar, foram propostas arquiteturas baseadas em transformers, capazes de apresentar um excelente desempenho em tarefas de classificação, como é o caso do vision transformer (ViT) \cite{Dosovitskiy2021}. Essas arquiteturas têm sido aplicadas com sucesso em tarefas relacionadas à medicina, como o diagnóstico de COVID-19 a partir de radiografias, classificação de tumores e doenças de retina, tornando-se o estado da arte nesta área \cite{Shamshad2023}.
 
-Apesar dos avanços, persiste uma lacuna na literatura quanto a uma análise comparativa sistemática que avalie não apenas o desempenho preditivo, mas também a eficiência computacional e a interpretabilidade das RNCs em contraposição aos ViTs para a classificação ordinal da OA de joelho. Este trabalho, portanto, busca responder à seguinte questão de pesquisa: ``Qual família de arquiteturas, RNC ou ViT, oferece o melhor balanço entre acurácia, robustez ordinal, eficiência e interpretabilidade para a classificação da severidade da OA de joelho a partir de radiografias?''
-
-Para guiar esta investigação de forma objetiva, o estudo testará as seguintes hipóteses:
+Apesar dos avanços, persiste uma lacuna na literatura quanto a uma análise comparativa sistemática que avalie não apenas o desempenho preditivo, mas também a eficiência computacional e a interpretabilidade das RNCs em contraposição aos ViTs para a classificação ordinal da OA de joelho. Este trabalho, portanto, busca responder à seguinte questão de pesquisa: ``Qual família de arquiteturas, RNC ou ViT, oferece o melhor balanço entre acurácia, robustez ordinal, eficiência e interpretabilidade para a classificação da severidade da OA de joelho a partir de radiografias?''. Para guiar esta investigação de forma objetiva, o estudo testará as seguintes hipóteses:
 
 \begin{itemize}
     \item \textbf{Hipótese 1 (desempenho base):} Modelos de RNC e ViT, quando treinados com a técnica de transferência de aprendizado, são capazes de classificar o grau de osteoartrite em radiografias de joelho com desempenho significativamente superior ao acaso, atingindo valores de F1-score macro superiores a 0,70 e de Quadratic Weighted Kappa (QWK) superiores a 0,80.
@@ -34,7 +32,7 @@ Para guiar esta investigação de forma objetiva, o estudo testará as seguintes
 
 \subsection{Objetivo Geral}
 
-O objetivo geral deste trabalho consiste em realizar uma análise comparativa completa entre modelos de RNC e ViT na tarefa de detectar e classificar a OA de joelho usando radiografias, com o intuito de validar as hipóteses propostas e identificar a abordagem mais adequada para uma potencial ferramenta de diagnóstico automatizado.
+O objetivo geral deste trabalho consiste em realizar uma análise comparativa completa entre modelos de RNC e ViT na tarefa de detectar e classificar a OA de joelho usando radiografias, com o intuito de validar as hipóteses propostas e identificar a abordagem mais adequada para uma potencial ferramenta de diagnóstico automatizado. E para que esse objetivo seja alcançado, foram definidos alguns objetivos específicos, conforme descrito a seguir.
 
 \subsection{Objetivos Específicos}
 

@@ -91,22 +91,15 @@ A implementação foi realizada com a biblioteca OpenCV \cite{opencv} do Python.
 
 \subsection{Normalização}
 
-A normalização dos valores dos pixels é um passo crítico para a eficácia da trasferência de aprendizado. Os valores de cada canal de cor foram padronizados para uma média de 0 e desvio padrão de 1.
+A normalização dos valores de pixels é um passo fundamental para garantir a eficácia da transferência de aprendizado. Nesse processo, os valores de cada canal de cor são ajustados de modo a apresentar média zero e desvio padrão igual a um, o que contribui para a estabilidade do treinamento e para a compatibilidade com os pesos pré-treinados.  
 
-Neste estudo, a normalização foi implementada em todos os subconjuntos de dados com a biblioteca PyTorch \cite{pytorch}, que aplica a normalização em cada canal (RGB), subtraindo a média e dividindo pelo desvio padrão. Para os modelos de RNC, como ResNet e VGG, utilizaram-se os valores convencionais para manter a compatibilidade com o pré-treinamento no ImageNet:
-
-\begin{itemize}
-    \item Média: 0,485, 0,456 e 0,406
-    \item Desvio padrão: 0,229, 0,224 e 0,225
-\end{itemize}
-
-Para os modelos de ViT, como o DeiT e o Swin Transformer, foram utilizados os valores específicos de normalização fornecidos por seus respectivos pacotes no Hugging Face.
+Neste estudo, a normalização foi implementada em todos os subconjuntos de dados com a biblioteca PyTorch \cite{pytorch}, que aplica a operação em cada canal RGB, subtraindo a média e dividindo pelo desvio padrão correspondentes. Para os modelos de redes neurais convolucionais (ResNet, VGG e afins), adotaram-se os valores convencionais utilizados no pré-treinamento no ImageNet, com médias iguais a 0,485, 0,456 e 0,406 e desvios padrão iguais a 0,229, 0,224 e 0,225. Já para os modelos baseados em Transformers, como o DeiT e o Swin Transformer, foram empregados os parâmetros de normalização disponibilizados em seus respectivos pacotes no Hugging Face, assegurando consistência com os procedimentos originais de pré-treinamento.
 
 \subsection{Aumento de dados}
 
-Para aumentar a diversidade do conjunto de treinamento e mitigar o risco de \textit{overfitting}, foram aplicadas transformações geométricas aleatórias em tempo de execução. As técnicas incluíram a inversão horizontal (reflexão), com probabilidade de 50\%, e rotações leves limitadas a um intervalo de -10 a 10 graus. Essa estratégia expandiu artificialmente o conjunto de dados, expondo o modelo a uma maior variedade de exemplos e melhorando sua capacidade de generalização, especialmente para as classes minoritárias.
+Com o objetivo de ampliar a diversidade do conjunto de treinamento e reduzir o risco de \textit{overfitting}, foram aplicadas em tempo de execução transformações geométricas aleatórias. Entre elas, destacam-se a inversão horizontal (\textit{flip}) com probabilidade de 50\% e rotações leves dentro do intervalo de -10 a 10 graus. Essas operações expandem artificialmente o conjunto de dados e expõem o modelo a uma maior variedade de exemplos, favorecendo a capacidade de generalização, sobretudo em relação às classes minoritárias.  
 
-Antes das transformações serem aplicadas, no entanto, as imagens foram redimensionadas para o tamanho esperado pelo respectivo modelo, definido como 224×224 pixels para todos os modelos, exceto para o modelo Inception-v3, que requer imagens de 299×299 pixels.
+Antes da aplicação das transformações, as imagens foram redimensionadas para o tamanho exigido por cada arquitetura. Para a maioria dos modelos, adotou-se a resolução de 224×224 pixels, enquanto o Inception-v3, devido às características de sua arquitetura, requereu imagens com dimensões de 299×299 pixels.
 
 \subsection{Subamostragem}
 
@@ -116,7 +109,7 @@ O desbalanceamento de classes, evidente na \autoref{dataset-summary}, com a clas
 
 A estratégia central de treinamento foi o uso da transferência de aprendizado a partir de modelos pré-treinados no conjunto de dados ImageNet-1K \cite{Russakovsky2015}. As arquiteturas, obtidas de repositórios como PyTorch e Hugging Face (\autoref{tab:model_list}), tiveram sua camada final de classificação substituída e adaptada ao número de classes esperado. A natureza do problema consiste em $K=5$ classes, correspondendo às categorias de severidade da OA de joelho, mas para a função de perda CORN o número de classes considerado foi $K-1$.
 
-Adotou-se também a abordagem de ajuste fino, na qual todos os pesos da rede foram liberados para treinamento, permitindo que o modelo se adaptasse completamente às especificidades das imagens radiográficas.
+Além disso, foi adotada a abordagem de ajuste fino (\textit{fine-tuning}), na qual todos os pesos da rede foram liberados para treinamento. Essa estratégia permite que o modelo se adapte plenamente às características específicas das imagens radiográficas, otimizando sua capacidade de aprendizado para o problema em questão.
 
 \begin{table}[!htbp]
     \centering
@@ -169,7 +162,7 @@ O modelo com a melhor acurácia de validação foi salvo para a avaliação fina
 
 Todos os modelos foram executados na plataforma Google Colab, utilizando uma NVIDIA T4 GPU com 16 GB de memória, adequada para a tarefa de ajuste fino em modelos pequenos. A escolha dessa plataforma foi motivada pela sua acessibilidade e capacidade de fornecer recursos computacionais adequados a um custo reduzido.
 
-Visando garantir a total transparência e reprodutibilidade da pesquisa, o código-fonte desenvolvido para o pré-processamento, treinamento e avaliação dos modelos, juntamente com os arquivos de resultados em formato JSON citados ao longo deste trabalho, foram disponibilizados em um repositório público no GitHub \cite{github-repo}.
+Para garantir a total transparência e reprodutibilidade da pesquisa, o código-fonte desenvolvido para pré-processamento, treinamento e avaliação dos modelos foi disponibilizado em um repositório público no GitHub \cite{github-repo}. Além disso, os arquivos de resultados em formato JSON, mencionados ao longo deste trabalho, também estão acessíveis, permitindo que outros pesquisadores reproduzam e verifiquem os experimentos.
 
 \section{Avaliação e Análise Complementar}
 

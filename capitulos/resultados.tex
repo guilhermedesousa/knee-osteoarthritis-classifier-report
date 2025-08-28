@@ -180,7 +180,7 @@ Em forte contraste com a classe KL-1, as classes nos extremos da escala, KL-0 (s
 
 As classes KL-2 (mínimo) e KL-3 (moderado) representam estágios onde a doença já está presente e o desempenho dos modelos foi mais equilibrado. Modelos como DaViT-B (0,9212 para KL-3) e DenseNet-169 (0,9016 para KL-3) mostraram uma capacidade notável de distinguir os estágios intermediários da doença.
 
-Essa análise por classe não apenas valida a decisão de realizar experimentos excluindo a classe KL-1, mas também confirma que o desempenho dos modelos está fortemente alinhado à realidade clínica da OA de joelho, onde existe uma alta certeza nos casos extremos e dificuldade na zona de transição.
+Essa análise por classe não apenas valida a decisão de realizar experimentos excluindo a classe KL-1, mas também confirma que o desempenho dos modelos está fortemente alinhado à realidade clínica da OA de joelho, onde existe uma alta certeza nos casos extremos e dificuldade na zona de transição. Esses achados são cruciais para orientar futuras pesquisas e aprimorar a aplicação prática desses modelos em ambientes clínicos.
 
 \section{Comparações com Trabalhos Relacionados}
 
@@ -223,13 +223,13 @@ Portanto, embora alguns estudos possam apresentar valores de acurácia isoladame
 
 \section{Eficiência Computacional}
 
-A análise dos tempos de treinamento e inferência, apresentada na \autoref{tab:computational_performance}, revela distinções cruciais entre os modelos e funções de perda, oferecendo um respaldo da aplicação prática, complementando as métricas de desempenho preditivo e validando a hipótese 2 (comparação entre arquiteturas).
+A análise dos tempos de treinamento e inferência, apresentada na \autoref{tab:computational_performance}, revela distinções cruciais entre os modelos e funções de perda. Esses resultados oferecem um respaldo da aplicação prática, complementando as métricas de desempenho preditivo e validando a hipótese 2 (comparação entre arquiteturas).
 
 O tempo de inferência por imagem é uma métrica crítica para a aplicação clínica, e as RNCs demonstram uma vantagem sobre os ViTs. Modelos como ResNet-34 (1,55 ms/imagem), ResNet-50 (2,87 ms/imagem) e DenseNet/121 (3,11 ms/imagem) são os mais rápidos, estabelecendo uma linha de base de alta eficiência. Suas arquiteturas são bem otimizadas para o hardware de GPU, o que permite um processamento rápido.
 
 Em contraste, os ViTs apresentaram tempos de inferência significativamente mais altos. O mais rápido entre eles, MaxViT-T (6,92 ms/imagem), já é mais de duas vezes mais lento do que as RNCs eficientes. Essa disparidade pode ser justificada pela natureza das operações. Embora ViTs tenham alcançado complexidade computacional linear em relação ao tamanho de imagem, como citam \citeonline{ding2022davitdualattentionvision} e \citeonline{maxvit2022}, seus blocos de atenção ainda envolvem operações de multiplicação de matrizes em larga escala que são mais custosas do que as operações de convolução. Isso também pode ser visualizado na \autoref{tab:model_list}, na coluna de FLOPs (GMac).
 
-A literatura sobre modelos como MaxViT e DaViT foca em tornar a atenção global mais eficiente e de fato o fazem, mas os resultados práticos da \autoref{tab:computational_performance} demonstram que, na GPU utilizada, a sobrecarga computacional da auto-atenção ainda é um obstáculo significativo para a inferência quando comparada às RNCs.
+A literatura sobre modelos como MaxViT e DaViT concentra-se em tornar a atenção global mais eficiente, o que de fato é alcançado em termos teóricos. No entanto, os resultados práticos apresentados na \autoref{tab:computational_performance} mostram que, na GPU utilizada, a sobrecarga computacional da auto-atenção ainda representa um obstáculo significativo para a inferência, especialmente quando comparada ao desempenho das redes neurais convolucionais (RNCs).
 
 \begin{sidewaystable}[!htbp]
     \centering
