@@ -8,6 +8,8 @@ Os resultados das métricas gerais de desempenho dos modelos de RNC e ViT são a
 
 \begin{table}[!htbp]
     \centering
+    \caption{Métricas de desempenho de cada modelo na tarefa de classificar a OA de joelho em cinco classes de severidade.}
+    \label{tab:overall_metrics_all_models}
     \begin{tabular}{|l|l|c|c|c|}
         \hline
         \textbf{Modelo} & \textbf{Função de perda} & \textbf{Acurácia} & \textbf{QWK} & \textbf{MAE} \\
@@ -65,8 +67,6 @@ Os resultados das métricas gerais de desempenho dos modelos de RNC e ViT são a
         Swin-B & \text{CORN} & 0,7026 & 0,8617 & 0,3293 \\
         \hline
     \end{tabular}
-    \caption{Métricas de desempenho de cada modelo na tarefa de classificar a OA de joelho em cinco classes de severidade.}
-    \label{tab:overall_metrics_all_models}
 \end{table}
 
 A avaliação comparativa das funções de perda testou diretamente a hipótese 3 (consistência ordinal) e revelou uma clara compensação entre a acurácia categórica e a correção ordinal. Na maioria dos cenários, os modelos treinados com a entropia cruzada apresentaram um desempenho superior em termos de acurácia, com uma média de 1,58\% a mais em relação aos seus equivalentes treinados com a função CORN. Isso sugere que a entropia cruzada é mais eficaz para maximizar o número de classificações exatamente corretas.
@@ -79,6 +79,8 @@ Adicionalmente, para avaliar a capacidade discriminativa dos modelos, foram calc
 
 \begin{table}[!htbp]
     \centering
+    \caption{Curvas AUC-ROC para os cinco principais modelos.}
+    \label{tab:curvas_auc_roc}
     \begin{tabular}{|l|c|c|}
         \hline
         \textbf{Modelo} & \textbf{Entropia Cruzada} & \textbf{CORN} \\ \hline
@@ -88,8 +90,6 @@ Adicionalmente, para avaliar a capacidade discriminativa dos modelos, foram calc
         GCViT-B & \includegraphics[width=0.38\textwidth]{figs/auc_roc/gcvit_base-in1k_auc_roc_cross_entropy.png} & \includegraphics[width=0.38\textwidth]{figs/auc_roc/gcvit_base-in1k_auc_roc_corn.png} \\ \hline
         Inception-v3 & \includegraphics[width=0.38\textwidth]{figs/auc_roc/inception_v3_auc_roc_cross_entropy.png} & \includegraphics[width=0.38\textwidth]{figs/auc_roc/inception_v3_auc_roc_corn.png} \\ \hline
     \end{tabular}
-    \caption{Curvas AUC-ROC para os cinco principais modelos.}
-    \label{tab:curvas_auc_roc}
 \end{table}
 
 \section{Métricas de Desempenho por Classe}
@@ -98,6 +98,8 @@ A análise detalhada dos F1-scores por classe, apresentada na \autoref{tab:f1_sc
 
 \begin{sidewaystable}[!htbp]
     \centering
+    \caption{Métrica F1-score para cada uma das cinco classes e modelo, considerando as funções de perda Entropia Cruzada e CORN.}
+    \label{tab:f1_scores_all_models}
     \begin{tabular}{|l|l|c|c|c|c|c|c|}
         \hline
         \textbf{Modelo} & \textbf{Função de perda} & \textbf{Média Macro} & \textbf{KL-0} & \textbf{KL-1} & \textbf{KL-2} & \textbf{KL-3} & \textbf{KL-4} \\
@@ -155,14 +157,14 @@ A análise detalhada dos F1-scores por classe, apresentada na \autoref{tab:f1_sc
         Swin-B & \text{CORN} & 0.7261 & 0.7994 & 0.4261 & 0.6681 & 0.8405 & 0.8966 \\
         \hline
     \end{tabular}
-    \caption{Métrica F1-score para cada uma das cinco classes e modelo, considerando as funções de perda Entropia Cruzada e CORN.}
-    \label{tab:f1_scores_all_models}
 \end{sidewaystable}
 
 A tabela revela a observação central onde o desempenho dos modelos é consistentemente baixo na classe KL-1 (duvidoso). Nenhum modelo, independentemente da arquitetura ou da função de perda, conseguiu superar um F1-score de 0,6000 para esta classe, com o melhor sendo o DenseNet-169 (0,5970) e o pior sendo o VGG-19 (0,3750). Esse resultado sugere que a classe KL-1 é inerentemente ambígua e inconsistente, assim como diz \citeonline{Spector1993}. Ela representa um estágio da OA onde os achados radiológicos, como um possível estreitamento do espaço articular ou a formação de osteófitos, são muito sutis. Como consequência, essa classe sofre com a sobreposição de características entre as classes adjacentes, tornando a classificação pelos modelos mais desafiadora. Esse padrão é visualmente confirmado nas matrizes de confusão apresentadas na \autoref{tab:matrizes_confusao}, onde observa-se um número elevado de classificações incorretas entre as classes KL-1 e as classes adjacentes KL-0 e KL-2.
 
 \begin{table}[!htbp]
     \centering
+    \caption{Matriz de confusão para os cinco principais modelos.}
+    \label{tab:matrizes_confusao}
     \begin{tabular}{|l|c|c|}
         \hline
         \textbf{Modelo} & \textbf{Entropia Cruzada} & \textbf{CORN} \\ \hline
@@ -172,8 +174,6 @@ A tabela revela a observação central onde o desempenho dos modelos é consiste
         GCViT-B & \includegraphics[width=0.37\textwidth]{figs/confusion_matrices/gcvit_base-in1k_cm_cross_entropy.png} & \includegraphics[width=0.37\textwidth]{figs/confusion_matrices/gcvit_base-in1k_cm_corn.png} \\ \hline
         Inception-v3 & \includegraphics[width=0.37\textwidth]{figs/confusion_matrices/inception_v3_cm_cross_entropy.png} & \includegraphics[width=0.37\textwidth]{figs/confusion_matrices/inception_v3_cm_corn.png} \\ \hline
     \end{tabular}
-    \caption{Matriz de confusão para os cinco principais modelos.}
-    \label{tab:matrizes_confusao}
 \end{table}
 
 Em forte contraste com a classe KL-1, as classes nos extremos da escala, KL-0 (saudável) e KL-4 (severo), apresentam F1-scores consistentemente altos na maioria dos modelos. Para a classe KL-0, modelos como DenseNet-121 (0,8454) e GCViT-B (0,8409) demonstraram uma boa capacidade de identificar corretamente um joelho saudável. Já para a classe KL-4, os resultados são ainda mais expressivos, com modelos como DaViT-B e MaxViT-T alcançando F1-scores muito elevados, ambos com 0,9310.
@@ -188,6 +188,8 @@ O desempenho do melhor modelo deste estudo (DenseNet-169) foi comparado com trab
 
 \begin{table}[!htbp]
     \centering
+    \caption{Comparação entre os resultados de diferentes estudos que abordam o problema da OA de joelho.}
+    \label{tab:study_comparisons}
     \begin{tabular}{|l|c|c|c|c|c|}
         \hline
         \textbf{Referência} & \textbf{Classes} & \textbf{Acurácia} & \textbf{QWK} & \textbf{F1-score} & \textbf{AUC} \\
@@ -211,8 +213,6 @@ O desempenho do melhor modelo deste estudo (DenseNet-169) foi comparado com trab
         Este estudo & 5 & \makecell{78,85\%} & \makecell{0,888} & \makecell{0,806} & \makecell{0,938} \\
         \hline
     \end{tabular}
-    \caption{Comparação entre os resultados de diferentes estudos que abordam o problema da OA de joelho.}
-    \label{tab:study_comparisons}
 \end{table}
 
 Ao analisar os trabalhos que consideram as cinco classes KL, observa-se que o presente estudo, com 78,85\% de acurácia, supera significativamente os resultados de \citeonline{Mohammed2023} (69,00\%), \citeonline{Cueva2022} (61,71\%), \citeonline{sekhri2023} (70,17\%) e \citeonline{apon2024} (66,14\%). A superioridade é particularmente evidente no F1-score (0,806), que indica um melhor equilíbrio entre precisão e revocação entre todas as cinco classes em comparação com os valores reportados por \citeonline{Mohammed2023} (0,670) e \citeonline{apon2024} (0,618). O trabalho de \citeonline{Tariq2023} apresenta resultados excepcionalmente elevados (98,00\% de acurácia), que foram obtidos a partir de um modelo \textit{ensemble}, além de o resultado poder ser atribuído a um subconjunto de dados menos desafiador ou protocolos de validação que podem não garantir uma separação estrita entre treino e teste.
@@ -233,6 +233,8 @@ A literatura sobre modelos como MaxViT e DaViT concentra-se em tornar a atençã
 
 \begin{sidewaystable}[!htbp]
     \centering
+    \caption{Tempos de treinamento e inferência de cada modelo.}
+    \label{tab:computational_performance}
     \begin{tabular}{|l|l|c|c|c|}
         \hline
         \textbf{Modelo} & \textbf{Função de perda} & \textbf{Treinamento (\textit{min})} & \textbf{Inferência média/batch (\textit{ms})} & \textbf{Inferência média/imagem (\textit{ms})} \\
@@ -290,8 +292,6 @@ A literatura sobre modelos como MaxViT e DaViT concentra-se em tornar a atençã
         Swin-B & CORN & 36,02 & 348,65 & 12,45 \\
         \hline
     \end{tabular}
-    \caption{Tempos de treinamento e inferência de cada modelo.}
-    \label{tab:computational_performance}
 \end{sidewaystable}
 
 \section{Análise Quantitativa}
@@ -300,6 +300,8 @@ A predição conformal foi aplicada para quantificar a incerteza dos modelos, ge
 
 \begin{table}[!htbp]
     \centering
+    \caption{Valores de cobertura da predição conformal para cada modelo e função de perda.}
+    \label{tab:conformal_coverage}
     \begin{tabular}{|l|l|c|}
         \hline
         \textbf{Modelo} & \textbf{Função de perda} & \textbf{Cobertura} \\
@@ -357,8 +359,6 @@ A predição conformal foi aplicada para quantificar a incerteza dos modelos, ge
         Swin-B & CORN &    0,8822 \\
         \hline
     \end{tabular}
-    \caption{Valores de cobertura da predição conformal para cada modelo e função de perda.}
-    \label{tab:conformal_coverage}
 \end{table}
 
 Como descrito na \autoref{sec:conformal-prediction}, a cobertura mede a porcentagem de vezes que a classe verdadeira esteve contida no conjunto de predição conformal a partir das imagens de teste. Modelos treinados com entropia cruzada demonstraram uma cobertura muito alta, consistentemente alcançando valores de 100\%, como é o caso do ResNet-50, VGG-16, DenseNet-121, DeiT-Distilled-B e Swin-B. Embora isso satisfaça a garantia teórica de cobrir pelo menos 95\% dos casos, valores altos podem indicar que o método é excessivamente conservador, ou seja, que o limiar de confiança ($\hat{q}$) calculado é muito alto, levando os modelos a incluírem mais classes para garantir a cobertura.
@@ -371,6 +371,8 @@ Como pode ser visto na \autoref{tab:cp_set_sizes}, os histogramas para os modelo
 
 \begin{table}[!htbp]
     \centering
+    \caption{Histograma do tamanho dos conjuntos de predição para cinco modelos relevantes.}
+    \label{tab:cp_set_sizes}
     \begin{tabular}{|c|c|c|}
         \hline
         \textbf{Modelo} & \textbf{Entropia Cruzada} & \textbf{CORN} \\ \hline
@@ -380,8 +382,6 @@ Como pode ser visto na \autoref{tab:cp_set_sizes}, os histogramas para os modelo
         DaViT-B & \includegraphics[width=0.25\textwidth]{figs/conformal_prediction/davit_base-msft_in1k_cp_cross_entropy.png} & \includegraphics[width=0.25\textwidth]{figs/conformal_prediction/davit_base-msft_in1k_cp_corn.png} \\ \hline
         DenseNet-169 & \includegraphics[width=0.25\textwidth]{figs/conformal_prediction/densenet169_cp_cross_entropy.png} & \includegraphics[width=0.25\textwidth]{figs/conformal_prediction/densenet169_cp_corn.png} \\ \hline
     \end{tabular}
-    \caption{Histograma do tamanho dos conjuntos de predição para cinco modelos relevantes.}
-    \label{tab:cp_set_sizes}
 \end{table}
 
 Curiosamente, a abordagem ordinal com uso do CORN produziu conjuntos de predição muito mais informativos e úteis. A principal vantagem foi o número de conjuntos de tamanho um, indicando alta confiança do modelo em muitos casos. Por exemplo, os modelos Inception-v3 e DenseNet-169 geraram 198 e 181 predições únicas, respectivamente. Isso representa aproximadamente 20\% do conjunto de teste recebendo uma resposta precisa. Os histogramas mostram uma distribuição mais deslocada para a esquerda, ou seja, conjuntos menores.
@@ -402,6 +402,8 @@ Em síntese, a análise de interpretabilidade com Grad-CAM não só validou a hi
 
 \begin{sidewaystable}[!htbp]
     \centering
+    \caption{Visualização Grad-CAM para os cinco principais modelos.}
+    \label{tab:gradcams_top5_models}
     \begin{tabular}{|c|c|c|c|c|c|}
         \hline
         \textbf{Modelo} & \textbf{KL-0} & \textbf{KL-1} & \textbf{KL-2} & \textbf{KL-3} & \textbf{KL-4} \\ \hline
@@ -411,6 +413,4 @@ Em síntese, a análise de interpretabilidade com Grad-CAM não só validou a hi
         GCViT-B & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_gcvit_kl0.png} & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_gcvit_kl1.png} & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_gcvit_kl2.png} & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_gcvit_kl3.png} & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_gcvit_kl4.png} \\ \hline
         Inception-v3 & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_inceptionv3_kl0.png} & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_inceptionv3_kl1.png} & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_inceptionv3_kl2.png} & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_inceptionv3_kl3.png} & \includegraphics[width=0.15\textwidth]{figs/gradcams/gradcam_inceptionv3_kl4.png} \\ \hline
     \end{tabular}
-    \caption{Visualização Grad-CAM para os cinco principais modelos.}
-    \label{tab:gradcams_top5_models}
 \end{sidewaystable}

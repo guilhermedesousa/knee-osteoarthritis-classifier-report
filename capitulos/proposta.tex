@@ -15,6 +15,8 @@ A base para qualquer modelo de aprendizado profundo é um conjunto de dados de a
 
 \begin{table}[!htbp]
     \centering
+    \caption{Número de radiografias por classe KL no conjunto de dados original.}
+    \label{dataset-summary}
     \begin{tabular}{|c|c|c|c|}
         \hline
         \textbf{Classe KL} & \textbf{Descrição} & \textbf{Total de imagens} & \textbf{\% do total} \\
@@ -32,8 +34,6 @@ A base para qualquer modelo de aprendizado profundo é um conjunto de dados de a
         \textbf{Total} & - & 9.786 & 100\% \\
         \hline
     \end{tabular}
-    \caption{Número de radiografias por classe KL no conjunto de dados original.}
-    \label{dataset-summary}
 \end{table}
 
 Todas as imagens possuem resolução de 224×224 pixels no formato PNG. Para garantir uma avaliação robusta, o conjunto de dados foi dividido em quatro subconjuntos distintos: treino (70\%), validação (10\%), teste (10\%) e calibração (10\%). Essa separação é uma prática recomendada que permite não apenas o treinamento (treino), o ajuste de hiperparâmetros (validação) e a avaliação final (teste) em dados não vistos, mas também a quantificação de incerteza (calibração), como detalhado na \autoref{sec:conformal-prediction}. A distribuição das classes em cada subconjunto é apresentada na \autoref{dataset-distribuition}.
@@ -113,6 +113,8 @@ Além disso, foi adotada a abordagem de ajuste fino (\textit{fine-tuning}), na q
 
 \begin{table}[!htbp]
     \centering
+    \caption{Lista dos modelos utilizados neste estudo, com a fonte, o número de parâmetros e FLOPs estimados.}
+    \label{tab:model_list}
     \begin{tabular}{|l|l|c|c|}
         \hline
         \textbf{Modelo} & \textbf{Fonte} & \textbf{Parâmetros (M)} & \textbf{FLOPs (GMac)} \\
@@ -144,8 +146,6 @@ Além disso, foi adotada a abordagem de ajuste fino (\textit{fine-tuning}), na q
         Swin-Base & PyTorch & 86,75 & 10,55 \\
         \hline
     \end{tabular}
-    \caption{Lista dos modelos utilizados neste estudo, com a fonte, o número de parâmetros e FLOPs estimados.}
-    \label{tab:model_list}
 \end{table}
 
 A estimativa de FLOPs foi realizada com o auxílio da biblioteca \textit{FLOPs Counter PyTorch} \cite{ptflops}, que permite a análise do custo computacional por meio da instrumentação do modelo em PyTorch. Essa análise visa fornecer uma perspectiva complementar à avaliação de desempenho, destacando modelos que, além de eficazes, também são eficientes em termos de recursos computacionais, o que é especialmente relevante para implementação em ambientes com capacidade limitada, como dispositivos embarcados ou sistemas hospitalares com restrições de hardware.
@@ -197,6 +197,8 @@ A implementação foi realizada com a biblioteca \textit{pytorch-grad-cam} \cite
 
 \begin{table}[!htbp]
     \centering
+    \caption{Lista das camadas escolhidas para a geração dos mapas de calor Grad-CAM.}
+    \label{tab:grad_cam_chosen_layers}
     \begin{tabular}{|l|l|}
         \hline
         \textbf{Arquitetura} & \textbf{Camada escolhida} \\
@@ -220,6 +222,4 @@ A implementação foi realizada com a biblioteca \textit{pytorch-grad-cam} \cite
         Swin-Base & model.features[-1][-1].norm1 \\
         \hline
     \end{tabular}
-    \caption{Lista das camadas escolhidas para a geração dos mapas de calor Grad-CAM.}
-    \label{tab:grad_cam_chosen_layers}
 \end{table}

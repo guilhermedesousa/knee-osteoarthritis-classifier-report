@@ -61,6 +61,8 @@ Na prática clínica, a atribuição do grau KL é realizada por radiologistas, 
 
 \begin{table}[h]
     \centering
+    \caption{Escala de Kellgren/Lawrence para classificação da severidade de osteoartrite.}
+    \label{tabela-kl}
     \begin{tabular}{|c|c|c|c|c|}
         \hline
         \includegraphics[width=1.7cm]{figs/KL0-sample.png} & \includegraphics[width=1.7cm]{figs/KL1-sample.png} & \includegraphics[width=1.7cm]{figs/KL2-sample.png} & \includegraphics[width=1.7cm]{figs/KL3-sample.png} & \includegraphics[width=1.7cm]{figs/KL4-sample.png} \\
@@ -68,8 +70,6 @@ Na prática clínica, a atribuição do grau KL é realizada por radiologistas, 
         \textbf{0 (saudável)} & \textbf{1 (duvidoso)} & \textbf{2 (mínimo)} & \textbf{3 (moderado)} & \textbf{4 (severo)} \\
         \hline
     \end{tabular}
-    \caption{Escala de Kellgren/Lawrence para classificação da severidade de osteoartrite.}
-    \label{tabela-kl}
 \end{table}
 
 \section{Rede Neural Convolucional (RNC)}\label{sec:rnc}
@@ -107,6 +107,8 @@ A \autoref{tab:vgg-arch} apresenta a configuração das arquiteturas VGG-16 e VG
 
 \begin{table}[!htbp]
     \centering
+    \caption{Configuração dos modelos VGG-16 e VGG-19. Fonte: \citeonline{Simonyan2015}.}
+    \label{tab:vgg-arch}
     \footnotesize
     \begin{tabular}{|c|c|}
         \hline
@@ -156,8 +158,6 @@ A \autoref{tab:vgg-arch} apresenta a configuração das arquiteturas VGG-16 e VG
         \multicolumn{2}{|c|}{softmax} \\
         \hline
     \end{tabular}
-    \caption{Configuração dos modelos VGG-16 e VGG-19. Fonte: \citeonline{Simonyan2015}.}
-    \label{tab:vgg-arch}
 \end{table}
 
 \subsection{Residual Network (ResNet)}
@@ -179,6 +179,8 @@ A \autoref{resnet-arch} apresenta a configuração das arquiteturas ResNet-34, R
 
 \begin{table}[!htbp]
     \centering
+    \caption{Configuração dos modelos ResNet-34, ResNet-50 e ResNet-101. Fonte: \citeonline{He2016}.}
+    \label{resnet-arch}
     \footnotesize
     \begin{tabular}{|c|c|c|c|c|}
         \hline
@@ -257,8 +259,6 @@ A \autoref{resnet-arch} apresenta a configuração das arquiteturas ResNet-34, R
         \multicolumn{2}{|c|}{FLOPs} & 3.6×10\textsuperscript{9} & 3.8×10\textsuperscript{9} & 7.6×10\textsuperscript{9} \\
         \hline
     \end{tabular}
-    \caption{Configuração dos modelos ResNet-34, ResNet-50 e ResNet-101. Fonte: \citeonline{He2016}.}
-    \label{resnet-arch}
 \end{table}
 
 \subsection{Densely Connected Convolutional Networks (DenseNet)}
@@ -280,6 +280,7 @@ Nos últimos anos, a arquitetura DenseNet tem sido amplamente utilizada em diver
 
 \begin{table}[!htbp]
     \centering
+    \caption{Configuração dos modelos DenseNet-121 e DenseNet-169. Fonte: \citeonline{Huang2017}.}
     \footnotesize
     \begin{tabular}{|c|c|c|c|}
         \hline
@@ -346,7 +347,6 @@ Nos últimos anos, a arquitetura DenseNet tem sido amplamente utilizada em diver
         &  & \multicolumn{2}{c|}{1000D fully-connected, softmax} \\
         \hline
     \end{tabular}
-    \caption{Configuração dos modelos DenseNet-121 e DenseNet-169. Fonte: \citeonline{Huang2017}.}
     \label{tab:densenet-arch}
 \end{table}
 
@@ -376,6 +376,8 @@ A \autoref{inception-v3-arch} apresenta a configuração da arquitetura Inceptio
 
 \begin{table}[!htbp]
     \centering
+    \caption{Configuração do modelo Inception-v3. Fonte \citeonline{Szegedy2016}.}
+    \label{inception-v3-arch}
     \footnotesize
     \begin{tabular}{|c|c|c|c|c|}
         \hline
@@ -408,8 +410,6 @@ A \autoref{inception-v3-arch} apresenta a configuração da arquitetura Inceptio
         softmax & classifier & $1\times1\times1000$ \\
         \hline
     \end{tabular}
-    \caption{Configuração do modelo Inception-v3. Fonte \citeonline{Szegedy2016}.}
-    \label{inception-v3-arch}
 \end{table}
 
 Além de seu excelente desempenho na tarefa de classificação de imagens do ILSVRC 2012 \cite{Russakovsky2015}, a arquitetura Inception-v3 tem sido utilizada em outras aplicações, incluindo o diagnóstico médico. Por exemplo, \citeonline{Mujahid2022} adotaram a arquitetura Inception-v3 para a tarefa de classificação de pneumonia em radiografias e obtiveram resultados promissores, alcançando uma acurácia de 99,29\% com um modelo \textit{ensemble}, superando outros modelos, como VGG-16 e ResNet-50.
