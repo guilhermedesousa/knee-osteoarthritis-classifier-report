@@ -445,7 +445,7 @@ Todas as variantes de ViT compartilham a mesma estrutura básica, que consiste n
 
 A arquitetura DeiT, introduzida por pesquisadores do \textit{Facebook} em 2021 \cite{Touvron2021}, representa um avanço significativo na adaptação de transformers. Além de ser uma abordagem livre de convoluções, ela se destaca por não necessitar de grandes volumes de dados e infraestrutura computacional para alcançar resultados competitivos, ao contrário do que se pressupõe de arquiteturas ViT \cite{Dosovitskiy2021}.
 
-O diferencial do DeiT reside na introdução de uma nova estratégia de distilação de conhecimento, adaptada especificamente para a arquitetura transformer. Como ilustrado na \autoref{fig:distillation-procedure}, um token de distilação é incorporado diretamente à entrada do transformer e atua de maneira similar ao token de classificação: interage com os demais tokens da rede através das camadas de auto-atenção e sua saída é observada após a última camada. Este token é treinado com o objetivo de replicar a predição de um ``modelo professor'', estratégia conhecida como \textit{hard-label distillation}:
+O diferencial do DeiT reside na introdução de uma nova estratégia de destilação de conhecimento, adaptada especificamente para a arquitetura transformer. Como ilustrado na \autoref{fig:distillation-procedure}, um token de destilação é incorporado diretamente à entrada do transformer e atua de maneira similar ao token de classificação: interage com os demais tokens da rede através das camadas de auto-atenção e sua saída é observada após a última camada. Este token é treinado com o objetivo de replicar a predição de um ``modelo professor'', estratégia conhecida como \textit{hard-label distillation}:
 
 \begin{equation}
     L_{\text{global}}^{\text{hardDistill}} = \frac{1}{2} \, L_{CE}\left( \psi(Z_s), y \right) + \frac{1}{2} \, L_{CE}\left( \psi(Z_s), y_t \right) \text{,}
@@ -453,14 +453,14 @@ O diferencial do DeiT reside na introdução de uma nova estratégia de distila�
 
 onde $Z_s$ são os \textit{logits} do ``modelo aluno'', $L_{CE}$ é a entropia cruzada sobre os rótulos corretos ($y$) e os rótulos preditos pelo ``modelo professor'' ($y_t = \text{argmax}_c Z_t(c)$), sendo $Z_t$ os seus \textit{logits}, e $\psi$ é a função \textit{softmax}. Como resultado, ambos os tokens compartilham informação ao longo das camadas e gradualmente convergem para vetores similares, porém ainda distintos. Por fim, seus valores são associados com classificadores lineares para produzir o rótulo da imagem.
 
-Entre suas variantes, o modelo DeiT-B com a estratégia de distilação, que possui arquitetura semelhante ao ViT-B, é o maior modelo em termos de número de parâmetros (87 milhões). Em experimentos com o ImageNet-1K, tal modelo atingiu uma acurácia top-1 de 83,4\% (com entrada de 224×224 pixels), superando arquiteturas de RNC e inclusive variantes do ViT pré-treinadas com conjuntos de dados significativamente maiores. Adicionalmente, avaliações em tarefas de \textit{transfer learning} em diversos \textit{benchmarks} (CIFAR-10, CIFAR-100, Flowers) demonstram a capacidade de generalização do modelo, onde o DeiT ficou no mesmo nível que RNCs competitivas e superou modelos ViT tradicionais.
+Entre suas variantes, o modelo DeiT-B com a estratégia de destilação, que possui arquitetura semelhante ao ViT-B, é o maior modelo em termos de número de parâmetros (87 milhões). Em experimentos com o ImageNet-1K, tal modelo atingiu uma acurácia top-1 de 83,4\% (com entrada de 224×224 pixels), superando arquiteturas de RNC e inclusive variantes do ViT pré-treinadas com conjuntos de dados significativamente maiores. Adicionalmente, avaliações em tarefas de \textit{transfer learning} em diversos \textit{benchmarks} (CIFAR-10, CIFAR-100, Flowers) demonstram a capacidade de generalização do modelo, onde o DeiT ficou no mesmo nível que RNCs competitivas e superou modelos ViT tradicionais.
 
 Diante desses resultados, o DeiT se mostra como uma alternativa promissora e eficiente aos modelos convolucionais e ViT clássicos para diversas tarefas, incluindo análise de imagens médicas. Por exemplo, \citeonline{alotaibi2022} propuseram um modelo \textit{ensemble} com ViT e DeiT (ViT-DeiT) para classificar imagens histopatológicas do câncer de mama em oito classes (benignas e malignas), obtendo um resultado de 98,17\% de acurácia.
 
 \begin{figure}[!htbp]
     \centering
     \includegraphics[width=0.5\linewidth]{figs/distillation-procedure-deit.png}
-    \caption{Estratégia de distilação em transformers através da introdução de um token de distilação. Fonte: \citeonline{Touvron2021}.}
+    \caption{Estratégia de destilação em transformers através da introdução de um token de destilação. Fonte: \citeonline{Touvron2021}.}
     \label{fig:distillation-procedure}
 \end{figure}
 
@@ -503,7 +503,7 @@ Em camadas consecutivas, os blocos Swin Transformer alternam entre duas configur
 
 onde $\hat{z}$ e $z$ denotam as saídas dos módulos de atenção e da MLP para um bloco $l$, respectivamente. A atenção é sempre calculada com um viés de posição relativa, o que se mostrou crucial para o desempenho do modelo.
 
-O Swin Transformer possui quatro configurações principais: Swin-T, Swin-S, Swin-B e Swin-L, que variam em capacidade. A versão base (Swin-B), possui 88 milhões de parâmetros e alcançou uma acurácia top-1 de 83,5\% no ImageNet-1K (com entrada de 224×224 pixels), superando os modelos ViT-B/16 (77,91\%) e DeiT-B com distilação (83,4\%) \cite{Dosovitskiy2021, Touvron2021}.
+O Swin Transformer possui quatro configurações principais: Swin-T, Swin-S, Swin-B e Swin-L, que variam em capacidade. A versão base (Swin-B), possui 88 milhões de parâmetros e alcançou uma acurácia top-1 de 83,5\% no ImageNet-1K (com entrada de 224×224 pixels), superando os modelos ViT-B/16 (77,91\%) e DeiT-B com destilação (83,4\%) \cite{Dosovitskiy2021, Touvron2021}.
 
 \subsection{Dual Attention Vision Transformers (DaViT)}
 
@@ -545,7 +545,7 @@ Já o mecanismo de atenção global, aplicado em grupos de canais, é ilustrado 
 
 onde $Q_i$, $K_i$, $V_i$ $\in \mathbb{R}^{P \times C_g}$ são os vetores de consulta, chave e valor correspondentes a cada grupo de canais.
 
-Existem três configurações diferentes da arquitetura DaViT para classificação de imagens, detecção de objetos e segmentação, que diferem na quantidade de camadas, tamanho do \textit{patch}, número de grupos em cada canal e número de cabeças de atenção. O modelo DaViT-B é a maior configuração, com quase 88 milhões de parâmetros, e obteve acurácia top-1 de 84,6\% no ImageNet-1K (com entrada de 224×224 pixels), superando modelos como o DeiT-B com distilação (83,4\%) e o Swin-B (83,5\%) \cite{Touvron2021, Liu2021}.
+Existem três configurações diferentes da arquitetura DaViT para classificação de imagens, detecção de objetos e segmentação, que diferem na quantidade de camadas, tamanho do \textit{patch}, número de grupos em cada canal e número de cabeças de atenção. O modelo DaViT-B é a maior configuração, com quase 88 milhões de parâmetros, e obteve acurácia top-1 de 84,6\% no ImageNet-1K (com entrada de 224×224 pixels), superando modelos como o DeiT-B com destilação (83,4\%) e o Swin-B (83,5\%) \cite{Touvron2021, Liu2021}.
 
 \subsection{Multi-Axis Vision Transformer (MaxViT)}
 
