@@ -97,7 +97,7 @@ A \autoref{fig:cnn} ilustra uma rede neural convolucional composta por cinco cam
     \label{fig:cnn}
 \end{figure}
 
-\subsection{Visual Geometry Group Network (VGG)}
+\subsection{Rede do Visual Geometry Group (VGG)}
 
 Os modelos VGG foram introduzidos pelo \textit{Visual Geometry Group} da Universidade de Oxford por \citeonline{Simonyan2015}, que depois serviu como base para a competição do ImageNet em 2014, quando conquistaram o primeiro e segundo lugar na época. A arquitetura VGG é conhecida por sua simplicidade e profundidade, utilizando filtros convolucionais pequenos (3×3) empilhados em camadas profundas, variando de 11 a 19 camadas. O objetivo dos autores era explorar o impacto da profundidade na performance do modelo, e eles descobriram que redes neurais mais profundas superavam redes mais rasas, desde que treinadas adequadamente.
 
@@ -160,7 +160,7 @@ A \autoref{tab:vgg-arch} apresenta a configuração das arquiteturas VGG-16 e VG
     \end{tabular}
 \end{table}
 
-\subsection{Residual Network (ResNet)}
+\subsection{Rede Residual (ResNet)}
 
 \citeonline{He2016} venceram a competição ILSVRC 2015 com a arquitetura ResNet, que introduziu a ideia de blocos residuais e alcançou uma taxa de erro de 3,57\% no conjunto de validação do ImageNet com um \textit{ensemble} de seus modelos. Os autores abordaram o problema da degradação de desempenho: conforme a profundidade da rede aumentava, a acurácia saturava e começava a diminuir. Para resolver, eles introduziram a ideia de conexões de atalho entre as camadas, onde o sinal de entrada de uma camada é somado ao sinal de saída de uma camada subsequente (\autoref{fig:residual-learning}).
 
@@ -261,7 +261,7 @@ A \autoref{resnet-arch} apresenta a configuração das arquiteturas ResNet-34, R
     \end{tabular}
 \end{table}
 
-\subsection{Densely Connected Convolutional Networks (DenseNet)}
+\subsection{Rede Convolucional Densa (DenseNet)}
 
 A arquitetura DenseNet introduziu uma nova abordagem para lidar com redes profundas e aliviar o problema de \textit{vanishing gradients}, melhorando a propagação e reuso da informação, além de diminuir o número de parâmetros. A ideia principal foi conectar cada camada a todas as camadas anteriores, formando conexões densas entre elas. Isso significa que cada camada recebe como entrada não apenas a saída da camada anterior, mas também as saídas de todas as camadas anteriores (\autoref{fig:dense-network}). Essa abordagem permite que o modelo aprenda representações mais ricas e complexas, facilitando a extração de características relevantes para a tarefa de classificação \cite{Huang2017}.
 
@@ -350,7 +350,7 @@ Nos últimos anos, a arquitetura DenseNet tem sido amplamente utilizada em diver
     \label{tab:densenet-arch}
 \end{table}
 
-\subsection{Inception-v3}
+\subsection{Arquitetura Inception-v3}
 
 A arquitetura Inception, introduzida por \citeonline{Szegedy2015} no contexto do desafio ILSVRC 2014, representou um avanço significativo na evolução das redes neurais convolucionais. Seu principal diferencial está na proposta de uma estrutura modular — o módulo Inception — que combina convoluções de diferentes tamanhos (1×1, 3×3, 5×5) e operações de \textit{pooling} em paralelo, promovendo o processamento de informações em múltiplas escalas (\autoref{inception-module}).
 
@@ -441,7 +441,7 @@ Em cenários com poucos dados, as RNCs tendem a apresentar melhor desempenho, en
 
 Todas as variantes de ViT compartilham a mesma estrutura básica, que consiste na divisão da imagem em \textit{patches} de tamanho fixo, a projeção linear desses \textit{patches} em vetores de dimensão fixa, a inclusão de vetores de posição e um token de classe, e o processamento desses vetores em um \textit{encoder} de transformer. O ViT-B/16 \cite{Dosovitskiy2021} é uma das primeiras variantes da arquitetura, onde ``B'' representa o modelo base e ``16'' refere-se ao tamanho do \textit{patch} em que a imagem é dividida (16×16 pixels). Os modelos que surgiram posteriormente introduziram melhorias e adaptações buscando aumentar a eficiência e/ou reduzir a necessidade de grandes volumes de dados para treinamento. A seguir, são apresentadas as variantes que foram utilizadas nesta pesquisa.
 
-\subsection{Data-efficient image Transformer (DeiT)}
+\subsection{Transformer de Imagem Eficiente em Dados (DeiT)}
 
 A arquitetura DeiT, introduzida por pesquisadores do \textit{Facebook} em 2021 \cite{Touvron2021}, representa um avanço significativo na adaptação de transformers. Além de ser uma abordagem livre de convoluções, ela se destaca por não necessitar de grandes volumes de dados e infraestrutura computacional para alcançar resultados competitivos, ao contrário do que se pressupõe de arquiteturas ViT \cite{Dosovitskiy2021}.
 
@@ -505,7 +505,7 @@ onde $\hat{z}$ e $z$ denotam as saídas dos módulos de atenção e da MLP para 
 
 O Swin Transformer possui quatro configurações principais: Swin-T, Swin-S, Swin-B e Swin-L, que variam em capacidade. A versão base (Swin-B), possui 88 milhões de parâmetros e alcançou uma acurácia top-1 de 83,5\% no ImageNet-1K (com entrada de 224×224 pixels), superando os modelos ViT-B/16 (77,91\%) e DeiT-B com destilação (83,4\%) \cite{Dosovitskiy2021, Touvron2021}.
 
-\subsection{Dual Attention Vision Transformers (DaViT)}
+\subsection{Vision Transformer de Atenção Dupla (DaViT)}
 
 Com o avanço das arquiteturas de ViT, diversos métodos têm buscado o equilíbrio entre a capacidade de capturar contexto global e a eficiência computacional necessária para lidar com imagens de alta resolução. Nesse contexto, \citeonline{ding2022davitdualattentionvision} propuseram uma nova arquitetura de ViT que introduz um mecanismo de atenção dual, combinando janelas espaciais de atenção e grupos de canais de atenção, de forma a integrar representações locais e globais de maneira eficiente e complementar.
 
@@ -547,7 +547,7 @@ onde $Q_i$, $K_i$, $V_i$ $\in \mathbb{R}^{P \times C_g}$ são os vetores de cons
 
 Existem três configurações diferentes da arquitetura DaViT para classificação de imagens, detecção de objetos e segmentação, que diferem na quantidade de camadas, tamanho do \textit{patch}, número de grupos em cada canal e número de cabeças de atenção. O modelo DaViT-B é a maior configuração, com quase 88 milhões de parâmetros, e obteve acurácia top-1 de 84,6\% no ImageNet-1K (com entrada de 224×224 pixels), superando modelos como o DeiT-B com destilação (83,4\%) e o Swin-B (83,5\%) \cite{Touvron2021, Liu2021}.
 
-\subsection{Multi-Axis Vision Transformer (MaxViT)}
+\subsection{Vision Transformer Multi-Eixo (MaxViT)}
 
 A escalabilidade da auto-atenção em transformers para imagens de alta resolução tem sido um desafio significativo, limitando sua aplicação em arquiteturas de visão de ponta. Para superar essa barreira, \citeonline{maxvit2022} propuseram o MaxViT, uma arquitetura que introduz um modelo de atenção eficiente e escalável, denominado auto-atenção multi-eixo (\textit{multi-axis self-attention} - Max-SA). Essa abordagem combina convoluções e um novo módulo de atenção que efetivamente captura interações espaciais locais e globais com complexidade apenas linear, permitindo que o modelo ``veja'' globalmente em todas as etapas da rede.
 
@@ -571,7 +571,7 @@ Esses dois mecanismos de atenção são combinados com uma camada de convoluçã
     \label{fig:maxvit-arch}
 \end{figure}
 
-\subsection{Global Context Vision Transformer (GCViT)}
+\subsection{Vision Transformer de Contexto Global (GCViT)}
 
 Em 2022, \citeonline{gcvit2022} introduziram o GCViT, uma nova arquitetura que aumenta a eficiência de cômputo e parâmetros ao integrar módulos de auto-atenção de contexto global com a atenção local tradicional, modelando de forma eficaz as interações espaciais de curta e longa distância. Além disso, os autores propuseram o uso de blocos residuais Fused-MBConv modificados, que incorporam o viés indutivo convolucional na arquitetura.
 
@@ -605,7 +605,7 @@ O GCViT é apresentado em diversas configurações, que variam em capacidade. Na
 
 \section{Funções de Perda} \label{sec:funcoes-perda}
 
-A função de perda é um componente essencial no treinamento de modelos, pois guia o ajuste dos pesos da rede neural ao quantificar a diferença entre as previsões e os rótulos reais. Neste trabalho, foram utilizadas duas funções de perda com o objetivo de compará-las: a entropia cruzada (ou \textit{cross-entropy}, do inglês) e a \textit{Conditional Ordinal Regression for Neural Networks} (CORN).
+A função de perda é um componente essencial no treinamento de modelos, pois guia o ajuste dos pesos da rede neural ao quantificar a diferença entre as previsões e os rótulos reais. Neste trabalho, foram utilizadas duas funções de perda com o objetivo de compará-las: a entropia cruzada (ou \textit{cross-entropy}, do inglês) e a Regressão Ordinal Condicional para Redes Neurais (CORN).
 
 \subsection{Entropia Cruzada}
 
@@ -619,7 +619,7 @@ onde $y_{k}^{(i)}$ é a probabilidade real da classe $k$ para o exemplo $i$.
 
 Ao penalizar mais fortemente casos em que o modelo apresenta baixa confiança na classe correta, a entropia cruzada, de modo geral, contribui para aumentar a precisão do modelo para tarefas de classificação. No entanto, ela não leva em consideração a natureza ordinal das classes, o que constitui uma limitação em problemas onde a ordem das classes é relevante, como no problema abordado neste trabalho.
 
-\subsection{Conditional Ordinal Regression for Neural Networks (CORN)}
+\subsection{Regressão Ordinal Condicional para Redes Neurais (CORN)}
 
 \citeonline{Shi_2023} propuseram um framework de regressão ordinal para redes neurais profundas, chamado CORN, que é projetado para lidar com tarefas de classificação ordinal, mantendo a consistência ordinal entre as classes. Dado um problema de classificação com $K$ classes e um conjunto de treino $D = \{(x^{[i]}, y^{[i]})\}_{i=1}^{N}$, onde $x^{[i]}$ é a entrada e $y^{[i]}$ é o rótulo ordinal, o CORN divide o problema de classificação ordinal em $K-1$ tarefas de classificação binária associadas às classes $r_1$, $r_2$, $...$, $r_K$, onde $y_{k}^{[i]} \in \lbrace 0 \text{,} 1 \rbrace$ indica se o exemplo $y^{[i]}$ excede a classe $r_k$ ou não (\autoref{fig:corn-nn}).
 
@@ -670,7 +670,7 @@ onde a classe predita será $r_{q^{[i]}}$.
 
 \section{Avaliação e métricas de desempenho} \label{sec:avaliacao-metricas}
 
-Para avaliar o desempenho dos modelos na tarefa de classificação da severidade da OA de joelho, foram empregadas métricas amplamente utilizadas, como acurácia, precisão, revocação, F1-score e \textit{Quadratic Weighted Kappa} (QWK). A matriz de confusão foi utilizada para visualizar a distribuição das previsões corretas e incorretas entre as diferentes classes, enquanto a métrica AUC-ROC (Área Sob a Curva da Característica de Operação do Receptor) avaliou a capacidade do modelo de distinguir uma classe em relação às demais. Essas métricas fornecem uma visão abrangente do desempenho dos modelos. Para o cálculo delas, foram adotados os seguintes acrônimos nas respectivas fórmulas:
+Para avaliar o desempenho dos modelos na tarefa de classificação da severidade da OA de joelho, foram empregadas métricas amplamente utilizadas, como acurácia, precisão, revocação, F1-score e Kappa Quadrático Ponderado (QWK). A matriz de confusão foi utilizada para visualizar a distribuição das previsões corretas e incorretas entre as diferentes classes, enquanto a métrica AUC-ROC (Área Sob a Curva da Característica de Operação do Receptor) avaliou a capacidade do modelo de distinguir uma classe em relação às demais. Essas métricas fornecem uma visão abrangente do desempenho dos modelos. Para o cálculo delas, foram adotados os seguintes acrônimos nas respectivas fórmulas:
 
 \begin{itemize}
     \item $TP$ é o número de verdadeiros positivos,
@@ -707,7 +707,7 @@ O F1-score é a média harmônica entre a precisão e a revocação, e é uma m�
     F1 = 2 \cdot \frac{\text{Precisão} \cdot \text{Revocação}}{\text{Precisão} + \text{Revocação}}
 \end{equation}
 
-\subsection{Quadratic Weighted Kappa (QWK)}
+\subsection{Kappa Quadrático Ponderado (QWK)}
 O QWK é uma métrica que avalia a concordância entre as previsões do modelo e os rótulos reais, levando em consideração a característica ordinal das classes. É especialmente útil para este estudo devido à natureza ordinal das classes de severidade da OA de joelho, onde erros maiores são mais penalizados do que erros menores. O QWK é calculado pela seguinte fórmula:
 
 \begin{equation}
@@ -731,8 +731,8 @@ A matriz de confusão é uma ferramenta para visualizar o desempenho do modelo d
 \end{array}
 \]
 
-\subsection{AUC-ROC}
-A métrica AUC-ROC (Área Sob a Curva da Característica de Operação do Receptor) é bastante útil, pois mede a capacidade do modelo de separar as classes positivas e negativas. A curva ROC é um gráfico que exibe a taxa de verdadeiros positivos (sensibilidade) em função da taxa de falsos positivos. A AUC, por sua vez, quantifica a área sob essa curva, variando de 0 a 1, onde 0,5 representa um modelo aleatório e 1 representa um modelo perfeito. A AUC-ROC é calculada pela seguinte integral:
+\subsection{Área Sob a Curva da Característica de Operação do Receptor (AUC-ROC)}
+A métrica AUC-ROC é bastante útil, pois mede a capacidade do modelo de separar as classes positivas e negativas. A curva ROC é um gráfico que exibe a taxa de verdadeiros positivos (sensibilidade) em função da taxa de falsos positivos. A AUC, por sua vez, quantifica a área sob essa curva, variando de 0 a 1, onde 0,5 representa um modelo aleatório e 1 representa um modelo perfeito. A AUC-ROC é calculada pela seguinte integral:
 
 \begin{equation}
     \text{AUC-ROC} = \int_{0}^{1} \text{TPR}(FPR) \text{ d}FPR \text{,}
